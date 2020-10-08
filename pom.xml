@@ -15,6 +15,10 @@
         <module>mi-order</module>
         <module>mi-product</module>
         <module>mi-ware</module>
+        <module>mi-common</module>
+        <module>mi-gateway</module>
+        <module>renren-fast</module>
+        <module>renren-generator</module>
     </modules>
 
 </project>
