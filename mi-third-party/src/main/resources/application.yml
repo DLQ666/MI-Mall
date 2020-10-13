@@ -1,0 +1,16 @@
+#server:
+#  port: 30000
+#
+#spring:
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: localhost:8848  #配置nacos地址
+#spring:
+#  cloud:
+#    alicloud:
+#      access-key: LTAI4GBwiRuPNBXdmn6CfDS7
+#      secret-key: jybOLXwtMe05bGKoJQADEGjUkjQ4sM
+#      oss:
+#        endpoint: oss-cn-beijing.aliyuncs.com
+#        bucket: dlq-mi-mall

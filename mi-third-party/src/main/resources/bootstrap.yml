@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: mi-third-party
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848 #配置中心地址
+        file-extension: yaml #指定yaml格式的配置
+        namespace: 96cf26de-2a85-4572-99e3-e5470a52f2fc
+        ext-config:
+          - data-id: mi-third-party.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - data-id: oss.yaml
+            group: DEFAULT_GROUP
+            refresh: true
