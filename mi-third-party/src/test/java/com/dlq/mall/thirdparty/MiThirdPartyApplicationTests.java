@@ -3,6 +3,7 @@ package com.dlq.mall.thirdparty;
 import com.aliyun.oss.OSSClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.FileInputStream;
@@ -14,6 +15,12 @@ class MiThirdPartyApplicationTests {
 
     @Autowired
     OSSClient ossClient;
+
+    @Value("${spring.cloud.alicloud.oss.endpoint}")
+    private String endpoint;
+
+    @Value("${spring.cloud.alicloud.oss.bucket}")
+    private String bucket;
 
     @Test
     public void testUpload() throws FileNotFoundException {
@@ -34,6 +41,19 @@ class MiThirdPartyApplicationTests {
         ossClient.shutdown();
 
         System.out.println("上传成功");
+    }
+
+    @Test
+    public void test0111() {
+        String url = "https://dlq-mi-mall.oss-cn-beijing.aliyuncs.com/2020-10-17/ae8204b7-598d-4e9c-8a61-32d9fc3e8193_2c0ba419dce57806d4080f3d1dd928a186ac989e5f2634b23c9a7633ab6ac07d.jpg";
+
+        String host = "https://" + bucket + "." + endpoint + "/";
+
+        System.out.println(host.length());
+
+        String objectName = url.substring(host.length());
+
+        System.out.println(objectName);
     }
 
 }

@@ -5,9 +5,12 @@ import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
 import com.dlq.common.utils.R;
+import com.dlq.mall.thirdparty.service.LogoService;
+import com.dlq.mall.thirdparty.service.impl.LogoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +27,9 @@ import java.util.Map;
  */
 @RestController
 public class OssController {
+
+    @Autowired
+    private LogoService logoService;
 
     @Autowired
     OSS ossClient;
@@ -76,5 +82,11 @@ public class OssController {
             ossClient.shutdown();
         }
         return R.ok().put("data",respMap);
+    }
+
+    @RequestMapping("/oss/remove")
+    public R removeLogo(@RequestBody String url){
+        logoService.removeLogo(url);
+        return R.ok();
     }
 }
