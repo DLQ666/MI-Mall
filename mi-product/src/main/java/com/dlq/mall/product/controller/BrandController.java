@@ -1,23 +1,20 @@
 package com.dlq.mall.product.controller;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.dlq.mall.product.entity.BrandEntity;
-import com.dlq.mall.product.service.BrandService;
 import com.dlq.common.utils.PageUtils;
 import com.dlq.common.utils.R;
+import com.dlq.common.valid.AddGroup;
+import com.dlq.common.valid.UpdateGroup;
+import com.dlq.common.valid.UpdateStatusGroup;
+import com.dlq.mall.product.entity.BrandEntity;
+import com.dlq.mall.product.feign.OssFileService;
+import com.dlq.mall.product.service.BrandService;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.Map;
 
 
 /**
@@ -30,8 +27,11 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("product/brand")
 public class BrandController {
+
     @Autowired
     private BrandService brandService;
+    @Autowired
+    OssFileService ossFileService;
 
     /**
      * 列表
@@ -61,22 +61,22 @@ public class BrandController {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("product:brand:save")
-    public R save(@Valid @RequestBody BrandEntity brand, BindingResult result) {
-        if (result.hasErrors()) {
-            Map<String,String> map = new HashMap<>();
+    public R save(@Validated({AddGroup.class}) @RequestBody BrandEntity brand/*, BindingResult result*/) {
+        /*if (result.hasErrors()) {
+            Map<String, String> map = new HashMap<>();
             //1、获取校验的错误结果
             result.getFieldErrors().forEach((item) -> {
                 //FieldError 获取的错误提示
                 String message = item.getDefaultMessage();
                 //获取错误的属性名字
                 String field = item.getField();
-                map.put(field,message);
+                map.put(field, message);
 
             });
-            return R.error(400,"提交的数据不合法").put("data",map);
+            return R.error(400, "提交的数据不合法").put("data", map);
         } else {
-            brandService.save(brand);
-        }
+        }*/
+        brandService.save(brand);
 
         return R.ok();
     }
@@ -86,7 +86,17 @@ public class BrandController {
      */
     @RequestMapping("/update")
     //@RequiresPermissions("product:brand:update")
-    public R update(@RequestBody BrandEntity brand) {
+    public R update(@Validated(UpdateGroup.class) @RequestBody BrandEntity brand) {
+        brandService.updateById(brand);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改品牌状态
+     */
+    @RequestMapping("/update/status")
+    public R updateStatus(@Validated(UpdateStatusGroup.class) @RequestBody BrandEntity brand) {
         brandService.updateById(brand);
 
         return R.ok();
@@ -99,7 +109,18 @@ public class BrandController {
     //@RequiresPermissions("product:brand:delete")
     public R delete(@RequestBody Long[] brandIds) {
         brandService.removeByIds(Arrays.asList(brandIds));
+        return R.ok();
+    }
 
+    /**
+     * 修改或者添加品牌时选错图片  删除oss服务器中图片
+     */
+    @RequestMapping("/deleteLogo")
+    public R deleteLogo(@RequestBody String url) {
+        String substringUrl = url.substring(1, url.length() - 1);
+        if (!StringUtils.isEmpty(substringUrl)) {
+            ossFileService.removeLogo(substringUrl);
+        }
         return R.ok();
     }
 
