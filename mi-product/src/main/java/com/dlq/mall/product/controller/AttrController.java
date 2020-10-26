@@ -3,12 +3,9 @@ package com.dlq.mall.product.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.dlq.mall.product.vo.AttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.dlq.mall.product.entity.AttrEntity;
 import com.dlq.mall.product.service.AttrService;
@@ -29,6 +26,14 @@ import com.dlq.common.utils.R;
 public class AttrController {
     @Autowired
     private AttrService attrService;
+
+    //product/attr/base/list/225?t=1603700615681&page=1&limit=10&key=1
+    ///product/attr/base/list/{catelogId}
+    @GetMapping("/base/list/{catelogId}")
+    public R baseAttrList(@RequestParam Map<String, Object> params,@PathVariable("catelogId") Long catelogId){
+        PageUtils page = attrService.queryBaseAttrPage(params,catelogId);
+        return R.ok().put("page", page);
+    }
 
     /**
      * 列表
@@ -58,8 +63,8 @@ public class AttrController {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("product:attr:save")
-    public R save(@RequestBody AttrEntity attr){
-		attrService.save(attr);
+    public R save(@RequestBody AttrVo attr){
+		attrService.saveAttr(attr);
 
         return R.ok();
     }
