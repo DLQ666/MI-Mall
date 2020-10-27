@@ -24,6 +24,10 @@ public class AttrVo {
      */
     private Integer searchType;
     /**
+     * 值类型
+     */
+    private Integer valueType;
+    /**
      * 属性图标
      */
     private String icon;
