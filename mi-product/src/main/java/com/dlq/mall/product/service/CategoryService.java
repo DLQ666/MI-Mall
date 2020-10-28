@@ -3,6 +3,7 @@ package com.dlq.mall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dlq.common.utils.PageUtils;
 import com.dlq.mall.product.entity.CategoryEntity;
+import com.dlq.mall.product.vo.AttrGrooupRelationVo;
 
 import java.util.List;
 import java.util.Map;
@@ -30,5 +31,6 @@ public interface CategoryService extends IService<CategoryEntity> {
     Long[] findCategoryPath(Long catelogId);
 
     void updateCascate(CategoryEntity category);
+
 }
 

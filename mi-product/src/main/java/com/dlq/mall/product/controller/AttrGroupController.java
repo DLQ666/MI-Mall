@@ -7,6 +7,7 @@ import java.util.Map;
 import com.dlq.mall.product.entity.AttrEntity;
 import com.dlq.mall.product.service.AttrService;
 import com.dlq.mall.product.service.CategoryService;
+import com.dlq.mall.product.vo.AttrGrooupRelationVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,12 +44,20 @@ public class AttrGroupController {
         return R.ok().put("data",entityList);
     }
 
+    ///product/attrgroup/{attrgroupId}/noattr/relation
+    @GetMapping("/{attrgroupId}/noattr/relation")
+    public R attrNoRelation(@PathVariable("attrgroupId") Long attrgroupId,
+                            @RequestParam Map<String, Object> params){
+        PageUtils page =  attrService.getNoRelationAttr(params,attrgroupId);
+        return R.ok().put("page",page);
+    }
     /**
      * 列表
      */
     @RequestMapping("/list/{catelogId}")
     //@RequiresPermissions("product:attrgroup:list")
-    public R list(@RequestParam Map<String, Object> params,@PathVariable("catelogId") Long catelogId){
+    public R list(@RequestParam Map<String, Object> params,
+                  @PathVariable("catelogId") Long catelogId){
         //PageUtils page = attrGroupService.queryPage(params);
         PageUtils page = attrGroupService.queryPage(params,catelogId);
         return R.ok().put("page", page);
@@ -77,6 +86,13 @@ public class AttrGroupController {
     public R save(@RequestBody AttrGroupEntity attrGroup){
 		attrGroupService.save(attrGroup);
 
+        return R.ok();
+    }
+
+    ///product/attrgroup/attr/relation/delete
+    @PostMapping("/attr/relation/delete")
+    public R deleteRelation(@RequestBody AttrGrooupRelationVo[] vos){
+        attrGroupService.deleteRelation(vos);
         return R.ok();
     }
 
