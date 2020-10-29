@@ -2,7 +2,10 @@ package com.dlq.mall.product.service.impl;
 
 import com.dlq.mall.product.dao.AttrAttrgroupRelationDao;
 import com.dlq.mall.product.entity.AttrAttrgroupRelationEntity;
+import com.dlq.mall.product.entity.AttrEntity;
+import com.dlq.mall.product.service.AttrService;
 import com.dlq.mall.product.vo.AttrGrooupRelationVo;
+import com.dlq.mall.product.vo.AttrGrooupWithAttrsVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,9 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
 
     @Autowired
     AttrAttrgroupRelationDao relationDao;
+
+    @Autowired
+    AttrService attrService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -72,6 +78,30 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
             return relationEntity;
         }).collect(Collectors.toList());
         relationDao.deleteBatchRelation(entities);
+    }
+
+    /**
+     * 根据分类id查出所有的分组以及这些分组的属性
+     * @param catelogId
+     * @return
+     */
+    @Override
+    public List<AttrGrooupWithAttrsVo> getAttrGroupWithAttrsByCatelogId(Long catelogId) {
+
+        //1、查出分组信息
+        List<AttrGroupEntity> attrGroupEntities = this.list(
+                new QueryWrapper<AttrGroupEntity>().eq("catelog_id", catelogId));
+        //2、查出分组下属性信息
+        List<AttrGrooupWithAttrsVo> collect = attrGroupEntities.stream().map(item -> {
+            AttrGrooupWithAttrsVo attrGrooupWithAttrsVo = new AttrGrooupWithAttrsVo();
+            BeanUtils.copyProperties(item, attrGrooupWithAttrsVo);
+
+            List<AttrEntity> relationAttr = attrService.getRelationAttr(attrGrooupWithAttrsVo.getAttrGroupId());
+            attrGrooupWithAttrsVo.setAttrs(relationAttr);
+            return attrGrooupWithAttrsVo;
+        }).collect(Collectors.toList());
+
+        return collect;
     }
 
 }

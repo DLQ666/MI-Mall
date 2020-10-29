@@ -63,7 +63,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         BeanUtils.copyProperties(attr, attrEntity);
         //1、保存基本数据
         this.save(attrEntity);
-        if (attr.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode() && attr.getAttrGroupId()!=null) {
+        if (attr.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode() && attr.getAttrGroupId() != null) {
             //2、保存关联关系
             AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
             relationEntity.setAttrGroupId(attr.getAttrGroupId());
@@ -99,7 +99,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
             //1、设置分类和分组的名字
             if ("base".equalsIgnoreCase(type)) {
                 AttrAttrgroupRelationEntity relationEntity = relationDao.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrEntity.getAttrId()));
-                if (relationEntity != null && relationEntity.getAttrGroupId()!=null) {
+                if (relationEntity != null && relationEntity.getAttrGroupId() != null) {
                     AttrGroupEntity attrGroupEntity = attrGroupDao.selectById(relationEntity.getAttrGroupId());
                     attrResponseVo.setGroupName(attrGroupEntity.getAttrGroupName());
                 }
@@ -123,7 +123,8 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
 
         if (attrEntity.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()) {
             //1、设置分组信息
-            AttrAttrgroupRelationEntity attrgroupRelationEntity = relationDao.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrId));
+            AttrAttrgroupRelationEntity attrgroupRelationEntity = relationDao.selectOne(
+                    new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrId));
             if (attrgroupRelationEntity != null) {
                 responseVo.setAttrGroupId(attrgroupRelationEntity.getAttrGroupId());
                 AttrGroupEntity attrGroupEntity = attrGroupDao.selectById(attrgroupRelationEntity.getAttrGroupId());
@@ -159,7 +160,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
 
             if (count > 0) {
                 relationDao.update(relationEntity, new UpdateWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attr.getAttrId()));
-            } else {
+            } else if (attr.getAttrGroupId() != null) {
                 relationDao.insert(relationEntity);
             }
         }
@@ -172,7 +173,8 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
      */
     @Override
     public List<AttrEntity> getRelationAttr(Long attrgroupId) {
-        List<AttrAttrgroupRelationEntity> relationEntityList = relationDao.selectList(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_group_id", attrgroupId));
+        List<AttrAttrgroupRelationEntity> relationEntityList = relationDao.selectList(
+                new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_group_id", attrgroupId));
         List<Long> attrIds = relationEntityList.stream().map((attr) -> {
             return attr.getAttrId();
         }).collect(Collectors.toList());
@@ -218,7 +220,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         //2.3、从当前分类的所有属性中移除这些属性
         QueryWrapper<AttrEntity> wrapper = new QueryWrapper<AttrEntity>()
                 .eq("catelog_id", catelogId)
-                .eq("attr_type",ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode());
+                .eq("attr_type", ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode());
         if (attrIdsList != null && attrIdsList.size() > 0) {
             wrapper.notIn("attr_id", attrIdsList);
         }

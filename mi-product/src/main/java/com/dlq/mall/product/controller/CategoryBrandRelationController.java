@@ -3,8 +3,11 @@ package com.dlq.mall.product.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.dlq.mall.product.entity.BrandEntity;
+import com.dlq.mall.product.vo.CategoryBrandRelationVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +42,18 @@ public class CategoryBrandRelationController {
         return R.ok().put("data", data);
     }
 
-
+    ///product/categorybrandrelation/brands/list
+    @GetMapping("/brands/list")
+    public R brandRelationList(@RequestParam(value = "catId",required = true) Long catId) {
+        List<BrandEntity> vos = categoryBrandRelationService.getBrandsByCatId(catId);
+        List<CategoryBrandRelationVo> voList = vos.stream().map(item -> {
+            CategoryBrandRelationVo brandRelationVo = new CategoryBrandRelationVo();
+            brandRelationVo.setBrandId(item.getBrandId());
+            brandRelationVo.setBrandName(item.getName());
+            return brandRelationVo;
+        }).collect(Collectors.toList());
+        return R.ok().put("data",voList);
+    }
     /**
      * 信息
      */
