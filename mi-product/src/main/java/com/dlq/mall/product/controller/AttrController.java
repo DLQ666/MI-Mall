@@ -3,7 +3,6 @@ package com.dlq.mall.product.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-import com.dlq.mall.product.vo.AttrGrooupRelationVo;
 import com.dlq.mall.product.vo.AttrResponseVo;
 import com.dlq.mall.product.vo.AttrVo;
 import org.springframework.beans.factory.annotation.Autowired;

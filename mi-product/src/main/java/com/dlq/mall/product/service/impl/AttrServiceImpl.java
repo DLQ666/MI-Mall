@@ -9,7 +9,6 @@ import com.dlq.mall.product.entity.AttrAttrgroupRelationEntity;
 import com.dlq.mall.product.entity.AttrGroupEntity;
 import com.dlq.mall.product.entity.CategoryEntity;
 import com.dlq.mall.product.service.CategoryService;
-import com.dlq.mall.product.vo.AttrGrooupRelationVo;
 import com.dlq.mall.product.vo.AttrResponseVo;
 import com.dlq.mall.product.vo.AttrVo;
 import org.apache.commons.lang.StringUtils;
@@ -64,7 +63,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         BeanUtils.copyProperties(attr, attrEntity);
         //1、保存基本数据
         this.save(attrEntity);
-        if (attr.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()) {
+        if (attr.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode() && attr.getAttrGroupId()!=null) {
             //2、保存关联关系
             AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
             relationEntity.setAttrGroupId(attr.getAttrGroupId());
@@ -100,7 +99,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
             //1、设置分类和分组的名字
             if ("base".equalsIgnoreCase(type)) {
                 AttrAttrgroupRelationEntity relationEntity = relationDao.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrEntity.getAttrId()));
-                if (relationEntity != null) {
+                if (relationEntity != null && relationEntity.getAttrGroupId()!=null) {
                     AttrGroupEntity attrGroupEntity = attrGroupDao.selectById(relationEntity.getAttrGroupId());
                     attrResponseVo.setGroupName(attrGroupEntity.getAttrGroupName());
                 }

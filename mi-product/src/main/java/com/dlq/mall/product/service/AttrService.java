@@ -3,7 +3,6 @@ package com.dlq.mall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dlq.common.utils.PageUtils;
 import com.dlq.mall.product.entity.AttrEntity;
-import com.dlq.mall.product.vo.AttrGrooupRelationVo;
 import com.dlq.mall.product.vo.AttrResponseVo;
 import com.dlq.mall.product.vo.AttrVo;
 

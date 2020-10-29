@@ -10,6 +10,9 @@
         <result property="attrGroupId" column="attr_group_id"/>
         <result property="attrSort" column="attr_sort"/>
     </resultMap>
+    <insert id="insertRelation" >
+        INSERT INTO pms_attr_attrgroup_relation(attr_id,attr_group_id) VALUES ()
+    </insert>
     <delete id="deleteBatchRelation">
         DELETE FROM pms_attr_attrgroup_relation WHERE
         <foreach collection="entities" item="item" separator=" OR ">
