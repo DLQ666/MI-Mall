@@ -1,0 +1,4 @@
+ES7_4_2:
+  dlq:
+    username: elastic
+    password: dlq.*123
