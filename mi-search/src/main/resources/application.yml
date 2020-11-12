@@ -1,4 +1,13 @@
-ES7_4_2:
-  dlq:
-    username: elastic
-    password: dlq.*123
+#server:
+#  port: 12000
+#
+#spring:
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: gitdlq.top:8848  #配置nacos地址
+#
+#ES7_4_2:
+#  dlq:
+#    username: elastic
+#    password: dlq.*123
