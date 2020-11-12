@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: mi-order
+  cloud:
+    nacos:
+      config:
+        server-addr: gitdlq.top:8848 #配置中心地址
+        file-extension: yaml #指定yaml格式的配置
+        namespace: 936e9736-47c0-43bd-9af0-29262b4a1203
