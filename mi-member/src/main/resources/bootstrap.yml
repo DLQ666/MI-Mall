@@ -6,4 +6,4 @@ spring:
       config:
         server-addr: gitdlq.top:8848 #配置中心地址
         file-extension: yaml #指定yaml格式的配置
-        namespace: cea1b278-8dc6-40b9-868f-bfff904417a2
+        namespace: e6a7201e-06b1-4a92-82fe-4a2df091fd93

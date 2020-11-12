@@ -1,0 +1,23 @@
+#server:
+#  port: 8000
+#
+#spring:
+#  datasource:
+#    username: root
+#    password: dlq.*123
+#    url: jdbc:mysql://gitdlq.top:3306/mi_sms
+#    driver-class-name: com.mysql.jdbc.Driver
+#  application:
+#    name: mi-member
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: gitdlq.top:8848  #配置nacos地址
+#mybatis-plus:
+#  mapper-locations: classpath:/mapper/**/*.xml
+#  global-config:
+#    db-config:
+#      id-type: auto
+#logging:
+#  level:
+#    com.dlq.mall: debug
