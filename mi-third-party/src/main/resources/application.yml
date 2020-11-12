@@ -9,8 +9,8 @@
 #spring:
 #  cloud:
 #    alicloud:
-#      access-key: LTAI4GBwiRuPNBXdmn6CfDS7
-#      secret-key: jybOLXwtMe05bGKoJQADEGjUkjQ4sM
+#      access-key: L
+#      secret-key: j
 #      oss:
 #        endpoint: oss-cn-beijing.aliyuncs.com
 #        bucket: dlq-mi-mall
