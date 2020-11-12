@@ -23,19 +23,37 @@
 #            - Path=/api/product/**
 #          filters:
 #            - RewritePath=/api/(?<segment>/?.*),/$\{segment}
-#          #http://localhost:88/api/thirdparty/oss/policy
 #        - id: member_route
 #          uri: lb://mi-member
 #          predicates:
 #            - Path=/api/member/**
 #          filters:
 #            - RewritePath=/api/(?<segment>/?.*),/$\{segment}
+#        - id: order_route
+#          uri: lb://mi-order
+#          predicates:
+#            - Path=/api/order/**
+#          filters:
+#            - RewritePath=/api/(?<segment>/?.*),/$\{segment}
 #        - id: ware_route
-#            uri: lb://mi-ware
-#            predicates:
-#              - Path=/api/ware/**
-#            filters:
-#              - RewritePath=/api/(?<segment>/?.*),/$\{segment}
+#          uri: lb://mi-ware
+#          predicates:
+#            - Path=/api/ware/**
+#          filters:
+#            - RewritePath=/api/(?<segment>/?.*),/$\{segment}
+#        - id: coupon_route
+#          uri: lb://mi-coupon
+#          predicates:
+#            - Path=/api/coupon/**
+#          filters:
+#            - RewritePath=/api/(?<segment>/?.*),/$\{segment}
+#        - id: search_route
+#          uri: lb://mi-search
+#          predicates:
+#            - Path=/api/search/**
+#          filters:
+#            - RewritePath=/api/(?<segment>/?.*),/$\{segment}
+#          #http://localhost:88/api/thirdparty/oss/policy
 #        - id: third_party_route
 #          uri: lb://mi-third-party
 #          predicates:
@@ -48,4 +66,3 @@
 #            - Path=/api/**
 #          filters:
 #            - RewritePath=/api/(?<segment>/?.*),/renren-fast/$\{segment}
-#
