@@ -5,16 +5,19 @@
 #  datasource:
 #    username: root
 #    password: root
-#    url: jdbc:mysql://192.168.56.10:3306/mi_sms
+#    url: jdbc:mysql://gitdlq.top:3306/mi_sms
 #    driver-class-name: com.mysql.jdbc.Driver
 #  application:
 #    name: mi-coupon
 #  cloud:
 #    nacos:
 #      discovery:
-#        server-addr: localhost:8848  #配置nacos地址
+#        server-addr: gitdlq.top:8848  #配置nacos地址
 #mybatis-plus:
 #  mapper-locations: classpath:/mapper/**/*.xml
 #  global-config:
 #    db-config:
 #      id-type: auto
+#logging:
+#  level:
+#    com.dlq.mall: debug
