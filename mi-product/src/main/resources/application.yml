@@ -1,0 +1,28 @@
+#server:
+#  port: 10000
+#
+#spring:
+#  datasource:
+#    username: root
+#    password: dlq.*123
+#    url: jdbc:mysql://gitdlq.top:3306/mi_pms
+#    driver-class-name: com.mysql.jdbc.Driver
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: gitdlq.top:8848  #配置nacos地址
+#    alicloud:
+#      access-key: L
+#      secret-key: j
+#      oss:
+#        endpoint: oss-cn-beijing.aliyuncs.com
+#mybatis-plus:
+#  mapper-locations: classpath:/mapper/**/*.xml
+#  global-config:
+#    db-config:
+#      id-type: auto
+#      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+#      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+#logging:
+#  level:
+#    com.dlq.mall: debug
