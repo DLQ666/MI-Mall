@@ -3,7 +3,8 @@ package com.dlq.common.exception;
 public enum BizCodeEnum {
 
     UNKONW_EXCEPTION(10000,"系统未知异常"),
-    VALID_EXCEPTION(10001,"参数格式校验失败");
+    VALID_EXCEPTION(10001,"参数格式校验失败"),
+    PRODUCT_UP_EXCEPTION(11000,"商品上架异常");
 
     private int code;
     private String msg;
