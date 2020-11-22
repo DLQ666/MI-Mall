@@ -16,6 +16,9 @@
 #      secret-key: j
 #      oss:
 #        endpoint: oss-cn-beijing.aliyuncs.com
+#  thymeleaf:
+#    cache: false #关闭thymeleaf 开发期间可以实时效果
+#
 #mybatis-plus:
 #  mapper-locations: classpath:/mapper/**/*.xml
 #  global-config:

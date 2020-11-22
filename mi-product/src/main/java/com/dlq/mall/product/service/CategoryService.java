@@ -3,6 +3,7 @@ package com.dlq.mall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dlq.common.utils.PageUtils;
 import com.dlq.mall.product.entity.CategoryEntity;
+import com.dlq.mall.product.vo.webvo.Catelog2Vo;
 
 import java.util.List;
 import java.util.Map;
@@ -31,5 +32,10 @@ public interface CategoryService extends IService<CategoryEntity> {
 
     void updateCascate(CategoryEntity category);
 
+    //查询所有一级分类
+    List<CategoryEntity> getLevel1Categorys();
+
+    //查询所有分类
+    Map<String, List<Catelog2Vo>> getCatalogJson();
 }
 
