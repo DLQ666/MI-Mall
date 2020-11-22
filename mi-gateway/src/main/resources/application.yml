@@ -66,3 +66,8 @@
 #            - Path=/api/**
 #          filters:
 #            - RewritePath=/api/(?<segment>/?.*),/renren-fast/$\{segment}
+#        - id: jdmall_host_route
+#          uri: lb://mi-product
+#          predicates:
+#            - Host=**.gitdlq.top
+#
