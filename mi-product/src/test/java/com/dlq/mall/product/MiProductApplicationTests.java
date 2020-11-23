@@ -8,9 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @SpringBootTest
@@ -21,6 +24,20 @@ class MiProductApplicationTests {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
+
+    @Test
+    public void testRedis() {
+        //保存一个Hello  world
+        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
+        //保存
+        ops.set("hello", "world"+ UUID.randomUUID().toString());
+        //查询
+        String hello = ops.get("hello");
+        System.out.println(hello);
+    }
 
     @Test
     public void test01() {
