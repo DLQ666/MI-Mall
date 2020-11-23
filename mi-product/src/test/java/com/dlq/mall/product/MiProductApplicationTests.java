@@ -2,8 +2,10 @@ package com.dlq.mall.product;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dlq.mall.product.entity.BrandEntity;
+import com.dlq.mall.product.entity.CategoryEntity;
 import com.dlq.mall.product.service.BrandService;
 import com.dlq.mall.product.service.CategoryService;
+import com.dlq.mall.product.service.impl.CategoryServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,30 @@ class MiProductApplicationTests {
 
     @Autowired
     StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    CategoryServiceImpl service;
+
+    public static void main(String[] args) {
+        String aaa ="羽绒服棉服运动裤夹克/风衣卫衣/套头衫T恤套装乒羽网服健身服运动背心毛衫/线衫运动配饰";
+        String bbb ="智能手环智能手表智能眼镜运动跟踪器健康监测智能配饰智能家居体感车其他配件无人机智能机器人";
+        System.out.println(aaa.length());
+        System.out.println(bbb.length());
+    }
+
+    @Test
+    public void test000() {
+        List<CategoryEntity> sort = categoryService.list();
+        System.out.println(sort);
+        List<CategoryEntity> parent_cid = service.getParent_cid(sort, 1434L);
+        System.out.println(parent_cid);
+    }
+
+    @Test
+    public void test0001() {
+        String aaa ="移动电源电池/移动电源蓝牙耳机充电器/数据线苹果周边手机耳机手机贴膜手机存储卡充电器数据线手机保护套车载配件iPhone 配件手机电池创意配件便携/无线音响手机饰品拍照配件手机支架";
+        System.out.println(aaa.length());
+    }
 
     @Test
     public void testRedis() {

@@ -1,11 +1,15 @@
 package com.dlq.mall.product.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.dlq.mall.product.entity.CategoryBrandRelationEntity;
 import com.dlq.mall.product.service.CategoryBrandRelationService;
 import com.dlq.mall.product.vo.webvo.Catelog2Vo;
 import com.dlq.mall.product.vo.webvo.Catelog3Vo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -26,12 +30,15 @@ import com.dlq.mall.product.entity.CategoryEntity;
 import com.dlq.mall.product.service.CategoryService;
 import org.springframework.transaction.annotation.Transactional;
 
-
+@Slf4j
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
 
     @Autowired
     private CategoryBrandRelationService categoryBrandRelationService;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -89,20 +96,40 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     //查询所有一级分类
     @Override
     public List<CategoryEntity> getLevel1Categorys() {
-        List<CategoryEntity> categoryEntities = baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid", 0));
+        List<CategoryEntity> categoryEntities = baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid", 0).orderByAsc("sort"));
         return categoryEntities;
     }
 
     @Override
     public Map<String, List<Catelog2Vo>> getCatalogJson() {
+        //给缓存中放入JSON字符串，拿出的json字符串，还用逆转未来能用的对象类型，【序列化与反序列化】
+        //好处：JSON是跨语言，跨平台兼容的。
+        //1、加入缓存逻辑，存入的是json字符串
+        String catalogJson = stringRedisTemplate.opsForValue().get("catalogJson");
+        if (StringUtils.isEmpty(catalogJson)){
+            //2、判断缓存中没有数据，就从数据库查询
+            Map<String, List<Catelog2Vo>> catalogJsonFromDb = getCatalogJsonFromDb();
+            //3、保存在Redis中，将对象转为JSon放在缓存中
+            String s = JSON.toJSONString(catalogJsonFromDb);
+            stringRedisTemplate.opsForValue().set("catalogJson", s);
+            return catalogJsonFromDb;
+        }
+        //转为我们指定的对象
+        Map<String, List<Catelog2Vo>> result = JSON.parseObject(catalogJson,new TypeReference<Map<String, List<Catelog2Vo>>>(){});
+        return result;
+    }
+
+    //从数据库查询并封装分类数据
+    public Map<String, List<Catelog2Vo>> getCatalogJsonFromDb() {
 
         /**
          * 优化一：将数据库的多次查询变为一次
          */
-        List<CategoryEntity> selectList = baseMapper.selectList(null);
+        List<CategoryEntity> selectList = baseMapper.selectList(new QueryWrapper<CategoryEntity>().orderByAsc("sort"));
 
         //查出所有一级分类
         List<CategoryEntity> level1Categorys = getParent_cid(selectList,0L);
+        log.info("一级分类：{}",level1Categorys);
 
         //封装数据
         Map<String, List<Catelog2Vo>> parent_cid = level1Categorys.stream().collect(Collectors.toMap(k -> k.getCatId().toString(), v -> {
@@ -127,11 +154,12 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
             }
             return catelog2Vos;
         }));
+        log.info("总分类：{}",parent_cid);
         return parent_cid;
     }
 
-    private List<CategoryEntity> getParent_cid(List<CategoryEntity> selectList,Long parent_cid) {
-        List<CategoryEntity> collect = selectList.stream().filter(item -> item.getParentCid() == parent_cid).collect(Collectors.toList());
+    public List<CategoryEntity> getParent_cid(List<CategoryEntity> selectList,Long parent_cid) {
+        List<CategoryEntity> collect = selectList.stream().filter(item -> item.getParentCid().equals(parent_cid)).collect(Collectors.toList());
         return collect;
         //return baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid", v.getCatId()));
     }
