@@ -109,9 +109,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         if (StringUtils.isEmpty(catalogJson)){
             //2、判断缓存中没有数据，就从数据库查询
             Map<String, List<Catelog2Vo>> catalogJsonFromDb = getCatalogJsonFromDb();
-            //3、保存在Redis中，将对象转为JSon放在缓存中
-            String s = JSON.toJSONString(catalogJsonFromDb);
-            stringRedisTemplate.opsForValue().set("catalogJson", s);
             return catalogJsonFromDb;
         }
         //转为我们指定的对象
@@ -154,6 +151,10 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
             }
             return catelog2Vos;
         }));
+
+        //3、保存在Redis中，将对象转为JSon放在缓存中
+        String s = JSON.toJSONString(parent_cid);
+        stringRedisTemplate.opsForValue().set("catalogJson", s);
         log.info("总分类：{}",parent_cid);
         return parent_cid;
     }
