@@ -8,6 +8,7 @@ import com.dlq.mall.product.service.CategoryService;
 import com.dlq.mall.product.service.impl.CategoryServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -32,6 +33,13 @@ class MiProductApplicationTests {
 
     @Autowired
     CategoryServiceImpl service;
+    @Autowired
+    RedissonClient redissonClient;
+
+    @Test
+    public void testRedissonTest() {
+        System.out.println(redissonClient);
+    }
 
     public static void main(String[] args) {
         String aaa ="羽绒服棉服运动裤夹克/风衣卫衣/套头衫T恤套装乒羽网服健身服运动背心毛衫/线衫运动配饰";
