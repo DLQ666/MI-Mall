@@ -8,6 +8,8 @@ import com.dlq.mall.product.vo.webvo.Catelog2Vo;
 import com.dlq.mall.product.vo.webvo.Catelog3Vo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -39,6 +41,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RedissonClient redisson;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -109,13 +114,31 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         if (StringUtils.isEmpty(catalogJson)){
             //2、判断缓存中没有数据，就从数据库查询
             System.out.println("缓存不命中，查询数据库。。。");
-            Map<String, List<Catelog2Vo>> catalogJsonFromDb = getCatalogJsonFromDbWithRedisLock();
+            Map<String, List<Catelog2Vo>> catalogJsonFromDb = getCatalogJsonFromDbWithRedissonLock();
             return catalogJsonFromDb;
         }
         System.out.println("缓存命中。。。");
         //转为我们指定的对象
         Map<String, List<Catelog2Vo>> result = JSON.parseObject(catalogJson,new TypeReference<Map<String, List<Catelog2Vo>>>(){});
         return result;
+    }
+
+    //从数据库查询并封装分类数据-----加Redis分布式锁
+    public Map<String, List<Catelog2Vo>> getCatalogJsonFromDbWithRedissonLock() {
+        //只要是同一把锁，就能锁住需要这个的所有线程
+        //在分布式情况下，想要锁住所有，必须使用分布式锁
+        //1、占分布式锁，去Redis占坑
+        RLock lock = redisson.getLock("CatalogJson-lock");
+        lock.lock();
+        //加锁成功，执行业务-查询数据库
+        System.out.println("获取分布式锁成功。。。。");
+        Map<String, List<Catelog2Vo>> dataFromDb;
+        try {
+            dataFromDb = getDataFromDb();
+        }finally {
+            lock.unlock();
+        }
+        return dataFromDb;
     }
 
     //从数据库查询并封装分类数据-----加Redis分布式锁

@@ -5,14 +5,13 @@ import com.dlq.mall.product.service.CategoryService;
 import com.dlq.mall.product.vo.webvo.Catelog2Vo;
 import io.lettuce.core.dynamic.domain.Timeout;
 import org.omg.CORBA.TIMEOUT;
-import org.redisson.api.RLock;
-import org.redisson.api.RReadWriteLock;
-import org.redisson.api.RedissonClient;
+import org.redisson.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -127,5 +126,52 @@ public class IndexController {
             System.out.println("读锁释放..."+Thread.currentThread().getId());
         }
         return s;
+    }
+
+    /**
+     * 信号量--》也可以用作分布式限流
+     * 车库停车
+     * 3车位
+     */
+    @ResponseBody
+    @GetMapping("/park")
+    public String park() throws InterruptedException {
+        RSemaphore park = redisson.getSemaphore("park");
+//        park.acquire(); //获取一个信号，获取一个值，占一个车位
+        boolean b = park.tryAcquire();
+        if (b){
+            //执行业务
+        }else {
+            return "error";
+        }
+        return "ok"+b;
+    }
+
+    @ResponseBody
+    @GetMapping("/go")
+    public String go() throws InterruptedException {
+        RSemaphore park = redisson.getSemaphore("park");
+        park.release(); //释放一个车位
+        return "ok";
+    }
+
+    /**
+     * 闭锁模拟---放假，锁门场景
+     */
+    @ResponseBody
+    @GetMapping("/lockDoor")
+    public String lockDoor() throws InterruptedException {
+        RCountDownLatch door = redisson.getCountDownLatch("door");
+        door.trySetCount(5);
+        door.await(); //等待闭锁都完成
+        return "放假了....";
+    }
+
+    @ResponseBody
+    @GetMapping("/gogogo/{id}")
+    public String gogogo(@PathVariable("id") Long id) throws InterruptedException {
+        RCountDownLatch door = redisson.getCountDownLatch("door");
+        door.countDown(); //计数减一
+        return id + "班的人都走了...";
     }
 }
