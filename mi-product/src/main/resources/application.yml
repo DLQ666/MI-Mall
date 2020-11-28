@@ -21,6 +21,10 @@
 #  redis:
 #    host: gitdlq.top
 #    password: dlq.*123
+#  cache:
+#    type: redis
+#    redis:
+#      time-to-live: 360000
 #
 #mybatis-plus:
 #  mapper-locations: classpath:/mapper/**/*.xml
