@@ -6,6 +6,8 @@
 #    nacos:
 #      discovery:
 #        server-addr: gitdlq.top:8848  #配置nacos地址
+#  thymeleaf:
+#    cache: false #关闭thymeleaf 开发期间可以实时效果
 #
 #ES7_4_2:
 #  dlq:
