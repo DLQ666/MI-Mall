@@ -9,5 +9,5 @@ package com.dlq.mall.search.constant;
 public class EsConstant {
 
     //sku在es中的索引常量
-    public static final String PRODUCT_INDEX = "product";
+    public static final String PRODUCT_INDEX = "jdmall_product";
 }

@@ -1,4 +1,4 @@
-package com.dlq.mall.search.Controller;
+package com.dlq.mall.search.controller;
 
 import com.dlq.common.exception.BizCodeEnum;
 import com.dlq.common.to.es.SkuEsModule;
