@@ -69,5 +69,8 @@
 #        - id: jdmall_host_route
 #          uri: lb://mi-product
 #          predicates:
-#            - Host=**.gitdlq.top
-#
+#            - Host=gitdlq.top
+#        - id: jdmall_search_route
+#          uri: lb://mi-search
+#          predicates:
+#            - Host=search.gitdlq.top
