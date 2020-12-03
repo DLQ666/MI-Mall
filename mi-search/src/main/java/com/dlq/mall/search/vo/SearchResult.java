@@ -25,6 +25,7 @@ public class SearchResult {
     private Integer pageNum;//当前页码
     private Long total; //总记录数
     private Integer totalPages; //总页码
+    private List<Integer> pageNavs;
 
 
 

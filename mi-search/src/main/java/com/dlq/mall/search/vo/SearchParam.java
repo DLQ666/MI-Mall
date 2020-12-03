@@ -30,7 +30,7 @@ public class SearchParam {
      * brandId=1
      * attrs=2_5寸:6寸
      */
-    private Integer hasStock = 1; //是否显示有货 0(表示无货) 1(表示有货)  默认是有货状态
+    private Integer hasStock; //是否显示有货 0(表示无货) 1(表示有货)  默认是有货状态
     private String skuPrice;    //价格区间
     private List<Long> brandId; //按照品牌查询，可以多选
     private List<String> attrs; //按照属性进行筛选，可以多选

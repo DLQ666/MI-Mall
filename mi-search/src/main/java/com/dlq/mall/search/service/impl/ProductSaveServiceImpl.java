@@ -3,6 +3,7 @@ package com.dlq.mall.search.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.dlq.common.to.es.SkuEsModule;
 import com.dlq.mall.search.confg.ESConfig;
+import com.dlq.mall.search.constant.EsConstant;
 import com.dlq.mall.search.service.ProductSaveService;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -41,7 +42,7 @@ public class ProductSaveServiceImpl implements ProductSaveService {
         BulkRequest bulkRequest = new BulkRequest();
         for (SkuEsModule skuEsModule : skuEsModules) {
             //构造保存请求
-            IndexRequest indexRequest = new IndexRequest("product");
+            IndexRequest indexRequest = new IndexRequest(EsConstant.PRODUCT_INDEX);
             indexRequest.id(skuEsModule.getSkuId().toString());
 
             String s = JSON.toJSONString(skuEsModule);

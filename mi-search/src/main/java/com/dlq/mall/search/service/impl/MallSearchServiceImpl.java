@@ -106,7 +106,9 @@ public class MallSearchServiceImpl implements MallSearchService {
             }
         }
         //1.2 构建 bool filter 按照是否有库存进行查询
-        boolQuery.filter(QueryBuilders.termQuery("hasStock", param.getHasStock()==1));
+        if (param.getHasStock() != null){
+            boolQuery.filter(QueryBuilders.termQuery("hasStock", param.getHasStock()==1));
+        }
         //1.2 构建 bool filter 按照价格区间进行查询
         if (!StringUtils.isEmpty(param.getSkuPrice())){
             //1_500/_500/500_
@@ -173,11 +175,11 @@ public class MallSearchServiceImpl implements MallSearchService {
         //3、属性聚合
         NestedAggregationBuilder attr_agg = AggregationBuilders.nested("attr_agg", "attrs");
         //聚合出当前所有的attrId
-        TermsAggregationBuilder attr_id_agg = AggregationBuilders.terms("attr_id_agg").field("attrs.attrId").size(1);
+        TermsAggregationBuilder attr_id_agg = AggregationBuilders.terms("attr_id_agg").field("attrs.attrId");
         //聚合分析出当前attr_id对应的名字
         attr_id_agg.subAggregation(AggregationBuilders.terms("attr_name_agg").field("attrs.attrName").size(1));
         //聚合分析出当前attr_id对应的属性值
-        attr_id_agg.subAggregation(AggregationBuilders.terms("attr_value_agg").field("attrs.attrValue").size(1));
+        attr_id_agg.subAggregation(AggregationBuilders.terms("attr_value_agg").field("attrs.attrValue").size(50));
         attr_agg.subAggregation(attr_id_agg);
         sourceBuilder.aggregation(attr_agg);
 
@@ -303,6 +305,12 @@ public class MallSearchServiceImpl implements MallSearchService {
         //7、分页-总页码-计算得到
         int totalPages = (int)total%EsConstant.PRODUCT_PAGESIZE==0?(int)total/EsConstant.PRODUCT_PAGESIZE:((int)total/EsConstant.PRODUCT_PAGESIZE+1);
         result.setTotalPages(totalPages);
+
+        List<Integer> pageNavs = new ArrayList<>();
+        for (int i = 1; i <= totalPages; i++) {
+            pageNavs.add(i);
+        }
+        result.setPageNavs(pageNavs);
 
         return result;
     }
