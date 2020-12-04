@@ -826,7 +826,12 @@
 <script type="text/javascript">
     function search() {
         var keyword = $("#searchText").val()
-        window.location.href = "http://search.gitdlq.top/list.html?keyword=" + keyword;
+        if (keyword !== ""){
+            window.location.href = "http://search.gitdlq.top/list.html?keyword=" + keyword;
+        }else {
+            window.location.href = "http://search.gitdlq.top/list.html";
+        }
+
     }
 
 </script>
