@@ -441,10 +441,10 @@
                 <a >全部商品分类</a>
             </li>
             <li class="nav_li">
-                <a >服装城</a>
+                <a >京东时尚</a>
             </li>
             <li class="nav_li">
-                <a >没装馆</a>
+                <a >美妆馆</a>
             </li>
             <li class="nav_li">
                 <a >超市</a>
@@ -456,7 +456,7 @@
         <div class="spacer">|</div>
         <ul>
             <li class="nav_li">
-                <a >全球购</a>
+                <a >京东国际</a>
             </li>
             <li class="nav_li">
                 <a >闪购</a>
@@ -674,59 +674,61 @@
             <div class="bd mc">
                 <ul class="mc">
                     <li>
-                        <a  class="mc_a"><img src="./img/5a28b5a1n8a5c095f.jpg" alt=""></a>
+                        <a  class="mc_a"><img src="https://dlq-mi-mall.oss-cn-beijing.aliyuncs.com/2020-11-19/072a824d-fcad-4e95-8cfc-41c45a0abe86_1831cb31ecb63f24.jpg" alt=""></a>
                         <div class="mc_div">
                             <a  class="mc_div_a1">
-                                <em>华为 HUAWEI nova 2S 全面屏四摄 6GB +64GB 曜石黑 移动联通电信4G手机 双卡双待</em>
+                                <em>Apple iPhone 12 黑色 256GB 支持移动联通电信5G 双卡双待手机</em>
                             </a>
                             <p>
                                 <strong>
-                                    <em class="number J-p-5963064">￥2999.00</em>
+                                    <em class="number J-p-5963064">￥7599.00</em>
                                 </strong>
                             </p>
                             <a  class="mc_div_a2">立即抢购</a>
                         </div>
                     </li>
                     <li>
-                        <a  class="mc_a"><img src="./img/59f5eef1n99542494.jpg" alt=""></a>
+                        <a  class="mc_a"><img src="https://dlq-mi-mall.oss-cn-beijing.aliyuncs.com/2020-12-02/aec1c063-74fb-4908-875f-616fb647560c_e6d818cb94e1cf5b.jpg" alt=""></a>
                         <div class="mc_div">
                             <a  class="mc_div_a1">
-                                <em>【预约版】华为 HUAWEI 畅享7S 全面屏双摄 4GB +64GB 黑色 移动联通电信4G手机 双卡双待</em>
+                                <em>【预约版】Apple iPhone 12 白色 256GB 支持移动联通电信5G 双卡双待手机</em>
                             </a>
                             <p>
                                 <strong>
-                                    <em class="number J-p-5963064">￥1699.00</em>
+                                    <em class="number J-p-5963064">￥7599.00</em>
                                 </strong>
                             </p>
                             <a  class="mc_div_a2">立即抢购</a>
                         </div>
                     </li>
-                    <li style="margin-right: 0">
-                        <a  class="mc_a"><img src="./img/59f5eef1n99542494.jpg" alt=""></a>
+                    <li>
+                        <a  class="mc_a"><img src="https://dlq-mi-mall.oss-cn-beijing.aliyuncs.com/2020-11-19/8883a49c-60f6-493e-8e09-f099d560348d_3c64d4346f9a6cf3.jpg" alt=""></a>
                         <div class="mc_div">
                             <a  class="mc_div_a1">
-                                <em>华为 HUAWEI nova 2S 全面屏四摄 6GB +64GB 曜石黑 移动联通电信4G手机 双卡双待</em>
+                                <em>Apple iPhone 12 绿色 128GB 支持移动联通电信5G 双卡双待手机</em>
                             </a>
                             <p>
                                 <strong>
-                                    <em class="number J-p-5963064">￥2999.00</em>
+                                    <em class="number J-p-5963064">￥6799.00</em>
                                 </strong>
                             </p>
                             <a  class="mc_div_a2">立即抢购</a>
                         </div>
                     </li>
-                </ul>
-            </div>
-        </div>
-        <div class="JD_right">
-            <div class="hd"> 促销活动</div>
-            <div class="bd">
-                <ul>
-                    <li> . <a >红米千元全面屏手机上市</a></li>
-                    <li> . <a >锤子坚果Pro2火爆预约中</a></li>
-                    <li> . <a >大牌新品 疯狂抢购</a></li>
-                    <li> . <a >X20 vivo蓝新色上市</a></li>
-                    <li> . <a >荣耀畅玩7X新品上市</a></li>
+                    <li>
+                        <a  class="mc_a"><img src="https://dlq-mi-mall.oss-cn-beijing.aliyuncs.com/2020-11-19/7df75ea5-7b22-4c6a-8765-5d3203883f42_f50369e925acbd4e.jpg" alt=""></a>
+                        <div class="mc_div">
+                            <a  class="mc_div_a1">
+                                <em>Apple iPhone 12 红色 64GB 支持移动联通电信5G 双卡双待手机</em>
+                            </a>
+                            <p>
+                                <strong>
+                                    <em class="number J-p-5963064">￥6299.00</em>
+                                </strong>
+                            </p>
+                            <a  class="mc_div_a2">立即抢购</a>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -764,6 +766,13 @@
             </div>
         </div>
         <i><img src="image/right-@1x.png" alt=""></i>
+        <div class="JD_ipone_one d" th:each="nav:${result.navs}" >
+            <!--[[${#strings.listContains(brand,brand)}]]-->
+            <!--遍历面包屑-->
+            <a th:href="${nav.link}"><span th:text="${nav.navName}"></span>：<span class="JD_ipone_one_value" th:text="${nav.navValue}"></span><i></i></a>
+        </div>
+            <!--<a th:text="${result.navs.indexOf(nav)}"></a>
+            <a th:text="${result.navs.size()}"></a>-->
     </div>
 </div>
 
@@ -774,11 +783,11 @@
             <!--手机商品筛选-->
             <div class="title">
                 <h3><b>手机</b><em>商品筛选</em></h3>
-                <div class="st-ext">共&nbsp;<span>10135</span>个商品 </div>
+                <div class="st-ext">共&nbsp;<span>[[${result.total}]]</span>个商品 </div>
             </div>
-            <div class="JD_nav_logo">
+            <div class="JD_nav_logo" th:with="brandid = ${param.brandId}">
                 <!--品牌-->
-                <div class="JD_nav_wrap">
+                <div th:if="${#strings.isEmpty(brandid)}" class="JD_nav_wrap">
                     <div class="sl_key">
                         <span><b>品牌：</b></span>
                     </div>
@@ -824,8 +833,8 @@
                     </div>
                 </div>
                 <!--展示属性-->
-                <div class="JD_pre" th:each="attr:${result.attrs}">
-                    <div class="sl_key">
+                <div class="JD_pre" th:each="attr:${result.attrs}" th:if="${!#lists.contains(result.attrIds,attr.attrId)}">
+                    <div class="sl_key" >
                         <span th:text="${attr.attrName}">屏幕尺寸：</span>
                     </div>
                     <div class="sl_value">
@@ -841,7 +850,7 @@
             <div class="JD_show">
                 <a >
                     <span>
-                        更多选项（ CPU核数、网络、机身颜色 等）
+                       <<< 点击展开更多参数选项 >>>
                     </span>
                 </a>
             </div>
@@ -1033,11 +1042,15 @@
                             </div>
                         </div>
                         <div class="filter_top_right">
+                            <div class="f-result-sum">共
+                                <span id="J_resCount" class="num">[[${result.total}]]</span>
+                                件商品
+                            </div>
                             <span class="fp-text">
-                               <b>1</b><em>/</em><i>169</i>
+                               <b >[[${result.pageNum}]]</b><em>/</em><i>[[${result.totalPages}]]</i>
                            </span>
-                            <a  class="prev"><</a>
-                            <a  class="next"> > </a>
+                            <a  class="prev"  th:attr="pn=${result.pageNum > 1?(result.pageNum - 1):1},style=${result.pageNum > 1?'color: #aaa;;background: #fff;':''}" ><</a>
+                            <a  class="prev" th:attr="pn=${result.pageNum < result.totalPages?(result.pageNum + 1):result.totalPages},style=${result.pageNum < result.totalPages?'color: #aaa;;background: #fff;':'color: #ccc;background: ##F1F1F1;'}"> > </a>
                         </div>
                     </div>
                     <!--收货地址-->
@@ -1120,7 +1133,7 @@
                         </div>
                         <div class="filter_bottom_right">
                             <ul>
-                                <li>
+                                <!--<li>
                                     <a>
                                         <i></i>
                                         京东商城配送
@@ -1137,19 +1150,19 @@
                                         <i></i>
                                         货到付款
                                     </a>
-                                </li>
+                                </li>-->
                                 <li>
-                                    <a class="check_a" th:with="check = ${param.hasStock}">
+                                    <a class="check_a" th:with="check = ${param.hasStock}" >
                                         <input id="showHasStock" class="filter_bottom_input" type="checkbox" th:checked="${#strings.equals(check,'1')}">
-                                        仅显示有货
+                                        <label for="showHasStock" th:attr="style=${(!#strings.isEmpty(check)&&#strings.equals(check,'1'))?'color: #e4393c':''}">仅显示有货</label>
                                     </a>
                                 </li>
-                                <li>
+                                <!--<li>
                                     <a>
                                         <i></i>
                                         可配送全球
                                     </a>
-                                </li>
+                                </li>-->
                             </ul>
                         </div>
 
@@ -1178,10 +1191,10 @@
                                     离线商品名
                                 </a>
                             </p>
-                            <p class="tab_PI"><strong><a >11万+</a></strong>条评价
+                            <p class="tab_PI"><strong><a >100万+</a></strong>条评价
                                 <a  class="spu-link">二手有售</a>
                             </p>
-                            <p class="tab_CP"><a  title="京东商城Apple产品专营店">京东商城Apple产品...</a>
+                            <p class="tab_CP"><a  title="京东商城Apple产品专营店">京东商城旗舰店</a>
                                 <a href='#' title="联系供应商进行咨询">
                                     <img src="img/lianxikefu.png">
                                 </a>
@@ -1881,7 +1894,7 @@
               $(this).css({width:"86px"}).text('收起 ^');
           }else{
               $li.hide();
-              $('.JD_show span').css({width:"291px"}).text('更多选项（ CPU核数、网络、机身颜色 等）');
+              $('.JD_show span').css({width:"291px"}).text('<<< 点击展开更多参数选项 >>>');
           }
           return false;
       });
@@ -1972,11 +1985,19 @@
 
     function searchAttrs(name,value){
         //原来的页面+传入的值
-        var href = location.href +"";
-        if (href.indexOf("?") != -1){
-            location.href = location.href+"&"+name+"="+value;
+        var href = location.href;
+        let s = encodeURI(value);
+        //如果有就替换，没有就添加
+        if (href.indexOf(s) != -1){
+            var re=eval( '/('+name+'='+value+')([^&]*)/gi');
+            location.href= href.replace(re,name+'='+value);
+            // alert(location.href)
         }else {
-            location.href = location.href+"?"+name+"="+value;
+            if (href.indexOf("?") != -1){
+                location.href = location.href+"&"+name+"="+value;
+            }else {
+                location.href = location.href+"?&"+name+"="+value;
+            }
         }
     }
 
@@ -2007,6 +2028,20 @@
         return false;
     });
 
+    $(".prev").click(function () {
+        var pn = $(this).attr("pn");
+
+        var href = location.href;
+        if (href.indexOf("pageNum")!=-1){
+            //替换pageNum的值
+            location.href = replaceParamVal(href,"pageNum",pn);
+        }else {
+            // location.href = location.href+"&pageNum="+pn;
+            location.href = replaceParamVal(href,"pageNum",pn);
+        }
+        return false;
+    });
+
     function replaceParamVal(url,paramName,replaceVal) {
         var oUrl = url.toString();
         //如果有就替换，没有就添加
@@ -2019,7 +2054,7 @@
             if (oUrl.indexOf("?") != -1){
                 nUrl = oUrl + "&"+ paramName+'='+replaceVal;
             }else {
-                nUrl = oUrl + "?"+ paramName+'='+replaceVal;
+                nUrl = oUrl + "?&"+ paramName+'='+replaceVal;
             }
             return nUrl;
         }
@@ -2086,10 +2121,12 @@
     $("#showHasStock").change(function () {
         if ($(this).prop('checked')){
             //如果选中
+            $("#check_label").hover({"color":"#333"});
             location.href = replaceParamVal(location.href,"hasStock",1)
         }else {
             //如果没选中  就删除URL中条件
-            var re=eval( '/(hasStock=)([^&]*)/gi');
+            // $(".check_a").css({"color":"#e4393c"})
+            var re=eval( '/(&hasStock=)([^&]*)/gi');
             location.href = (location.href+"").replace(re,'');
         }
         return false;

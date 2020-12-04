@@ -1,27 +1,35 @@
 package com.dlq.mall.search.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.dlq.common.to.es.SkuEsModule;
+import com.dlq.common.utils.R;
 import com.dlq.mall.search.confg.ESConfig;
 import com.dlq.mall.search.constant.EsConstant;
+import com.dlq.mall.search.feign.ProductFeignService;
 import com.dlq.mall.search.service.MallSearchService;
+import com.dlq.mall.search.vo.AttrResponseVo;
+import com.dlq.mall.search.vo.BrandVo;
 import com.dlq.mall.search.vo.SearchParam;
 import com.dlq.mall.search.vo.SearchResult;
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.search.TotalHits;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.NestedQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.nested.NestedAggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.nested.ParsedNested;
-import org.elasticsearch.search.aggregations.bucket.terms.*;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedLongTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
@@ -29,11 +37,12 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -47,6 +56,8 @@ public class MallSearchServiceImpl implements MallSearchService {
 
     @Autowired
     RestHighLevelClient restHighLevelClient;
+    @Autowired
+    ProductFeignService productFeignService;
 
     //去es进行检索
     @Override
@@ -312,7 +323,117 @@ public class MallSearchServiceImpl implements MallSearchService {
         }
         result.setPageNavs(pageNavs);
 
+        /*//构建属性面包屑导航
+        if (param.getAttrs() != null && param.getAttrs().size() > 0) {
+            List<SearchResult.NavVo> collect = param.getAttrs().stream().map(attr -> {
+                //分析每一个attrs传来的查询参数值  attrs=2_5寸:6寸
+                SearchResult.NavVo navVo = new SearchResult.NavVo();
+                String[] s = attr.split("_");
+                navVo.setNavValue(s[1]);
+                //根据id查询属性分类名字---远程调用商品服务---按照属性id查询属性详细信息
+                R r = productFeignService.attrInfo(Long.parseLong(s[0]));
+                result.getAttrIds().add(Long.parseLong(s[0]));
+                if (r.getCode() == 0){
+                    AttrResponseVo data = r.getData("attr", new TypeReference<AttrResponseVo>() {});
+                    navVo.setNavName(data.getAttrName());
+                }else {
+                    navVo.setNavName(s[0]);
+                }
+                //取消面包屑，我们要跳转到那个地方，将请求地址的url里面的当前条件置空
+                //拿到所有的查询条件，去掉当前条件  attrs  =  2_iPhone 12
+                String replace = replaceQueryString(param, attr,"attrs");
+                navVo.setLink("http://search.gitdlq.top/list.html?"+replace);
+
+                return navVo;
+            }).collect(Collectors.toList());
+
+            result.setNavs(collect);
+        }*/
+
+        List<SearchResult.NavVo> collect = new ArrayList<>();
+
+        //构建品牌面包屑导航
+        if (param.getBrandId()!=null && param.getBrandId().size()>0){
+            collect = param.getBrandId().stream().map(brandById -> {
+                SearchResult.NavVo navVo = new SearchResult.NavVo();
+                navVo.setNavName("品牌");
+                R r = productFeignService.brandInfoById(brandById);
+                StringBuffer buffer = new StringBuffer();
+                String replace = "";
+                if (r.getCode() == 0) {
+                    BrandVo brand = r.getData("brand", new TypeReference<BrandVo>() {
+                    });
+                    buffer.append(brand.getName());
+                    replace = replaceQueryString(param, brand.getBrandId() + "", "brandId");
+                } else {
+                    navVo.setNavValue(String.valueOf(brandById));
+                }
+                navVo.setNavValue(buffer.toString());
+                navVo.setLink("http://search.gitdlq.top/list.html?" + replace);
+                return navVo;
+            }).collect(Collectors.toList());
+
+            /*List<SearchResult.NavVo> navs = result.getNavs();
+            SearchResult.NavVo navVo = new SearchResult.NavVo();
+
+            navVo.setNavName("品牌");
+            R r = productFeignService.brandInfo(param.getBrandId());
+            if (r.getCode() == 0){
+                List<BrandVo> brand = r.getData("brand", new TypeReference<List<BrandVo>>() {
+                });
+                StringBuffer buffer = new StringBuffer();
+                String replace = "";
+                for (BrandVo brandVo : brand) {
+                    buffer.append(brandVo.getName());
+                    replace = replaceQueryString(param,brandVo.getBrandId()+"","brandId");
+                }
+                navVo.setNavValue(buffer.toString());
+                navVo.setLink("http://search.gitdlq.top/list.html?"+replace);
+            }
+            navs.add(navVo);*/
+        }
+
+        //构建属性面包屑导航
+        if (param.getAttrs() != null && param.getAttrs().size() > 0) {
+            List<SearchResult.NavVo> finalCollect = collect;
+            param.getAttrs().stream().map(attr -> {
+                //分析每一个attrs传来的查询参数值  attrs=2_5寸:6寸
+                SearchResult.NavVo navVo = new SearchResult.NavVo();
+                String[] s = attr.split("_");
+                navVo.setNavValue(s[1]);
+                //根据id查询属性分类名字---远程调用商品服务---按照属性id查询属性详细信息
+                R r = productFeignService.attrInfo(Long.parseLong(s[0]));
+                result.getAttrIds().add(Long.parseLong(s[0]));
+                if (r.getCode() == 0) {
+                    AttrResponseVo data = r.getData("attr", new TypeReference<AttrResponseVo>() {
+                    });
+                    navVo.setNavName(data.getAttrName());
+                } else {
+                    navVo.setNavName(s[0]);
+                }
+                //取消面包屑，我们要跳转到那个地方，将请求地址的url里面的当前条件置空
+                //拿到所有的查询条件，去掉当前条件  attrs  =  2_iPhone 12
+                String replace = replaceQueryString(param, attr, "attrs");
+                navVo.setLink("http://search.gitdlq.top/list.html?" + replace);
+                finalCollect.add(navVo);
+                return navVo;
+            }).collect(Collectors.toList());
+        }
+        result.setNavs(collect);
+
         return result;
+    }
+
+    private String replaceQueryString(SearchParam param, String value,String key) {
+        String encode = null;
+        try {
+            encode = URLEncoder.encode(value, "UTF-8");
+            //浏览器对空格编码和java不一样，所以java将空格替换为+号，就把+号替换成浏览器的%20
+            encode = encode.replace("+", "%20");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return param.get_queryString().replace("&"+key+"="+encode,"");
     }
 
 }

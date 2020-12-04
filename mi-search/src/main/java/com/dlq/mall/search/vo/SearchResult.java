@@ -3,6 +3,7 @@ package com.dlq.mall.search.vo;
 import com.dlq.common.to.es.SkuEsModule;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +28,16 @@ public class SearchResult {
     private Integer totalPages; //总页码
     private List<Integer> pageNavs;
 
+    //面包屑导航
+    private List<NavVo> navs = new ArrayList<>();
+    private List<Long> attrIds = new ArrayList<>();
 
+    @Data
+    public static class NavVo{
+        private String navName;
+        private String navValue;
+        private String link;
+    }
 
     //品牌信息vo
     @Data
