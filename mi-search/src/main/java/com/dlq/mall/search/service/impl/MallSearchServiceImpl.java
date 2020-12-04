@@ -354,11 +354,11 @@ public class MallSearchServiceImpl implements MallSearchService {
 
         //构建品牌面包屑导航
         if (param.getBrandId()!=null && param.getBrandId().size()>0){
+            StringBuffer buffer = new StringBuffer();
             collect = param.getBrandId().stream().map(brandById -> {
                 SearchResult.NavVo navVo = new SearchResult.NavVo();
                 navVo.setNavName("品牌");
                 R r = productFeignService.brandInfoById(brandById);
-                StringBuffer buffer = new StringBuffer();
                 String replace = "";
                 if (r.getCode() == 0) {
                     BrandVo brand = r.getData("brand", new TypeReference<BrandVo>() {

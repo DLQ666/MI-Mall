@@ -2058,7 +2058,6 @@
             }
             return nUrl;
         }
-
     }
 
     $(".sort_a").click(function () {
@@ -2103,6 +2102,7 @@
     $("#skuPriceSearchBtn").click(function () {
         //拼上价格区间  的查询条件
         var from = $("#skuPriceFrom").val();
+        // alert(from)
         var to = $("#skuPriceTo").val();
         if (from<0){
             from = "";
@@ -2111,8 +2111,37 @@
             to = "";
         }
         var query = from + "_" + to;
-        location.href = replaceParamVal(location.href,"skuPrice",query);
-    });
+        location.href = replacePriceSearch(location.href,"skuPrice=",query)
+        /*if (location.href.indexOf("skuPrice=") != -1){
+            var re=eval( '/('+"skuPrice="+')([^&]*)/gi');
+            location.href = location.href.replace(re,"skuPrice="+query);
+        }else {
+            if (location.href.indexOf("?") != -1){
+                location.href = location.href + "&"+ "skuPrice="+query;
+            }else {
+                location.href = location.href + "?&"+ "skuPrice="+query;
+            }
+        }*/
+        // alert(location.href)
+    })
+
+    function replacePriceSearch(url,paramName,replaceVal) {
+        var oUrl = url.toString();
+        //如果有就替换，没有就添加
+        if (oUrl.indexOf(paramName) != -1){
+            var re=eval( '/('+paramName+')([^&]*)/gi');
+            var nUrl = oUrl.replace(re,paramName+replaceVal);
+            return nUrl;
+        }else {
+            var nUrl = ""
+            if (oUrl.indexOf("?") != -1){
+                nUrl = oUrl + "&"+ paramName+replaceVal;
+            }else {
+                nUrl = oUrl + "?&"+ paramName+replaceVal;
+            }
+            return nUrl;
+        }
+    }
 
     /*$(".check_a").click(function () {
         $(".filter_bottom_input")[0].checked = true;
