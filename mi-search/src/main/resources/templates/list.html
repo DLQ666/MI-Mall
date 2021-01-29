@@ -18,10 +18,10 @@
     <div class="header_head_box">
         <b class="header_head_p">
             <div style="overflow: hidden">
-                <a href="http://gitdlq.top" class="header_head_p_a1" style="width:73px;">
+                <a href="http://dlqk8s.top:81" class="header_head_p_a1" style="width:73px;">
                     京东商城首页
                 </a>
-                <a href="http://gitdlq.top" class="header_head_p_a">
+                <a href="http://dlqk8s.top:81" class="header_head_p_a">
                     <!--<img src="img/img_05.png" style="border-radius: 50%;"/>-->
                     北京</a>
             </div>
@@ -400,7 +400,7 @@
 <!--搜索导航-->
 <div class="header_sous">
     <div class="logo">
-        <a href="http://gitdlq.top"><img src="./image/jdlogo-201708-@2x.png" alt=""></a>
+        <a href="http://dlqk8s.top:81"><img src="./image/jdlogo-201708-@2x.png" alt=""></a>
     </div>
     <div class="header_form">
         <input id="searchText" type="text" placeholder="输入搜索条件" th:value="${param.keyword}"/>
@@ -1215,12 +1215,75 @@
                     <div class="filter_page">
                         <div class="page_wrap">
                             <span class="page_span1">
-                                <a class="page_a"  th:attr="pn=${result.pageNum > 1?(result.pageNum - 1):1},style=${result.pageNum > 1?'color: #000;;background: #f0f0f0;':''}" >
+                                <a class="page_up"  th:attr="pn=${result.pageNum > 1?(result.pageNum - 1):1},style=${result.pageNum > 1?'color: #000;;background: #f0f0f0;':''}" >
                                     < 上一页
                                 </a>
-                                <a class="page_a" th:attr="pn=${nav},style=${nav == result.pageNum?'border: 0;color:#ee2222;background: #fff':''}" th:each="nav:${result.pageNavs}" >[[${nav}]]</a>
-                                <a style="border: 0;font-size: 20px;color: #999;background: #fff">...</a>
-                                <a class="page_a"  th:attr="pn=${result.pageNum < result.totalPages?(result.pageNum + 1):result.totalPages},style=${result.pageNum < result.totalPages?'color: #000;;background: #f0f0f0;':'color: #ccc;background: #fff;'}">
+                                <a class="page_a"
+                                   th:if="${result.totalPages<=2}"
+                                   th:attr="pn=${nav},style=${nav == result.pageNum?'border: 0;color:#ee2222;background: #fff':''}"
+                                   th:each="nav:${#numbers.sequence(1,result.totalPages)}"
+                                >[[${nav}]]
+                                </a>
+                                <a class="page_a"
+                                   th:if="${result.totalPages>2 && result.totalPages<=7}"
+                                   th:attr="pn=${nav},style=${nav == result.pageNum?'border: 0;color:#ee2222;background: #fff':''}"
+                                   th:each="nav:${#numbers.sequence(1,2)}"
+                                >[[${nav}]]
+                                </a>
+                                <a th:if="${result.totalPages>2 && result.totalPages<=7 && result.pageNum>5}" style="border: 0;font-size: 20px;color: #999;background: #fff">...</a>
+                                <a class="page_a"
+                                   th:if="${result.totalPages>2 && result.totalPages<=7 && result.pageNum<=5}"
+                                   th:attr="pn=${nav},style=${nav == result.pageNum?'border: 0;color:#ee2222;background: #fff':''}"
+                                   th:each="nav:${#numbers.sequence(3,result.totalPages)}"
+                                >[[${nav}]]
+                                </a>
+                                <a class="page_a"
+                                   th:if="${result.totalPages>2 && result.totalPages<=7 && result.pageNum>5}"
+                                   th:attr="pn=${nav},style=${nav == result.pageNum?'border: 0;color:#ee2222;background: #fff':''}"
+                                   th:each="nav:${#numbers.sequence(((result.pageNum)-2),result.totalPages)}"
+                                >[[${nav}]]
+                                </a>
+
+                                <a class="page_a"
+                                   th:if="${result.totalPages>7}"
+                                   th:attr="pn=${nav},style=${nav == result.pageNum?'border: 0;color:#ee2222;background: #fff':''}"
+                                   th:each="nav:${#numbers.sequence(1,2)}"
+                                >[[${nav}]]
+                                </a>
+                                <a th:if="${result.totalPages>7 && result.pageNum>5}" style="border: 0;font-size: 20px;color: #999;background: #fff">...</a>
+                                <a class="page_a"
+                                   th:if="${result.totalPages>7 && result.pageNum<=5}"
+                                   th:attr="pn=${nav},style=${nav == result.pageNum?'border: 0;color:#ee2222;background: #fff':''}"
+                                   th:each="nav:${#numbers.sequence(3,7)}"
+                                >[[${nav}]]
+                                </a>
+                                <a class="page_a"
+                                   th:if="${result.totalPages>7 && result.pageNum>5 && result.pageNum>((result.totalPages)-3)}"
+                                   th:attr="pn=${nav},style=${nav == result.pageNum?'border: 0;color:#ee2222;background: #fff':''}"
+                                   th:each="nav:${#numbers.sequence(((result.totalPages)-4),result.totalPages)}"
+                                >[[${nav}]]
+                                </a>
+                                <a class="page_a"
+                                   th:if="${result.totalPages>7 && result.pageNum>5 && result.pageNum<=((result.totalPages)-3)}"
+                                   th:attr="pn=${nav},style=${nav == result.pageNum?'border: 0;color:#ee2222;background: #fff':''}"
+                                   th:each="nav:${#numbers.sequence(((result.pageNum)-2),((result.pageNum)+2))}"
+                                >[[${nav}]]
+                                </a>
+                                <!--<a class="page_a"
+                                   th:if="${result.totalPages>7}"
+                                   th:attr="pn=${nav},style=${nav == result.pageNum?'border: 0;color:#ee2222;background: #fff':''}"
+                                   th:each="nav:${#numbers.sequence(1,2)}"
+                                >[[${nav}]]
+                                </a>-->
+                                <!--<a class="page_a"
+                                   th:attr="pn=${nav},style=${nav == result.pageNum?'border: 0;color:#ee2222;background: #fff':''}"
+                                   th:each="nav:${result.pageNavs}" >[[${nav}]]
+                                </a>-->
+                                <a th:if="${result.totalPages>7 && result.pageNum<=((result.totalPages)-3)}" style="border: 0;font-size: 20px;color: #999;background: #fff">...</a>
+
+                                <a class="page_down"
+                                   th:attr="pn=${result.pageNum < result.totalPages?(result.pageNum + 1):result.totalPages},
+                                   style=${result.pageNum < result.totalPages?'color: #000;;background: #f0f0f0;':'color: #ccc;background: #fff;'}">
                                     下一页 >
                                 </a>
                             </span>
@@ -1842,7 +1905,7 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script th:inline="javascript" type="text/javascript">
     $(".sl_ext a:nth-child(1)").hover(function(){
         $(this).children("b").stop(true).animate({top:"3px"},50);
         $(this).children("i").stop(true).animate({top:"-23px"},50)
@@ -2014,10 +2077,45 @@
 
     }
 
+    $(".page_up").click(function () {
+        var pn = $(this).attr("pn");
+        var result = [[${result}]];
+        var href = location.href;
+        if (result.pageNum <= 1) {
+            return false;
+        }
+        if (href.indexOf("pageNum")!=-1){
+            //替换pageNum的值
+            location.href = replaceParamVal(href,"pageNum",pn);
+        }else {
+            // location.href = location.href+"&pageNum="+pn;
+            location.href = replaceParamVal(href,"pageNum",pn);
+        }
+        return false;
+    });
     $(".page_a").click(function () {
         var pn = $(this).attr("pn");
-
+        var result = [[${result}]];
         var href = location.href;
+        if (pn == result.pageNum){
+            return false;
+        }
+        if (href.indexOf("pageNum")!=-1){
+            //替换pageNum的值
+            location.href = replaceParamVal(href,"pageNum",pn);
+        }else {
+            // location.href = location.href+"&pageNum="+pn;
+            location.href = replaceParamVal(href,"pageNum",pn);
+        }
+        return false;
+    });
+    $(".page_down").click(function () {
+        var pn = $(this).attr("pn");
+        var result = [[${result}]];
+        var href = location.href;
+        if (result.pageNum >= result.totalPages) {
+            return false;
+        }
         if (href.indexOf("pageNum")!=-1){
             //替换pageNum的值
             location.href = replaceParamVal(href,"pageNum",pn);
@@ -2028,10 +2126,29 @@
         return false;
     });
 
-    $(".prev").click(function () {
+    $(".prev:eq(0)").click(function () {
         var pn = $(this).attr("pn");
-
+        var result = [[${result}]];
         var href = location.href;
+        if (result.pageNum <= 1) {
+            return false;
+        }
+        if (href.indexOf("pageNum")!=-1){
+            //替换pageNum的值
+            location.href = replaceParamVal(href,"pageNum",pn);
+        }else {
+            // location.href = location.href+"&pageNum="+pn;
+            location.href = replaceParamVal(href,"pageNum",pn);
+        }
+        return false;
+    });
+    $(".prev:eq(1)").click(function () {
+        var pn = $(this).attr("pn");
+        var result = [[${result}]];
+        var href = location.href;
+        if (result.pageNum >= result.totalPages) {
+            return false;
+        }
         if (href.indexOf("pageNum")!=-1){
             //替换pageNum的值
             location.href = replaceParamVal(href,"pageNum",pn);
