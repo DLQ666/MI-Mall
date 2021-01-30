@@ -17,6 +17,7 @@ body,
 html {
     background: #F6F6F6;
     position: relative;
+    min-width: 1500px;
 }
 
 .top_find {
@@ -359,12 +360,11 @@ header .header_sous .header_form {
     left: 280px;
     top: 25px;
     width: 550px;
-    height: 35px;
+    height: 32px;
     border: 2px solid #f10215;
 }
 
 header .header_sous .header_form input {
-    padding: 2px;
     padding-left: 17px;
     width: 485px;
     height: 33px;
