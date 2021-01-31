@@ -1,5 +1,6 @@
 package com.dlq.mall.product.service.impl;
 
+import com.dlq.mall.product.vo.sku.SkuItemVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -91,6 +92,24 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
 
         List<SkuInfoEntity> list = this.list(new QueryWrapper<SkuInfoEntity>().eq("spu_id",spuId));
         return list;
+    }
+
+    @Override
+    public SkuItemVo itemInfo(Long skuId) {
+        SkuItemVo skuItemVo = new SkuItemVo();
+        //1、sku基本信息获取  pms_sku_info
+
+
+        //2、获取sku的图片信息pms_sku_images
+
+        //3、获取spu的销售属性组合
+
+        //4、获取spu的介绍
+
+        //5、获取spu的规格参数信息
+
+
+        return null;
     }
 
 }
