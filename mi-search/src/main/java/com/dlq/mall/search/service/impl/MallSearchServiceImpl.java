@@ -157,6 +157,9 @@ public class MallSearchServiceImpl implements MallSearchService {
         //pageNum:1  from:0 size:5 【0,1,2,3,4】
         //pageNum：2 from：5 size；5 [5,6,7,8,9]
         //from = （pageNum-1）* size
+        if (param.getPageNum() < 1) {
+            param.setPageNum(1);
+        }
         sourceBuilder.from((param.getPageNum()-1)*EsConstant.PRODUCT_PAGESIZE);
         sourceBuilder.size(EsConstant.PRODUCT_PAGESIZE);
         //3、高亮
@@ -306,8 +309,6 @@ public class MallSearchServiceImpl implements MallSearchService {
         }
         result.setCatalogs(catalogVos);
 
-        //5、分页-当前页码
-        result.setPageNum(param.getPageNum());
 
         //6、分页-总记录数
         long total = hits.getTotalHits().value;
@@ -316,6 +317,9 @@ public class MallSearchServiceImpl implements MallSearchService {
         //7、分页-总页码-计算得到
         int totalPages = (int)total%EsConstant.PRODUCT_PAGESIZE==0?(int)total/EsConstant.PRODUCT_PAGESIZE:((int)total/EsConstant.PRODUCT_PAGESIZE+1);
         result.setTotalPages(totalPages);
+
+        //5、分页-当前页码
+        result.setPageNum(param.getPageNum());
 
         List<Integer> pageNavs = new ArrayList<>();
         for (int i = 1; i <= totalPages; i++) {
@@ -342,7 +346,7 @@ public class MallSearchServiceImpl implements MallSearchService {
                 //取消面包屑，我们要跳转到那个地方，将请求地址的url里面的当前条件置空
                 //拿到所有的查询条件，去掉当前条件  attrs  =  2_iPhone 12
                 String replace = replaceQueryString(param, attr,"attrs");
-                navVo.setLink("http://search.gitdlq.top/list.html?"+replace);
+                navVo.setLink("http://search.dlqk8s.top:81/list.html?"+replace);
 
                 return navVo;
             }).collect(Collectors.toList());
@@ -369,7 +373,7 @@ public class MallSearchServiceImpl implements MallSearchService {
                     navVo.setNavValue(String.valueOf(brandById));
                 }
                 navVo.setNavValue(buffer.toString());
-                navVo.setLink("http://search.gitdlq.top/list.html?" + replace);
+                navVo.setLink("http://search.dlqk8s.top:81/list.html?" + replace);
                 return navVo;
             }).collect(Collectors.toList());
 
@@ -388,7 +392,7 @@ public class MallSearchServiceImpl implements MallSearchService {
                     replace = replaceQueryString(param,brandVo.getBrandId()+"","brandId");
                 }
                 navVo.setNavValue(buffer.toString());
-                navVo.setLink("http://search.gitdlq.top/list.html?"+replace);
+                navVo.setLink("http://search.dlqk8s.top:81/list.html?"+replace);
             }
             navs.add(navVo);*/
         }
@@ -414,7 +418,7 @@ public class MallSearchServiceImpl implements MallSearchService {
                 //取消面包屑，我们要跳转到那个地方，将请求地址的url里面的当前条件置空
                 //拿到所有的查询条件，去掉当前条件  attrs  =  2_iPhone 12
                 String replace = replaceQueryString(param, attr, "attrs");
-                navVo.setLink("http://search.gitdlq.top/list.html?" + replace);
+                navVo.setLink("http://search.dlqk8s.top:81/list.html?" + replace);
                 finalCollect.add(navVo);
                 return navVo;
             }).collect(Collectors.toList());
