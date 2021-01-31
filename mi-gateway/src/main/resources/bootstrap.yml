@@ -1,9 +1,11 @@
 spring:
   application:
     name: mi-gateway
+  profiles:
+    active: dev
   cloud:
     nacos:
       config:
-        server-addr: gitdlq.top:8848 #配置中心地址
+        server-addr: dlqk8s.top:8848 #配置中心地址
         file-extension: yaml #指定yaml格式的配置
         namespace: c14b2b5b-549a-455f-bae7-76bca1941389

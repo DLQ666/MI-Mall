@@ -1,6 +1,8 @@
 spring:
   application:
     name: mi-member
+  profiles:
+    active: dev
   cloud:
     nacos:
       config:

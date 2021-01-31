@@ -1,6 +1,8 @@
 spring:
   application:
     name: mi-coupon
+  profiles:
+    active: dev
   cloud:
     nacos:
       config:
