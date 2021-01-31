@@ -264,7 +264,7 @@ html {
     position: absolute;
     left: 330px;
     top: 27px;
-    width: 550px;
+    width: 570px;
     height: 35px;
     border: 2px solid #f10215;
     float: left;
@@ -272,7 +272,7 @@ html {
 
 .header_sous .header_form input {
     padding: 4px;
-    width: 460px;
+    width: 480px;
     height: 30px;
     line-height: 33px;
     font-size: 14px;
@@ -312,7 +312,6 @@ html {
     position: relative;
     cursor: default;
     zoom: 1;
-    z-index: 10;
     float: left;
 }
 
@@ -340,13 +339,23 @@ html {
 }
 
 .header_sous .header_ico .header_gw:hover {
-    box-shadow: 0px -2px 5px 0px #999;
+    box-shadow: 0 0 5px rgba(0,0,0,.2);
     border-bottom: 0;
+    background: #fff;
+}
+
+.header_ico.hover .spacer, .header_ico:hover .spacer {
+    position: absolute;
+    right: 0;
+    top: -7px;
+    width: 138px;
+    height: 12px;
+    background: #fff;
 }
 
 .header_sous .header_ico .header_ko {
     position: absolute;
-    top: 39px;
+    top: 42px;
     left: -160px;
     width: 268px;
     height: 60px;
@@ -357,7 +366,8 @@ html {
     border: 1px solid #DFDFDF;
     margin-top: -1px;
     display: none;
-    box-shadow: 0 0 5px 0 #999;
+    box-shadow: 0 0 5px rgba(0,0,0,.2);
+    z-index: 1;
 }
 
 .header_sous .header_ico .header_ko p {
@@ -365,7 +375,6 @@ html {
     font-size: 12px;
     padding-right: 30px;
     width: 89%;
-    margin-top: -1px;
 }
 
 .header_sous .header_form_nav {
@@ -919,6 +928,7 @@ html {
 
 .JD_ipone .JD_ipone_bar .d a:hover{
     border: 1px solid #e23a3a;
+    background: #fff;
 }
 
 .JD_ipone .JD_ipone_bar .c div, .JD_ipone .JD_ipone_bar .b div {
@@ -1883,7 +1893,7 @@ input[type=checkbox]{
 }
 
 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_page .page_wrap {
-    margin-left: 355px;
+    float:right;
 }
 
 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_page .page_wrap .page_span1 a {
