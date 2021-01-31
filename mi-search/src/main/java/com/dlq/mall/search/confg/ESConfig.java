@@ -43,7 +43,7 @@ public class ESConfig {
                 new UsernamePasswordCredentials(username, password));  //es账号密码（默认用户名为elastic）
         RestHighLevelClient client = new RestHighLevelClient(
                 RestClient.builder(
-                        new HttpHost("gitdlq.top", 9200, "http")
+                        new HttpHost("dlqk8s.top", 9200, "http")
                 ).setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
                     @Override
                     public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpAsyncClientBuilder) {
