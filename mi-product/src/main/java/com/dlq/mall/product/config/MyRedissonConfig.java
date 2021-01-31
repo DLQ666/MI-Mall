@@ -20,6 +20,8 @@ public class MyRedissonConfig {
 
     @Value("${spring.redis.password}")
     private String password;
+    @Value("${spring.redis.host}")
+    private String host;
 
     //所有对Redisson的使用都是通过RedissonClient对象
     @Bean(destroyMethod="shutdown")
@@ -28,7 +30,7 @@ public class MyRedissonConfig {
         Config config = new Config();
         //Redis url should start with redis:// or rediss:// (for SSL connection)
         //可以用"rediss://"来启用SSL连接
-        config.useSingleServer().setAddress("redis://gitdlq.top:6379").setPassword(password);
+        config.useSingleServer().setAddress("redis://"+host+":6379").setPassword(password);
 
         //2、根据Config创建出RedissonClient实例
         RedissonClient redissonClient = Redisson.create(config);
