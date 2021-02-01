@@ -143,12 +143,9 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
                 List<SkuImagesEntity> imagesEntities = item.getImages().stream().map(img -> {
                     SkuImagesEntity skuImagesEntity = new SkuImagesEntity();
-                    if (img.getDefaultImg() == 1) {
-                        skuImagesEntity.setSkuId(skuId);
-                        skuImagesEntity.setImgUrl(img.getImgUrl());
-                        skuImagesEntity.setDefaultImg(img.getDefaultImg());
-                        return skuImagesEntity;
-                    }
+                    skuImagesEntity.setSkuId(skuId);
+                    skuImagesEntity.setImgUrl(img.getImgUrl());
+                    skuImagesEntity.setDefaultImg(img.getDefaultImg());
                     return skuImagesEntity;
                 }).filter(entity->{
                     //返回true就是需要，返回false就是过滤掉剔除
