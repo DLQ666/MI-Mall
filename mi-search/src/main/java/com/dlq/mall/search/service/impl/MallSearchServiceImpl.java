@@ -367,8 +367,10 @@ public class MallSearchServiceImpl implements MallSearchService {
                 if (r.getCode() == 0) {
                     BrandVo brand = r.getData("brand", new TypeReference<BrandVo>() {
                     });
-                    buffer.append(brand.getName());
-                    replace = replaceQueryString(param, brand.getBrandId() + "", "brandId");
+                    if (brand != null){
+                        buffer.append(brand.getName());
+                        replace = replaceQueryString(param, brand.getBrandId() + "", "brandId");
+                    }
                 } else {
                     navVo.setNavValue(String.valueOf(brandById));
                 }
