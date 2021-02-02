@@ -1175,22 +1175,25 @@
                                 <i class="iconfont icon-weiguanzhu"></i>
                                 <a >关注</a>
                             </div>
-                            <p class="da">
-                                <a th:href="|http://item.dlqk8s.top:81/${product.skuId}.html|" title="购买AppleCare+，获得原厂2年整机保修(含电池)，和多达2次意外损坏的保修服务。购买勾选：保障服务、原厂保2年。">
-                                    <img th:src="${product.skuImg}" class="dim">
+                            <p class="da"><!--|http://item.dlqk8s.top:81/${skuId}.html|-->
+                                <!--<a th:each="attr:${product.getAttrs()}" th:href="|http://item.dlqk8s.top:81/${attr.getSkuId()}.html|" th:title="${attr.getSkuTitle()}">
+                                    <img src="" class="dim">
+                                </a>-->
+                                <a th:href="|http://item.dlqk8s.top:81/${product.spuId}.html|" title="购买AppleCare+，获得原厂2年整机保修(含电池)，和多达2次意外损坏的保修服务。购买勾选：保障服务、原厂保2年。">
+                                    <img th:src="${product.defImg}" class="dim">
                                 </a>
                             </p>
                             <ul class="tab_im">
-                                <li>
+                                <li th:each="attr:${product.getAttrs()}">
                                     <a title="黑色">
-                                        <img th:src="${product.skuImg}"></a>
+                                    <img th:src="${attr.getSkuImg()}"></a>
                                 </li>
                             </ul>
                             <p class="tab_R">
-                                <span th:utext="'<em>¥</em>'+${product.skuPrice}">¥5199.00</span>
+                                <span th:each="attr:${product.getAttrs()}" th:utext="'<em>¥</em>'+${attr.getSkuPrice()}">¥5199.00</span>
                             </p>
                             <p class="tab_JE">
-                                <a th:href="|http://item.dlqk8s.top:81/${product.skuId}.html|" th:utext="${product.skuTitle}" th:title="${product.skuTitle}">
+                                <a th:each="attr:${product.getAttrs()}" th:href="|http://item.dlqk8s.top:81/${attr.getSkuId()}.html|" th:utext="${attr.getSkuTitle()}" th:title="${attr.getSkuTitle()}">
                                     离线商品名
                                 </a>
                             </p>
@@ -1923,11 +1926,17 @@
         $(this).children("span").stop(true).animate({top:"14px"},100);
         $(this).children("i").stop(true).animate({top:"-1px"},100).css({display:"block"})
     });
+    /*$(function () {
+        var a = $('.tab_im img').prop('src');
+        $('.tab_im img').parents('ul').prev().find('img').prop('src',a);
+    })*/
     $('.tab_im img').hover(function(){
         var a=$(this).prop('src');
         var index=$(this).parents('li').index();
+        console.log(index)
         $(this).parents('li').css('border','2px solid #e4393c').siblings('li').css('border','1px solid #ccc');
         $(this).parents('ul').prev().find('img').prop('src',a);
+        $(this).parents('ul').siblings('.da').find('a').eq(index).css('display','block').siblings('a').css('display','none');
         $(this).parents('ul').siblings('.tab_JE').find('a').eq(index).css('display','block').siblings('a').css('display','none');
         $(this).parents('ul').siblings('.tab_R').find('span').eq(index).css('display','block').siblings('span').css('display','none')
     });
@@ -1969,10 +1978,10 @@
 
     $(".rig_tab>div").hover(function(){
         var i = $(this).index();
-        $(this).find('.ico').css({display:'block'}).stop(true).animate({top:"205px"},300)
+        $(this).find('.ico').css({display:'block'}).stop(true).animate({top:"205px"},200)
     },function(){
         var i = $(this).index();
-        $(this).find('.ico').css({display:'none'}).stop(true).animate({top:"230px"})
+        $(this).find('.ico').css({display:'none'}).stop(true).animate({top:"220px"})
     });
 
     $('.header_main_left>ul>li').hover(function() {

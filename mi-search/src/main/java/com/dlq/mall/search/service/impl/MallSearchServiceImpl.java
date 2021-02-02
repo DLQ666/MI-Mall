@@ -3,6 +3,8 @@ package com.dlq.mall.search.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.dlq.common.to.es.SkuEsModule;
+import com.dlq.common.to.es.SkuRes;
+import com.dlq.common.to.es.SpuEsModule;
 import com.dlq.common.utils.R;
 import com.dlq.mall.search.confg.ESConfig;
 import com.dlq.mall.search.constant.EsConstant;
@@ -23,13 +25,18 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.BucketOrder;
 import org.elasticsearch.search.aggregations.bucket.nested.NestedAggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.nested.ParsedNested;
 import org.elasticsearch.search.aggregations.bucket.terms.ParsedLongTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.MinAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.ParsedTopHits;
+import org.elasticsearch.search.aggregations.metrics.TopHitsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
@@ -39,6 +46,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -197,6 +205,30 @@ public class MallSearchServiceImpl implements MallSearchService {
         attr_agg.subAggregation(attr_id_agg);
         sourceBuilder.aggregation(attr_agg);
 
+        //4、Spu商品聚合 及 聚合后的排序
+        TermsAggregationBuilder spu_agg = AggregationBuilders.terms("spu_agg").field("spuId").size(500000);
+        TermsAggregationBuilder spuImg = AggregationBuilders.terms("spuImg").field("skuImg");
+        if (!StringUtils.isEmpty(param.getSort())) {
+            String sort = param.getSort();
+            //sort=hotScore_asc/desc sort = saleCount_asc/desc sort = skuPrice_asc/desc
+            String[] s = sort.split("_");
+            if (s[0].equalsIgnoreCase("hotScore") && s[1].equalsIgnoreCase("asc")) {
+                MinAggregationBuilder hotScore = AggregationBuilders.min("hotScore");
+                spu_agg = AggregationBuilders.terms("spu_agg").field("spuId").size(500000).order(hotScore);
+            }
+        }
+        TopHitsAggregationBuilder top_img = AggregationBuilders.topHits("top_Img").fetchSource(new String[]{"skuImg", "skuTitle", "skuPrice", "skuId", "spuId"}, new String[]{}).size(1);
+        if (!StringUtils.isEmpty(param.getKeyword())){
+            HighlightBuilder highlightBuilder = new HighlightBuilder();
+            highlightBuilder.field("skuTitle");
+            highlightBuilder.preTags("<b style='color:#e4393c'>");
+            highlightBuilder.postTags("</b>");
+            top_img.highlighter(highlightBuilder);
+        }
+        spuImg.subAggregation(top_img);
+        spu_agg.subAggregation(spuImg);
+        sourceBuilder.aggregation(spu_agg);
+
         System.out.println("构建的DSL语句："+sourceBuilder.toString());
 
         SearchRequest searchRequest = new SearchRequest(new String[]{EsConstant.PRODUCT_INDEX},sourceBuilder);
@@ -206,24 +238,41 @@ public class MallSearchServiceImpl implements MallSearchService {
     //构建结果数据
     private SearchResult buildSearchResult(SearchResponse response,SearchParam param) {
         SearchResult result = new SearchResult();
-        //1、返回所有查询到的商品
-        SearchHits hits = response.getHits();
-        List<SkuEsModule> esModules = new ArrayList<>();
-        if (hits.getHits()!=null && hits.getHits().length>0){
-            for (SearchHit hit : hits.getHits()) {
-                String sourceAsString = hit.getSourceAsString();
-                SkuEsModule skuEsModule = JSON.parseObject(sourceAsString, SkuEsModule.class);
-
+        //1、返回所有查询到的聚合Spu商品
+        ParsedStringTerms spu_agg = response.getAggregations().get("spu_agg");
+        List<? extends Terms.Bucket> spuAggBuckets = spu_agg.getBuckets();
+        List<SpuEsModule> spuEsModules = new ArrayList<>();
+        for (Terms.Bucket spuAggBucket : spuAggBuckets) {
+            SpuEsModule spuEsModule = new SpuEsModule();
+            long spuId = spuAggBucket.getKeyAsNumber().longValue();
+            spuEsModule.setSpuId(spuId);
+            List<SpuEsModule.SpuAttr> SpuAttrs = new ArrayList<>();
+            List<? extends Terms.Bucket> spuImg = ((ParsedStringTerms) spuAggBucket.getAggregations().get("spuImg")).getBuckets();
+            for (Terms.Bucket item : spuImg) {
+                ParsedTopHits topHits = item.getAggregations().get("top_Img");
+                SearchHit at = topHits.getHits().getAt(0);
+                String sourceAsString = at.getSourceAsString();
+                SkuRes SkuRes = JSON.parseObject(sourceAsString, SkuRes.class);
                 //设置高亮
                 if (!StringUtils.isEmpty(param.getKeyword())){
-                    HighlightField highlightField = hit.getHighlightFields().get("skuTitle");
+                    HighlightField highlightField = at.getHighlightFields().get("skuTitle");
                     String string = highlightField.getFragments()[0].string();
-                    skuEsModule.setSkuTitle(string);
+                    SkuRes.setSkuTitle(string);
                 }
-                esModules.add(skuEsModule);
+                SpuEsModule.SpuAttr spuAttr = new SpuEsModule.SpuAttr();
+                spuAttr.setSkuId(SkuRes.getSkuId());
+                spuAttr.setSkuImg(SkuRes.getSkuImg());
+                spuAttr.setSkuPrice(SkuRes.getSkuPrice());
+                spuAttr.setSkuTitle(SkuRes.getSkuTitle());
+                SpuAttrs.add(spuAttr);
+                spuEsModule.setAttrs(SpuAttrs);
+                if (spuEsModule.getDefImg() == null && SkuRes.getSkuImg() != null) {
+                    spuEsModule.setDefImg(SkuRes.getSkuImg());
+                }
             }
+            spuEsModules.add(spuEsModule);
         }
-        result.setProducts(esModules);
+        result.setProducts(spuEsModules);
 
         //2、当前所有商品涉及到的所有属性
         List<SearchResult.AttrVo> attrVos = new ArrayList<>();
@@ -311,7 +360,7 @@ public class MallSearchServiceImpl implements MallSearchService {
 
 
         //6、分页-总记录数
-        long total = hits.getTotalHits().value;
+        long total = spuAggBuckets.size();
         result.setTotal(total);
 
         //7、分页-总页码-计算得到

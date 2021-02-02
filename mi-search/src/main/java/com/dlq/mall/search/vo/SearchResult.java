@@ -1,6 +1,7 @@
 package com.dlq.mall.search.vo;
 
 import com.dlq.common.to.es.SkuEsModule;
+import com.dlq.common.to.es.SpuEsModule;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
 public class SearchResult {
 
     //查询到的所有商品信息
-    private List<SkuEsModule> products;
+    private List<SpuEsModule> products;
 
     private List<BrandVo> brands;//当前查询到的结果，所有涉及到的品牌
     private List<CatalogVo> catalogs; //当前查询到的结果。所有涉及到的分类
