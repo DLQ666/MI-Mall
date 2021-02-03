@@ -281,6 +281,12 @@ public class MallSearchServiceImpl implements MallSearchService {
                 if (spuEsModule.getDefImg() == null && SkuRes.getSkuImg() != null) {
                     spuEsModule.setDefImg(SkuRes.getSkuImg());
                 }
+                if (spuEsModule.getDefSkuId() == null && SkuRes.getSkuId() != null){
+                    spuEsModule.setDefSkuId(SkuRes.getSkuId());
+                }
+                if (spuEsModule.getDefTitle() == null && SkuRes.getSkuTitle() != null){
+                    spuEsModule.setDefTitle(SkuRes.getSkuTitle());
+                }
             }
             spuEsModules.add(spuEsModule);
         }

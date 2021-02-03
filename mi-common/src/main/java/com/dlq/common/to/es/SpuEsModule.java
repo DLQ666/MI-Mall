@@ -17,6 +17,7 @@ public class SpuEsModule {
     private Long spuId;
     private String defImg;
     private Long defSkuId;
+    private String defTitle;
     private List<SpuAttr> attrs;
 
     @Data

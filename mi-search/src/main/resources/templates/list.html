@@ -1175,18 +1175,15 @@
                                 <i class="iconfont icon-weiguanzhu"></i>
                                 <a >关注</a>
                             </div>
-                            <p class="da"><!--|http://item.dlqk8s.top:81/${skuId}.html|-->
-                                <!--<a th:each="attr:${product.getAttrs()}" th:href="|http://item.dlqk8s.top:81/${attr.getSkuId()}.html|" th:title="${attr.getSkuTitle()}">
-                                    <img src="" class="dim">
-                                </a>-->
-                                <a th:href="|http://item.dlqk8s.top:81/${product.spuId}.html|" title="购买AppleCare+，获得原厂2年整机保修(含电池)，和多达2次意外损坏的保修服务。购买勾选：保障服务、原厂保2年。">
+                            <p class="da">
+                                <a class="asd" th:href="|http://item.dlqk8s.top:81/${product.defSkuId}.html|" th:title="${product.defTitle}">
                                     <img th:src="${product.defImg}" class="dim">
                                 </a>
                             </p>
                             <ul class="tab_im">
                                 <li th:each="attr:${product.getAttrs()}">
                                     <a title="颜色">
-                                    <img th:src="${attr.getSkuImg()}"></a>
+                                    <img th:src="${attr.getSkuImg()}" th:imgHerf="|http://item.dlqk8s.top:81/${attr.skuId}.html|" th:imgTitle="${attr.skuTitle}"></a>
                                 </li>
                             </ul>
                             <p class="tab_R">
@@ -1931,17 +1928,15 @@
         $(this).children("span").stop(true).animate({top:"14px"},100);
         $(this).children("i").stop(true).animate({top:"-1px"},100).css({display:"block"})
     });
-    /*$(function () {
-        var a = $('.tab_im img').prop('src');
-        $('.tab_im img').parents('ul').prev().find('img').prop('src',a);
-    })*/
     $('.tab_im img').hover(function(){
         var a=$(this).prop('src');
+        var b=$(this).attr('imgHerf');
+        var t=$(this).attr('imgTitle');
         var index=$(this).parents('li').index();
-        console.log(index)
         $(this).parents('li').css('border','2px solid #e4393c').siblings('li').css('border','1px solid #ccc');
         $(this).parents('ul').prev().find('img').prop('src',a);
-        $(this).parents('ul').siblings('.da').find('a').eq(index).css('display','block').siblings('a').css('display','none');
+        $(this).parents('ul').prev().find("a").prop('href',b);
+        $(this).parents('ul').prev().find("a").prop('title',t);
         $(this).parents('ul').siblings('.tab_JE').find('a').eq(index).css('display','block').siblings('a').css('display','none');
         $(this).parents('ul').siblings('.tab_R').find('span').eq(index).css('display','block').siblings('span').css('display','none')
     });
