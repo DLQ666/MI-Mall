@@ -862,7 +862,7 @@ a {
 }
 
 .box .box-two .box-name {
-    font: 700 18px Arial, "microsoft yahei";
+    font: 700 16px Arial,"microsoft yahei";
     color: #666;
     padding-top: 10px;
     line-height: 28px;
@@ -877,7 +877,8 @@ a {
     max-height: 1.5em;
     line-height: 1.5em;
     font-size: 12px;
-    color: red;
+    font: 12px/150% tahoma,arial,Microsoft YaHei,Hiragino Sans GB,"\u5b8b\u4f53",sans-serif;
+    color: #e4393c;
 }
 
 .box .box-two .box-hide a {

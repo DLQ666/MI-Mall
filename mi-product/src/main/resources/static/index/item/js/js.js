@@ -96,32 +96,33 @@ $(function(){
 		//左右滚动
 		$("#left").click(function() {
 			$(".box-lh-one ul").stop().animate({
-				"left": "-297px"
+				"left": 0
 			})
 			$(this).css({
-				"color": "#000"
+				"color": "#ccc"
 			})
 			$("#right").css({
-				"color": "#ccc"
+				"color": "#000"
 			})
 		})
 		$("#right").click(function() {
 			$(".box-lh-one ul").stop().animate({
-				"left": 0
+				"left": "-100px"
 			})
 			$(this).css({
-				"color": "#000"
-			})
-			$("#left").css({
 				"color": "#ccc"
 			})
+			$("#left").css({
+				"color": "#000"
+			})
+
 		})
 
 		//换图片
 		$(".box-lh-one li").mouseover(function() {
 			$(this).css({
 				"padding": "0",
-				"border": "solid 1px red"
+				"border": "2px solid #e53e41"
 
 			}).siblings().css({
 				"padding": "1px",

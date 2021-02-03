@@ -1,11 +1,14 @@
 package com.dlq.mall.product;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.dlq.mall.product.dao.AttrGroupDao;
+import com.dlq.mall.product.dao.SkuSaleAttrValueDao;
 import com.dlq.mall.product.entity.BrandEntity;
 import com.dlq.mall.product.entity.CategoryEntity;
 import com.dlq.mall.product.service.BrandService;
 import com.dlq.mall.product.service.CategoryService;
 import com.dlq.mall.product.service.impl.CategoryServiceImpl;
+import com.dlq.mall.product.vo.sku.SpuItemAttrGroupVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RedissonClient;
@@ -35,6 +38,21 @@ class MiProductApplicationTests {
     CategoryServiceImpl service;
     @Autowired
     RedissonClient redissonClient;
+    @Autowired
+    AttrGroupDao attrGroupDao;
+    @Autowired
+    SkuSaleAttrValueDao skuSaleAttrValueDao;
+
+    @Test
+    public void test() {
+        System.out.println(skuSaleAttrValueDao.getSaleAttrsBySpuId(9L));
+    }
+
+    @Test
+    public void test1() {
+        List<SpuItemAttrGroupVo> attrGroupWithAttrsBySpuId = attrGroupDao.getAttrGroupWithAttrsBySpuId(9L, 225L);
+        System.out.println(attrGroupWithAttrsBySpuId);
+    }
 
     @Test
     public void testRedissonTest() {

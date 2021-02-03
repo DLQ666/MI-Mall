@@ -6,6 +6,7 @@ import com.dlq.mall.product.entity.AttrEntity;
 import com.dlq.mall.product.service.AttrService;
 import com.dlq.mall.product.vo.AttrGrooupRelationVo;
 import com.dlq.mall.product.vo.AttrGrooupWithAttrsVo;
+import com.dlq.mall.product.vo.sku.SpuItemAttrGroupVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +103,11 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
         }).collect(Collectors.toList());
 
         return collect;
+    }
+
+    @Override
+    public List<SpuItemAttrGroupVo> getAttrGroupWithAttrsBySpuId(Long spuId, Long catalogId) {
+        return baseMapper.getAttrGroupWithAttrsBySpuId(spuId,catalogId);
     }
 
 }

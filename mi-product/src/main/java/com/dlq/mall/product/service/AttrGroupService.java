@@ -5,6 +5,7 @@ import com.dlq.common.utils.PageUtils;
 import com.dlq.mall.product.entity.AttrGroupEntity;
 import com.dlq.mall.product.vo.AttrGrooupRelationVo;
 import com.dlq.mall.product.vo.AttrGrooupWithAttrsVo;
+import com.dlq.mall.product.vo.sku.SpuItemAttrGroupVo;
 
 import java.util.List;
 import java.util.Map;
@@ -25,5 +26,7 @@ public interface AttrGroupService extends IService<AttrGroupEntity> {
     void deleteRelation(AttrGrooupRelationVo[] vos);
 
     List<AttrGrooupWithAttrsVo> getAttrGroupWithAttrsByCatelogId(Long catelogId);
+
+    List<SpuItemAttrGroupVo> getAttrGroupWithAttrsBySpuId(Long spuId, Long catalogId);
 }
 
