@@ -34,12 +34,14 @@ import org.elasticsearch.search.aggregations.bucket.terms.ParsedLongTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.MaxAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.MinAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.ParsedTopHits;
 import org.elasticsearch.search.aggregations.metrics.TopHitsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
+import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -138,10 +140,13 @@ public class MallSearchServiceImpl implements MallSearchService {
             RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery("skuPrice");
             String[] s = param.getSkuPrice().split("_");
             if (s.length == 2){
+                if ("".equals(s[0])){
+                    s[0] = null;
+                }
                 rangeQuery.gte(s[0]).lte(s[1]);
             }else if (s.length == 1){
                 if (param.getSkuPrice().startsWith("_")){
-                    rangeQuery.lte(s[0]);
+                    rangeQuery.gte(null).lte(s[0]);
                 }
                 if (param.getSkuPrice().endsWith("_")){
                     rangeQuery.gte(s[0]);
@@ -208,16 +213,23 @@ public class MallSearchServiceImpl implements MallSearchService {
         //4、Spu商品聚合 及 聚合后的排序
         TermsAggregationBuilder spu_agg = AggregationBuilders.terms("spu_agg").field("spuId").size(500000);
         TermsAggregationBuilder spuImg = AggregationBuilders.terms("spuImg").field("skuImg");
+        TopHitsAggregationBuilder top_img = AggregationBuilders.topHits("top_Img").fetchSource(new String[]{"skuImg", "skuTitle", "skuPrice", "skuId", "spuId"}, new String[]{}).size(1);
         if (!StringUtils.isEmpty(param.getSort())) {
             String sort = param.getSort();
             //sort=hotScore_asc/desc sort = saleCount_asc/desc sort = skuPrice_asc/desc
             String[] s = sort.split("_");
-            if (s[0].equalsIgnoreCase("hotScore") && s[1].equalsIgnoreCase("asc")) {
-                MinAggregationBuilder hotScore = AggregationBuilders.min("hotScore");
-                spu_agg = AggregationBuilders.terms("spu_agg").field("spuId").size(500000).order(hotScore);
+            if (s[0] != null && s[1] != null && s[1].equalsIgnoreCase("asc")) {
+                MinAggregationBuilder minOrder = AggregationBuilders.min("min_Fields").field(s[0]);
+                spu_agg = AggregationBuilders.terms("spu_agg").field("spuId").size(500000).order(BucketOrder.aggregation("min_Fields",true));
+                spu_agg.subAggregation(minOrder);
+                top_img = AggregationBuilders.topHits("top_Img").fetchSource(new String[]{"skuImg", "skuTitle", "skuPrice", "skuId", "spuId"}, new String[]{}).size(1).sort(s[0], SortOrder.ASC);
+            }else if (s[0] != null && s[1] != null && s[1].equalsIgnoreCase("desc")){
+                MaxAggregationBuilder maxOrder = AggregationBuilders.max("min_Fields").field(s[0]);
+                spu_agg = AggregationBuilders.terms("spu_agg").field("spuId").size(500000).order(BucketOrder.aggregation("min_Fields",false));
+                spu_agg.subAggregation(maxOrder);
+                top_img = AggregationBuilders.topHits("top_Img").fetchSource(new String[]{"skuImg", "skuTitle", "skuPrice", "skuId", "spuId"}, new String[]{}).size(1).sort(s[0], SortOrder.DESC);
             }
         }
-        TopHitsAggregationBuilder top_img = AggregationBuilders.topHits("top_Img").fetchSource(new String[]{"skuImg", "skuTitle", "skuPrice", "skuId", "spuId"}, new String[]{}).size(1);
         if (!StringUtils.isEmpty(param.getKeyword())){
             HighlightBuilder highlightBuilder = new HighlightBuilder();
             highlightBuilder.field("skuTitle");

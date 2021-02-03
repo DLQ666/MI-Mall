@@ -1185,7 +1185,7 @@
                             </p>
                             <ul class="tab_im">
                                 <li th:each="attr:${product.getAttrs()}">
-                                    <a title="黑色">
+                                    <a title="颜色">
                                     <img th:src="${attr.getSkuImg()}"></a>
                                 </li>
                             </ul>
@@ -1225,7 +1225,12 @@
                                     < 上一页
                                 </a>
                                 <a class="page_a"
-                                   th:if="${result.totalPages<=2}"
+                                   th:if="${result.totalPages<=2 && result.total == 0}"
+                                   th:attr="style=${'border: 0;color:#ee2222;background: #fff'}"
+                                >1
+                                </a>
+                                <a class="page_a"
+                                   th:if="${result.totalPages<=2 && result.total > 0}"
                                    th:attr="pn=${nav},style=${nav == result.pageNum?'border: 0;color:#ee2222;background: #fff':''}"
                                    th:each="nav:${#numbers.sequence(1,result.totalPages)}"
                                 >[[${nav}]]
@@ -2109,6 +2114,9 @@
         var pn = $(this).attr("pn");
         var result = [[${result}]];
         var href = location.href;
+        if (result.total == 0){
+            return false;
+        }
         if (pn == result.pageNum){
             return false;
         }
