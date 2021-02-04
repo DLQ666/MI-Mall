@@ -54,19 +54,10 @@ $(function(){
 			})
 		});
 
-
-
-	
-
-
-	
-
 		$(".box-attr dd").click(function() {
 			$(this).css({
-				"border": "solid 1px red"
-			}).siblings("dd").css({
-				"border": "solid 1px #ccc"
-			})
+				"border": "solid 1px #e3393c"
+			}).siblings("dd").remove("style")
 		})
 
        //红边框
@@ -137,7 +128,6 @@ $(function(){
 				"display": "block"
 			})
 			$(this).css({
-				"border": "solid 1px #ccc",
 				"border-bottom": "none",
 				"padding": "0",
 				"padding-bottom": "1px"
@@ -161,14 +151,14 @@ $(function(){
 				"display": "none"
 			})
 			$(".box-stock-div").eq(num).css({
-				"border": "solid 1px red",
+				"border": "solid 1px #e4393c",
 				"border-bottom": "solid 2px #fff"
 			}).siblings().css({
 				"border": "1px solid #ddd",
 				"border-bottom": "none"
 			})
 			$(".box-stock-fot").css({
-				"border-top": "solid 1px red"
+				"border-top": "solid 1px #e4393c"
 			})
 		})
 
@@ -197,7 +187,7 @@ $(function(){
 			})
 		})
 
-		function Zoom(imgbox, hoverbox, l, t, x, y, h_w, h_h, showbox) {
+		function Zoom(imgbox, hoverbox, l, t, x, y, h_w, h_h, showbox,showbox1) {
 			var moveX = x - l - (h_w / 2);
 			//鼠标区域距离
 			var moveY = y - t - (h_h / 2);
@@ -208,10 +198,10 @@ $(function(){
 			if(moveY < 0) {
 				moveY = 0
 			}
-			if(moveX > imgbox.width() - h_w) {
+			if(moveX >= imgbox.width() - h_w) {
 				moveX = imgbox.width() - h_w
 			}
-			if(moveY > imgbox.height() - h_h) {
+			if(moveY >= imgbox.height() - h_h) {
 				moveY = imgbox.height() - h_h
 			}
 			//判断鼠标使其不跑出图片框
@@ -219,9 +209,16 @@ $(function(){
 			//求图片比例
 			var zoomY = showbox.height() / imgbox.height()
 
+			var scaleX = moveX/(imgbox.width()-hoverbox.width());
+			var scaleY = moveY/(imgbox.height()-hoverbox.height());
+			/*//获取滑块和box1的的距离比例
+			//设置右侧大图的左边定位距离。也就是滑块和box1的距离比乘以大图片的宽减去box2的值
+			oImg.style.left = "-"+scaleX*(oImg.offsetWidth-box2.offsetWidth)+"px";
+			设置右侧大图的高度定位距离。
+			oImg.style.top =  "-"+scaleY*(oImg.offsetHeight-box2.offsetHeight)+"px";*/
 			showbox.css({
-				left: -(moveX * zoomX),
-				top: -(moveY * zoomY)
+				left: -scaleX *( showbox.width() - showbox1.width()),
+				top: -scaleY *( showbox.height()- showbox1.height())
 			})
 			hoverbox.css({
 				left: moveX,
@@ -231,7 +228,7 @@ $(function(){
 
 		}
 
-		function Zoomhover(imgbox, hoverbox, showbox) {
+		function Zoomhover(imgbox, hoverbox, showbox,showbox1) {
 			var l = imgbox.offset().left;
 			var t = imgbox.offset().top;
 			var w = hoverbox.width();
@@ -243,13 +240,13 @@ $(function(){
 				$(".hoverbox,.showbox").show();
 				hoverbox.css("opacity", "0.3")
 				time = setTimeout(function() {
-					Zoom(imgbox, hoverbox, l, t, x, y, w, h, showbox)
+					Zoom(imgbox, hoverbox, l, t, x, y, w, h, showbox,showbox1)
 				}, 1)
 			}).mousemove(function(e) {
 				var x = e.pageX;
 				var y = e.pageY;
 				time = setTimeout(function() {
-					Zoom(imgbox, hoverbox, l, t, x, y, w, h, showbox)
+					Zoom(imgbox, hoverbox, l, t, x, y, w, h, showbox,showbox1)
 				}, 1)
 			}).mouseout(function() {
 				showbox.parent().hide()
@@ -257,7 +254,7 @@ $(function(){
 			})
 		}
 		$(function() {
-			Zoomhover($(".probox img"), $(".hoverbox"), $(".showbox img"));
+			Zoomhover($(".probox img"), $(".hoverbox"), $(".showbox img"),$(".showbox"));
 			$(".box-lh-one ul li").hover(function() {
 				$('.img1').attr("src", $(this).find('img').attr('src'));
 			})

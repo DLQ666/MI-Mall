@@ -14,7 +14,7 @@
     </resultMap>
     
     <resultMap id="spuItemAttrGroupVo" type="com.dlq.mall.product.vo.sku.SpuItemAttrGroupVo">
-        <result property="groupName" column="attr_group_name"></result>
+        <result column="attr_group_name" property="groupName" ></result>
         <collection property="attrs" ofType="com.dlq.mall.product.vo.spuvo.Attr">
             <result column="attr_name" property="attrName"></result>
             <result column="attr_value" property="attrValue"></result>

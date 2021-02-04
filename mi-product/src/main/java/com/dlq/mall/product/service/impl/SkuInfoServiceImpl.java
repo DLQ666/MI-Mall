@@ -1,27 +1,24 @@
 package com.dlq.mall.product.service.impl;
 
-import com.dlq.mall.product.entity.SkuImagesEntity;
-import com.dlq.mall.product.entity.SpuInfoDescEntity;
-import com.dlq.mall.product.service.*;
-import com.dlq.mall.product.vo.sku.SkuItemSaleAttrVo;
-import com.dlq.mall.product.vo.sku.SkuItemVo;
-import com.dlq.mall.product.vo.sku.SpuItemAttrGroupVo;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dlq.common.utils.PageUtils;
 import com.dlq.common.utils.Query;
-
 import com.dlq.mall.product.dao.SkuInfoDao;
+import com.dlq.mall.product.entity.SkuImagesEntity;
 import com.dlq.mall.product.entity.SkuInfoEntity;
+import com.dlq.mall.product.entity.SpuInfoDescEntity;
+import com.dlq.mall.product.service.*;
+import com.dlq.mall.product.vo.sku.*;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 @Service("skuInfoService")
@@ -121,9 +118,13 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
         skuItemVo.setImages(images);
 
         //3、获取spu的销售属性组合
-        List<SkuItemSaleAttrVo> saleAttrVos = skuSaleAttrValueService.getSaleAttrsBySpuId(spuId);
-        skuItemVo.setSaleAttrs(saleAttrVos);
-
+        ArrayList<SkuItemSaleAttrVo> list = new ArrayList<>();
+        SkuItemSaleAttrVo saleAttrVersionVo = skuSaleAttrValueService.getSaleAttrsVersionBySpuId(spuId);
+        SkuItemSaleAttrVo saleAttrColorVos = skuSaleAttrValueService.getSaleAttrsColorBySpuId(spuId);
+        list.add(saleAttrColorVos);
+        list.add(saleAttrVersionVo);
+        skuItemVo.setSaleAttrs(list);
+        System.out.println(skuItemVo.getSaleAttrs());
         //4、获取spu的介绍
         SpuInfoDescEntity spuInfoDesc = spuInfoDescService.getById(spuId);
         skuItemVo.setDesc(spuInfoDesc);
@@ -132,7 +133,6 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
         Long catalogId = info.getCatalogId();
         List<SpuItemAttrGroupVo> attrGroupVos = attrGroupService.getAttrGroupWithAttrsBySpuId(spuId,catalogId);
         skuItemVo.setGroupAttrs(attrGroupVos);
-
         return skuItemVo;
     }
 

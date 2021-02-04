@@ -6,7 +6,7 @@
 		<title>[[${item.info.skuTitle}]]</title>
 		<link rel="shortcut icon" href="/static/index/img/favicon.ico" type="image/x-icon" />
 		<link rel="stylesheet" type="text/css" href="/static/item/scss/shop.css" />
-		<link rel="stylesheet" type="text/css" href="/static/item/scss/jd.css"/>
+		<!--<link rel="stylesheet" type="text/css" href="/static/item/scss/jd.css"/>-->
 		<link rel="stylesheet" href="/static/item/scss/header.css" />
 		<link rel="stylesheet" type="text/css" href="/static/item/bootstrap/css/bootstrap.css"/>
 	</head>
@@ -16,7 +16,7 @@
 			<!--品牌官方网站-->
 			<div class="min">
 				<ul class="header_ul_left">
-					<li class="glyphicon glyphicon-home"><a href="shouye.html" class="aa">京东首页</a></li>
+					<li class="glyphicon glyphicon-home"><a href="http://dlqk8s.top:81" class="aa">京东首页</a></li>
 					<li class="glyphicon glyphicon-map-marker"><a href="javascript:;">北京</a>
 						<ol id="beijing">
 							<li style="background: red;"><a href="javascript:;" style="color: white;">北京</a></li>
@@ -256,7 +256,7 @@
 		<nav>
 			<div class="nav_min">
 				<div class="nav_top">
-					<div class="nav_top_one"><a href="#"><img src="/static/item/img/jdlogo-201708-@1x.png"/></a></div>
+					<div class="nav_top_one"><a href="http://dlqk8s.top:81"><img src="/static/item/img/jdlogo-201708-@1x.png"/></a></div>
 					<div class="nav_top_two"><input type="text"/>
 						<button>搜索</button>
 					</div>
@@ -487,8 +487,8 @@
 					<div class="box-hide" th:text="${item.info.skuSubtitle}">副标题
 						<a href=""><u></u></a>
 					</div>
-					<div class="box-yuyue">
-						<div class="yuyue-one">
+					<div class="box-yuyue" style="background:url(//m.360buyimg.com/cc/jfs/t1/161142/1/3283/38776/6004f332E9264413b/2901eb7bfd686938.png) 0 0 no-repeat;">
+						<!--<div class="yuyue-one">
 							<img src="/static/item/img/7270ffc3baecdd448958f9f5e69cf60f.png" alt=""/> 预约抢购
 						</div>
 						<div class="yuyue-two">
@@ -504,21 +504,21 @@
 									</span>
 								</li>
 							</ul>
-						</div>
+						</div>-->
 					</div>
 					<div class="box-summary clear">
 						<ul>
-							<li>京东价</li>
+							<li>京 东 价</li>
 							<li>
 								<span>￥</span>
 								<span th:text="${#numbers.formatDecimal(item.info.price,2,2)}">价格</span>
 							</li>
 							<li>
-								预约享资格
+								降价通知
 							</li>
 							<li>
-								<a href="">
-									预约说明
+								<a href="#">
+									累计评价 400万+
 								</a>
 							</li>
 						</ul>
@@ -528,15 +528,15 @@
 							<ul>
 								<li>增值业务</li>
 								<li><img src="/static/item/img/90a6fa41d0d46b4fb0ff6907ca17c478.png"/></li>
-								<li><img src="/static/item/img/2e19336b961586468ef36dc9f7199d4f.png"/></li>
-								<li><img src="/static/item/img/1f80c3d6fabfd3418e54b005312c00b5.png"/></li>
+								<!--<li><img src="/static/item/img/2e19336b961586468ef36dc9f7199d4f.png"/></li>
+								<li><img src="/static/item/img/1f80c3d6fabfd3418e54b005312c00b5.png"/></li>-->
 							</ul>
 						</div>
 					</div>
 
 					<div class="box-stock">
 						<ul class="box-ul">
-							<li>配送至</li>
+							<li>配 送 至</li>
 							<li class="box-stock-li">
 								<div class="box-stock-one">
 									北京朝阳区管庄
@@ -598,7 +598,7 @@
 						<ul class="box-ul">
 							<li></li>
 							<li>
-								由<span>京东</span> 发货，并提供售后服务
+								由 <span>京东</span> 发货，并提供售后服务
 							</li>
 						</ul>
 					</div>
@@ -606,9 +606,11 @@
 						<div class="box-attr clear" th:each="attr:${item.saleAttrs}">
 							<dl>
 								<dt>选择[[${attr.attrName}]]</dt>
-								<dd th:each="val:${#strings.listSplit(attr.attrValues,',')}">
-									<a href="#">
-										<img src="/static/item/img/59ddfcb1Nc3edb8f1.jpg"/> [[${val}]]
+								<dd th:each="val:${attr.attrValues}" th:attr="style=${attr.attrName eq '版本'?'height: 34px;background-color: #fff;':''}">
+									<a th:attr="skus=${val.skuIds},style=${attr.attrName eq '版本'?'line-height: 34px;':''}">
+										<img th:if="${attr.attrName} eq '颜色'" th:src="${val.attrSidValues.value}" />
+										<i th:if="${attr.attrName eq '颜色'}" th:attr="style=${attr.attrName eq '颜色'?'margin: 0 8px;':'padding: 0 13px;'}" >[[${val.attrSidValues.key}]]</i>
+										<i th:if="${attr.attrName eq '版本'}" th:attr="style=${attr.attrName eq '颜色'?'margin: 0 8px;':'padding: 0 13px;'}" >[[${val.attrSidValues}]]</i>
 									</a>
 								</dd>
 							</dl>
@@ -635,16 +637,16 @@
 						</div>
 						<div class="box-btns-two">
 							<a href="../商品分类\index.html">
-								立即预约
+								加入购物车
 							</a>
 						</div>
-						<div class="box-btns-three">
+						<!--<div class="box-btns-three">
 							<img src="/static/item/img/e4ed3606843f664591ff1f68f7fda12d.png" alt=""/> 分享
-						</div>
+						</div>-->
 					</div>
 
 					<div class="box-footer-zo">
-						<div class="box-footer clear">
+						<!--<div class="box-footer clear">
 							<dl>
 								<dt>本地活动</dt>
 								<dd>
@@ -653,13 +655,12 @@
 									</a>
 								</dd>
 							</dl>
-						</div>
+						</div>-->
 
 						<div class="box-footer">
 							<dl>
 								<dt>温馨提示</dt>
-								<dd>·本商品不能使用 东券 京券</dd>
-								<dd>·请完成预约后及时抢购！</dd>
+								<dd>·7天无理由退货（合约版不支持）</dd>
 							</dl>
 						</div>
 					</div>
@@ -709,7 +710,7 @@
 			<div class="allLeft">
 				<!--火热预约-->
 				<div class="huoreyuyue">
-					<h3>火热预约</h3>
+					<h3>达人选购</h3>
 				</div>
 				<div class="dangeshopxingqing">
 					<ul class="shopdange">
@@ -814,7 +815,7 @@
 
 				</ul>
 				<button class="Lijiyuyuessss">
-					立即预约
+					加入购物车
 				</button>
 				<ul class="shopjieshaos posi" style="display: none;">
 					<li class="jieshoa" style="background: #e4393c;">
@@ -830,7 +831,7 @@
 						<a href="#li4">商品评价(4万+)</a>
 					</li>
 					<li class="shuoming">
-						<a href="#li5">预约说明</a>
+						<a href="#li5">手机社区</a>
 					</li>
 				</ul>
 
@@ -877,7 +878,9 @@
 										</td>
 									</tr>
 								</table>
-								<img class="xiaoguo" th:src="${descp}" th:each="descp:${#strings.listSplit(item.desc.decript,',')}"/>
+								<div>
+									<img class="xiaoguo" th:src="${descp}" th:each="descp:${#strings.listSplit(item.desc.decript,',')}"/>
+								</div>
 								<div class="guiGebox guiGebox1" >
 									<div class="guiGe" style="display: none;" >
 										<h3>主体</h3>

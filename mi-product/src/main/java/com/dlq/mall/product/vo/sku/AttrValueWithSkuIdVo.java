@@ -8,10 +8,10 @@ import java.util.List;
  *@program: MI-Mall
  *@description:
  *@author: Hasee
- *@create: 2021-02-04 17:44
+ *@create: 2021-02-04 20:05
  */
 @Data
-public class SkuItemSaleAttrVo {
-    private String attrName;
-    private List<AttrValueWithSkuIdVo> attrValues;
+public class AttrValueWithSkuIdVo {
+    private String skuIds;
+    private Object attrSidValues;
 }

@@ -82,7 +82,8 @@ a {
 }
 
 .Shop .ShopXiangqing .allLeft .huoreyuyue {
-    width: 212px;
+    width: 210px;
+    height: 40px;
     border: 1px solid #eeeeee;
     background: #f7f7f7;
     line-height: 43px;
@@ -91,11 +92,14 @@ a {
 .Shop .ShopXiangqing .allLeft .huoreyuyue h3 {
     margin-left: 20px;
     color: #666666;
+    font: 700 14px "microsoft yahei";
+    margin-top: 10px;
 }
 
 .Shop .ShopXiangqing .allLeft .dangeshopxingqing {
     width: 210px;
     border: 1px solid #eeeeee;
+    border-top: none;
 }
 
 .Shop .ShopXiangqing .allLeft .dangeshopxingqing .shopdange {
@@ -140,7 +144,7 @@ a {
     height: 40px;
     width: 990px;
     border: 1px solid #eeeeee;
-    border-bottom: 1px solid red;
+    border-bottom: 1px solid #e4393c;
 }
 
 .Shop .ShopXiangqing .allquanbushop .shopjieshao li {
@@ -167,8 +171,8 @@ a {
     text-align: center;
     height: 28px;
     line-height: 28px;
-    background: red;
-    margin-right: 10px;
+    background: #e4393c;
+    margin-right: 5px;
     color: white;
 }
 
@@ -315,6 +319,7 @@ a {
 .shanpinsssss table {
     margin-top: 20px;
     margin-left: 40px;
+    margin-bottom: 30px;
 }
 
 .shanpinsssss table td {
@@ -334,7 +339,6 @@ a {
 }
 
 .shanpinsssss .xiaoguo {
-    margin-top: 20px;
     margin-left: 106px;
 }
 
@@ -523,6 +527,7 @@ a {
 .guiGebox {
     width: 990px;
     margin: 0 auto;
+    margin-top: 20px;
 }
 
 .guiGebox .guiGe {
@@ -542,11 +547,13 @@ a {
     font-weight: 400;
     font-size: 12px;
     color: #999;
+    margin-top: 0px;
 }
 
 .guiGebox .guiGe dl {
     width: 880px;
     margin-left: 110px;
+    margin-bottom: 0px;
 }
 
 .guiGebox .guiGe dl dt {
@@ -935,6 +942,7 @@ a {
     padding-left: 10px;
     font-family: simsun;
     color: #999;
+    font-size: 12px;
 }
 
 .box .box-two .box-summary ul li:nth-child(2) {
@@ -948,10 +956,11 @@ a {
 }
 
 .box .box-two .box-summary ul li:nth-child(3) {
-    font-size: 14px;
-    padding: 1px 4px;
-    margin-left: 20px;
-    color: #fff;
+    font: 12px/150% tahoma,arial,Microsoft YaHei,Hiragino Sans GB,"\u5b8b\u4f53",sans-serif;
+    padding: 3px 4px;
+    margin-left: 10px;
+    color: #005aa0;
+    vertical-align: 2px;
 }
 
 .box .box-two .box-summary ul li:last-child {
@@ -975,6 +984,7 @@ a {
 .box .box-two .box-wrap .box-wrap-one ul li {
     float: left;
     line-height: 32px;
+    font-size: 12px;
 }
 
 .box .box-two .box-wrap .box-wrap-one ul li:not(:first-child) {
@@ -982,7 +992,7 @@ a {
 }
 
 .box .box-two .box-wrap .box-wrap-one ul li img {
-    vertical-align: -7px;
+    vertical-align: -8px;
 }
 
 .box .box-two .box-wrap .box-wrap-one ul li:first-child {
@@ -999,12 +1009,17 @@ a {
 .box .box-two .box-stock .box-stock-one,
 .box .box-two .box-supply .box-stock-one {
     padding: 1px;
+    border: 1px solid #CECBCE;
+    margin-top: -3px;
+    margin-left: -5px;
+    margin-right: 6px;
 }
 
 .box .box-two .box-stock .box-ul > li,
 .box .box-two .box-supply .box-ul > li {
     float: left;
     color: #999;
+    font-size: 12px;
 }
 
 .box .box-two .box-stock .box-ul > li:first-child,
@@ -1023,7 +1038,7 @@ a {
 
 .box .box-two .box-stock .box-ul > li:nth-child(2) span,
 .box .box-two .box-supply .box-ul > li:nth-child(2) span {
-    color: red;
+    color: #e4393c;
 }
 
 .box .box-two .box-stock .box-ul > li:nth-child(3) span,
@@ -1049,13 +1064,12 @@ a {
     display: none;
     z-index: 10;
     position: absolute;
-    left: -1px;
     background-color: #fff;
     width: 399px;
     padding-top: 20px;
     margin-top: -2px;
     border: solid 1px #CCCCCC;
-    border-top: none;
+    margin-left: -5px;
 }
 
 .box .box-two .box-stock .box-stock-two dl {
@@ -1119,24 +1133,39 @@ a {
 }
 
 .box .box-two .box-supply {
-    margin-bottom: 3px;
+    margin-bottom: 15px;
     height: 32px;
     line-height: 32px;
+    border-bottom: 1px dotted #dfdfdf;
 }
 
 .box .box-two .box-attr {
-    margin-top: 16px;
+    margin-top: 4px;
     margin-bottom: 4px;
+}
+
+.box .box-two .box-attr clear a{
+    padding: 0 13px;
+    cursor: pointer;
 }
 
 .box .box-two .box-attr img {
     width: 40px;
     height: 40px;
+    cursor: pointer;
+}
+.box .box-two .box-attr dd {
+    cursor: pointer;
+}
+.box .box-two .box-attr dd:hover{
+    cursor: pointer;
+    border: 1px solid rgb(227, 57, 60);
 }
 
 .box .box-two .box-attr dt,
 .box .box-two .box-attr dd {
     float: left;
+    font-size: 12px;
 }
 
 .box .box-two .box-attr dt {
@@ -1144,6 +1173,10 @@ a {
     font-family: simsun;
     color: #999;
     line-height: 34px;
+    margin-right: 7px;
+}
+.box .box-two .box-attr i {
+    font-style:normal;
 }
 
 .box .box-two .box-attr dd {
@@ -1151,16 +1184,16 @@ a {
     background: #F7F7F7;
     color: #999;
     margin-bottom: 4px;
-    margin-left: 5px;
+    margin-left: 7px;
 }
 
 .box .box-two .box-attr dd img {
-    vertical-align: -12px;
+    vertical-align: -15px;
 }
 
-.box .box-two .box-attr dd:nth-child(3) {
-    border: solid 1px red;
-}
+/*.box .box-two .box-attr dd:nth-child(3) {
+    border: solid 1px #e3393c;
+}*/
 
 .box .box-two .box-attr-2 {
     margin-bottom: 5px;
@@ -1191,7 +1224,7 @@ a {
 }
 
 .box .box-two .box-attr-3 {
-    border: #CCCCCC 1px dashed;
+    border-bottom: 1px dotted #dfdfdf;
     border-left: none;
     border-right: none;
 }
@@ -1204,7 +1237,6 @@ a {
 .box .box-two .box-btns .box-btns-one {
     height: 44px;
     overflow: hidden;
-    border: 1px solid #ccc;
     position: relative;
     margin-right: 10px;
     float: left;
@@ -1212,10 +1244,12 @@ a {
 
 .box .box-two .box-btns .box-btns-one input {
     width: 43px;
-    height: 42px;
+    height: 44px;
     line-height: 42px;
     text-align: center;
     float: left;
+    border: 1px solid #CECBCE;
+    border-right: none;
 }
 
 .box .box-two .box-btns .box-btns-one .box-btns-one1 {
@@ -1223,11 +1257,17 @@ a {
 }
 
 .box .box-two .box-btns .box-btns-one .box-btns-one1 button {
-    cursor: pointer;
-    width: 17px;
-    height: 23px;
-    outline: none;
-    margin-top: -1px;
+    display: block;
+    width: 15px;
+    text-align: center;
+    height: 22px;
+    line-height: 22px;
+    overflow: hidden;
+    background: #f1f1f1;
+    color: #666;
+    right: -2px;
+    border: 1px solid #ccc;
+    outline: none !important;
 }
 
 .box .box-two .box-btns .box-btns-two {
@@ -1238,7 +1278,7 @@ a {
     font-size: 18px;
     font-family: "microsoft yahei";
     color: white;
-    background: #E4393C;
+    background: #df3033;
     cursor: hand
 }
 
@@ -1256,6 +1296,7 @@ a {
 
 .box .box-two .box-btns .box-btns-two a {
     color: #FFFFFF;
+    font-weight: 700;
 }
 
 .box .box-two .box-btns .box-btns-three {
@@ -1282,6 +1323,7 @@ a {
     font-family: simsun;
     color: #999;
     line-height: 24px;
+    font-size: 12px;
 }
 
 .box .box-two .box-footer dd {
@@ -1289,6 +1331,7 @@ a {
     margin-left: 15px;
     font-family: simsun;
     color: #999;
+    font-size: 12px;
 }
 
 .box .box-two .box-footer dd a {
@@ -1306,6 +1349,7 @@ a {
 
 .boxx .boxx-one ul li {
     color: #999;
+    font-size: 12px;
 }
 
 .boxx .boxx-one ul li:first-child {
@@ -1381,12 +1425,12 @@ a {
 .probox {
     width: 450px;
     height: 450px;
-    border: 1px solid #000;
+    border: 1px solid #eee;
 }
 
 .probox img {
-    width: 440px;
-    height: 440px;
+    width: 448px;
+    height: 448px;
     vertical-align: top;
 }
 
@@ -1395,24 +1439,24 @@ a {
     position: absolute;
     left: 452px;
     top: 0;
-    width: 450px;
+    width: 530px;
     height: 500px;
     overflow: hidden;
-    border: 1px solid #ccc;
+    border: 1px solid #e4e4e4;
     background: #FFFFFF;
 }
 
 .showbox img {
     position: absolute;
-    height: 600px;
-    width: 600px;
+    height: 650px;
+    width: 650px;
 }
 
 .hoverbox {
     display: none;
     position: absolute;
     top: 0;
-    background: rgba(255, 255, 0, 0.5);
+    background: #fede4f;
     height: 300px;
     width: 300px;
     cursor: move;
@@ -1425,9 +1469,11 @@ a {
 
 .oBox .shuoHou {
     width: 990px;
-    height: 52px;
+    height: 38px;
     font-size: 12px;
     background: #F7F7F7;
+    border: 1px solid #eee;
+    margin-top: 20px;
 }
 
 .oBox .shuoHou .baoZhang {
@@ -1441,7 +1487,9 @@ a {
 .oBox .shuoHou .baoZhang h2 {
     width: 130px;
     height: 18px;
-    color: #808080;
+    color: #666;
+    font: 700 14px "microsoft yahei";
+    margin-top: 0px;
 }
 
 .oBox .changJia {

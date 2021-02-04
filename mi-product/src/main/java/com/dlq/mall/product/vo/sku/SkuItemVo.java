@@ -6,6 +6,7 @@ import com.dlq.mall.product.entity.SpuInfoDescEntity;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *@program: MI-Mall
