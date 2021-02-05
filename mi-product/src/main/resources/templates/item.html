@@ -606,13 +606,16 @@
 						<div class="box-attr clear" th:each="attr:${item.saleAttrs}">
 							<dl>
 								<dt>选择[[${attr.attrName}]]</dt>
-								<dd th:each="val:${attr.attrValues}" th:attr="style=${attr.attrName eq '版本'?'height: 34px;background-color: #fff;':''}">
-									<a th:attr="skus=${val.skuIds},style=${attr.attrName eq '版本'?'line-height: 34px;':''}">
-										<img th:if="${attr.attrName} eq '颜色'" th:src="${val.attrSidValues.value}" />
-										<i th:if="${attr.attrName eq '颜色'}" th:attr="style=${attr.attrName eq '颜色'?'margin: 0 8px;':'padding: 0 13px;'}" >[[${val.attrSidValues.key}]]</i>
-										<i th:if="${attr.attrName eq '版本'}" th:attr="style=${attr.attrName eq '颜色'?'margin: 0 8px;':'padding: 0 13px;'}" >[[${val.attrSidValues}]]</i>
-									</a>
-								</dd>
+								<div class="ddiv" >
+									<dd class="attr_sku_value" th:each="val:${attr.attrValues}"
+										th:attr="class=${#lists.contains(#strings.listSplit(val.skuIds,','),item.info.skuId.toString())?'attr_sku_value checked':'attr_sku_value'} ,skus=${val.skuIds},style=${attr.attrName eq '版本'?'height: 34px;background-color: #fff;':''}">
+										<a th:attr="style=${attr.attrName eq '版本'?'line-height: 34px;':''}">
+											<img th:if="${attr.attrName eq '颜色' || attr.attrName eq '平台'}" th:src="${val.attrSidValues.value}" />
+											<i th:attr="style=${attr.attrName eq '颜色' || attr.attrName eq '平台'?'margin: 0 8px;':'padding: 0 13px;'}" >[[${val.attrSidValues.key}]]</i>
+											<!--<i th:if="${attr.attrName eq '版本'}" th:attr="style=${attr.attrName eq '颜色'?'margin: 0 8px;':'padding: 0 13px;'}" >[[${val.attrSidValues}]]</i>-->
+										</a>
+									</dd>
+								</div>
 							</dl>
 						</div>
 					</div>

@@ -11,6 +11,7 @@ import com.dlq.mall.product.service.SkuSaleAttrValueService;
 import com.dlq.mall.product.vo.sku.SkuItemSaleAttrVo;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -28,13 +29,18 @@ public class SkuSaleAttrValueServiceImpl extends ServiceImpl<SkuSaleAttrValueDao
     }
 
     @Override
-    public SkuItemSaleAttrVo getSaleAttrsVersionBySpuId(Long spuId) {
-        return baseMapper.getSaleAttrsVersionBySpuId(spuId);
+    public List<SkuItemSaleAttrVo> getSaleAttrsBySpuId(Long spuId) {
+        return baseMapper.getSaleAttrsBySpuId(spuId);
+    }
+
+    /*@Override
+    public List<SkuItemSaleAttrVo> getSaleAttrsVersionBySpuId(Long spuId) {
+        return baseMapper.getSaleAttrsBySpuId(spuId);
     }
 
     @Override
-    public SkuItemSaleAttrVo getSaleAttrsColorBySpuId(Long spuId) {
-        return baseMapper.getSaleAttrsColorsBySpuId(spuId);
-    }
+    public List<SkuItemSaleAttrVo> getSaleAttrsColorBySpuId(Long spuId) {
+        return baseMapper.getSaleAttrsBySpuId(spuId);
+    }*/
 
 }

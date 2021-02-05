@@ -833,6 +833,18 @@
         }
 
     }
+    function catelog3(obj) {
+        console.log("ahhahahhahahha")
+        var hrefTo = $(obj).html();
+        // alert($(obj))
+        if ('手机' !== hrefTo && '笔记本' !== hrefTo && 'CPU' !== hrefTo){
+            alert("当前分类下不存在商品，目前只有\n【手机 / 运营商 / 数码】下 [手机通讯] > [手机]\n" +
+                "【电脑 / 办公】下 [电脑整机] > [笔记本]\n" +
+                "【电脑 / 办公】下 [电脑配件] > [CPU]\n存在商品！！！");
+            console.log("没有商品！！！！！！！！！！！！！！！！！！");
+            $(obj).preventDefault();
+        }
+    }
 
 </script>
 <script type="text/javascript" src="/static/index/js/text.js"></script>

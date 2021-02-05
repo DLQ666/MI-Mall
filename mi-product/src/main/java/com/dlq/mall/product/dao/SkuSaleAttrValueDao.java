@@ -6,6 +6,8 @@ import com.dlq.mall.product.vo.sku.SkuItemSaleAttrVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * sku销售属性&值
  * 
@@ -16,7 +18,9 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface SkuSaleAttrValueDao extends BaseMapper<SkuSaleAttrValueEntity> {
 
-    SkuItemSaleAttrVo getSaleAttrsVersionBySpuId(@Param("spuId") Long spuId);
+    /*SkuItemSaleAttrVo getSaleAttrsVersionBySpuId(@Param("spuId") Long spuId);
 
-    SkuItemSaleAttrVo getSaleAttrsColorsBySpuId(@Param("spuId") Long spuId);
+    SkuItemSaleAttrVo getSaleAttrsColorsBySpuId(@Param("spuId") Long spuId);*/
+
+    List<SkuItemSaleAttrVo> getSaleAttrsBySpuId(@Param("spuId") Long spuId);
 }
