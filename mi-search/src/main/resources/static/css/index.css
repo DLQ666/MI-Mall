@@ -16,6 +16,7 @@ body,
 html {
     background: #fff;
     position: relative;
+    min-width: 1500px;
 }
 
 .header_head {

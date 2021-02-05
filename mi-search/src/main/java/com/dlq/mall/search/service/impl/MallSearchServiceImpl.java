@@ -290,7 +290,38 @@ public class MallSearchServiceImpl implements MallSearchService {
             }
             spuEsModules.add(spuEsModule);
         }
-        result.setProducts(spuEsModules);
+
+        //pageNum:1  from:0 size:5 【0,1,2,3,4】
+        //pageNum：2 from：5 size；5 [5,6,7,8,9]
+        //from = （pageNum-1）* size
+        //6、分页-总记录数
+        long total = spuAggBuckets.size();
+        result.setTotal(total);
+        //7、分页-总页码-计算得到
+        int totalPages = (int) total % EsConstant.PRODUCT_PAGESIZE == 0 ? (int) total / EsConstant.PRODUCT_PAGESIZE : ((int) total / EsConstant.PRODUCT_PAGESIZE + 1);
+        result.setTotalPages(totalPages);
+        //5、分页-当前页码
+        result.setPageNum(param.getPageNum());
+        List<Integer> pageNavs = new ArrayList<>();
+        for (int i = 1; i <= totalPages; i++) {
+            pageNavs.add(i);
+        }
+        result.setPageNavs(pageNavs);
+
+        //2、返回所有查询到的聚合Spu商品的分页结果
+        if (param.getPageNum() > totalPages) {
+            param.setPageNum(totalPages);
+        }
+        List<SpuEsModule> spuEsModulesPageResult = new ArrayList<>();
+        if (total <= EsConstant.PRODUCT_PAGESIZE) {
+            result.setProducts(spuEsModules);
+        } else {
+            for (int i = (param.getPageNum() - 1) * EsConstant.PRODUCT_PAGESIZE; i < ((param.getPageNum() - 1) * EsConstant.PRODUCT_PAGESIZE + EsConstant.PRODUCT_PAGESIZE); i++) {
+                spuEsModulesPageResult.add(spuEsModules.get(i));
+            }
+            System.out.println(spuEsModulesPageResult);
+            result.setProducts(spuEsModulesPageResult);
+        }
 
         //2、当前所有商品涉及到的所有属性
         List<SearchResult.AttrVo> attrVos = new ArrayList<>();
@@ -333,7 +364,7 @@ public class MallSearchServiceImpl implements MallSearchService {
 
         result.setAttrs(attrVos);
 
-        //3、当前所有商品涉及到的所有品牌信息
+        //4、当前所有商品涉及到的所有品牌信息
         List<SearchResult.BrandVo> brandVos = new ArrayList<>();
         ParsedLongTerms brand_agg = response.getAggregations().get("brand_agg");
         List<? extends Terms.Bucket> brandAggBuckets = brand_agg.getBuckets();
@@ -357,7 +388,7 @@ public class MallSearchServiceImpl implements MallSearchService {
         }
         result.setBrands(brandVos);
 
-        //4、当前所有商品涉及到的所有分类信息
+        //5、当前所有商品涉及到的所有分类信息
         List<SearchResult.CatalogVo> catalogVos = new ArrayList<>();
         ParsedLongTerms catalog_agg = response.getAggregations().get("catalog_agg");
         List<? extends Terms.Bucket> buckets = catalog_agg.getBuckets();
@@ -375,24 +406,6 @@ public class MallSearchServiceImpl implements MallSearchService {
             catalogVos.add(catalogVo);
         }
         result.setCatalogs(catalogVos);
-
-
-        //6、分页-总记录数
-        long total = spuAggBuckets.size();
-        result.setTotal(total);
-
-        //7、分页-总页码-计算得到
-        int totalPages = (int)total%EsConstant.PRODUCT_PAGESIZE==0?(int)total/EsConstant.PRODUCT_PAGESIZE:((int)total/EsConstant.PRODUCT_PAGESIZE+1);
-        result.setTotalPages(totalPages);
-
-        //5、分页-当前页码
-        result.setPageNum(param.getPageNum());
-
-        List<Integer> pageNavs = new ArrayList<>();
-        for (int i = 1; i <= totalPages; i++) {
-            pageNavs.add(i);
-        }
-        result.setPageNavs(pageNavs);
 
         /*//构建属性面包屑导航
         if (param.getAttrs() != null && param.getAttrs().size() > 0) {
@@ -424,7 +437,7 @@ public class MallSearchServiceImpl implements MallSearchService {
         List<SearchResult.NavVo> collect = new ArrayList<>();
 
         //构建品牌面包屑导航
-        if (param.getBrandId()!=null && param.getBrandId().size()>0){
+        if (param.getBrandId() != null && param.getBrandId().size() > 0) {
             StringBuffer buffer = new StringBuffer();
             collect = param.getBrandId().stream().map(brandById -> {
                 SearchResult.NavVo navVo = new SearchResult.NavVo();
@@ -434,7 +447,7 @@ public class MallSearchServiceImpl implements MallSearchService {
                 if (r.getCode() == 0) {
                     BrandVo brand = r.getData("brand", new TypeReference<BrandVo>() {
                     });
-                    if (brand != null){
+                    if (brand != null) {
                         buffer.append(brand.getName());
                         replace = replaceQueryString(param, brand.getBrandId() + "", "brandId");
                     }
