@@ -1,324 +1,362 @@
-$(function(){
-        //1.楼梯什么时候显示，800px scroll--->scrollTop
-        $(window).on('scroll',function(){
-            var $scroll=$(this).scrollTop();
-            if($scroll>=940){
-                $('.posi').show();
-            }else{
-                $('.posi').hide();
-            }
+$(function () {
+    //1.楼梯什么时候显示，800px scroll--->scrollTop
+    $(window).on('scroll', function () {
+        var $scroll = $(this).scrollTop();
+        if ($scroll >= 940) {
+            $('.posi').show();
+        } else {
+            $('.posi').hide();
+        }
+    });
+    $('.shopjieshao li').each(function (i) {
+        // console.log(i)
+        $(this).click(function () {
+            $('.shopjieshao li a').css('color', '#666666');
+            $(this).css('background', ' #e4393c').siblings().css('background', '#f7f7f7');
+            $(this).find('a').css('color', 'white')
+            $('.xuanxiangka .actives').eq(i).css('display', 'block').siblings().css('display', 'none');
+        })
+    })
+    $('.shopjieshaos li').each(function (i) {
+        // console.log(i)
+        $(this).click(function () {
+            $('.shopjieshaos li a').css('color', '#666666');
+            $(this).css('background', ' #e4393c').siblings().css('background', '#f7f7f7');
+            $(this).find('a').css('color', 'white')
+            $('.xuanxiangka .actives').eq(i).css('display', 'block').siblings().css('display', 'none');
+        })
+    })
+    $(".crumb .crumb-item-one").mouseover(function () {
+        $(this).children(".crumb-item-two").css({
+            "display": "block"
+        })
+        $(this).css({
+            "border-bottom": "none",
+            "height": "30px"
+        })
+    }).mouseout(function () {
+        $(this).children(".crumb-item-two").css({
+            "display": "none"
+        })
+        $(this).css({
+            "border": "solid 1px #737373",
+            "height": "22px"
+        })
+    })
+    //top右下拉
+    $(".contact").mouseover(function () {
+        $(this).css({
+            "height": "30px"
+        })
+    }).mouseout(function () {
+        $(this).css({
+            "height": "22px"
+        })
+    });
+
+    $(".box-attr dd").click(function () {
+        $(this).css({
+            "border": "solid 1px #e3393c"
+        }).siblings("dd").css({
+            "border": ""
+        })
+    })
+    $(".attr_sku_value").click(function () {
+        //1、获取到当前的sku组合
+        //2、获取到另一个选中的属性的组合
+
+        //获取到了所有加了checked的属性
+        //1、点击的元素先添加上自定义的属性，为了识别刚才被点击的
+        if ("attr_sku_value checked" == $(this).attr("class")){
+            console.log("当前商品==不跳转")
+            return false;
+        }
+        var skus = new Array();
+        $(this).addClass("clicked");
+        var curr = $(this).attr("skus").split(",");
+        skus.push(curr)
+        //去掉同一行的所有checked
+        $(this).parent().children().removeClass("checked");
+
+        //获得同组其他元素拥有checked 属性的attr
+        $("dd[class='attr_sku_value checked']").each(function () {
+            skus.push($(this).attr("skus").split(","))
         });
-        $('.shopjieshao li').each(function(i) {
-			console.log(i)
-			$(this).click(function() {
-				$('.shopjieshao li a').css('color', '#666666');
-				$(this).css('background', ' #e4393c').siblings().css('background', '#f7f7f7');
-				$(this).find('a').css('color', 'white')
-				$('.xuanxiangka .actives').eq(i).css('display', 'block').siblings().css('display', 'none');
-			})
-		})
-        $('.shopjieshaos li').each(function(i) {
-			console.log(i)
-			$(this).click(function() {
-				$('.shopjieshaos li a').css('color', '#666666');
-				$(this).css('background', ' #e4393c').siblings().css('background', '#f7f7f7');
-				$(this).find('a').css('color', 'white')
-				$('.xuanxiangka .actives').eq(i).css('display', 'block').siblings().css('display', 'none');
-			})
-		})
-        $(".crumb .crumb-item-one").mouseover(function() {
-			$(this).children(".crumb-item-two").css({
-				"display": "block"
-			})
-			$(this).css({
-				"border-bottom": "none",
-				"height": "30px"
-			})
-		}).mouseout(function() {
-			$(this).children(".crumb-item-two").css({
-				"display": "none"
-			})
-			$(this).css({
-				"border": "solid 1px #737373",
-				"height": "22px"
-			})
-		})
-		//top右下拉
-		$(".contact").mouseover(function() {
-			$(this).css({
-				"height": "30px"
-			})
-		}).mouseout(function() {
-			$(this).css({
-				"height": "22px"
-			})
-		});
 
-		$(".box-attr dd").click(function() {
-			$(this).css({
-				"border": "solid 1px #e3393c"
-			}).siblings("dd").remove("style")
-		})
+        //3、取出他们的交集，得到skuId
+        // console.log($(skus[0]).filter(skus[1])[0]);
+        var filterEle = skus[0];
+        for (var i = 1; i<skus.length;i++){
+            filterEle = $(filterEle).filter(skus[i]);
+        }
 
-       //红边框
-		$(".box-attr-2 dd").click(function() {
-			$(this).addClass("redborder").siblings("dd").removeClass("redborder");
-            switchSkuId();
-		})
-		//加减
-		$("#jia").click(function() {
-			var n = $(this).parent().parent().prev("input").val()
-			var num = parseInt(n) + 1
-			if(num == 0) {
-				return;
-			}
-			$(this).parent().parent().prev("input").val(num)
-		})
+        //4、跳转
+        console.log(filterEle[0])
+        location.href = "http://item.dlqk8s.top:81/"+filterEle[0]+".html";
+    });
+    $("dd[class='attr_sku_value checked']").css({"border": "solid 1px #e3393c"});
+    // $("dd[class='attr_sku_value']").css({"border": "solid 1px #CCCCCC"});
 
-		$("#jian").click(function() {
-			var n = $(this).parent().parent().prev("input").val()
-			var num = parseInt(n) - 1
-			if(num == 0) {
-				return;
-			}
-			$(this).parent().parent().prev("input").val(num)
-		})
+    //红边框
+    $(".box-attr-2 dd").click(function () {
+        $(this).addClass("redborder").siblings("dd").removeClass("redborder");
+        switchSkuId();
+    })
+    //加减
+    $("#jia").click(function () {
+        var n = $(this).parent().parent().prev("input").val()
+        var num = parseInt(n) + 1
+        if (num == 0) {
+            return;
+        }
+        $(this).parent().parent().prev("input").val(num)
+    })
 
-		//左右滚动
-		$("#left").click(function() {
-			$(".box-lh-one ul").stop().animate({
-				"left": 0
-			})
-			$(this).css({
-				"color": "#ccc"
-			})
-			$("#right").css({
-				"color": "#000"
-			})
-		})
-		$("#right").click(function() {
-			$(".box-lh-one ul").stop().animate({
-				"left": "-100px"
-			})
-			$(this).css({
-				"color": "#ccc"
-			})
-			$("#left").css({
-				"color": "#000"
-			})
+    $("#jian").click(function () {
+        var n = $(this).parent().parent().prev("input").val()
+        var num = parseInt(n) - 1
+        if (num == 0) {
+            return;
+        }
+        $(this).parent().parent().prev("input").val(num)
+    })
 
-		})
+    //左右滚动
+    $("#left").click(function () {
+        $(".box-lh-one ul").stop().animate({
+            "left": 0
+        })
+        $(this).css({
+            "color": "#ccc"
+        })
+        $("#right").css({
+            "color": "#000"
+        })
+    })
+    $("#right").click(function () {
+        $(".box-lh-one ul").stop().animate({
+            "left": "-100px"
+        })
+        $(this).css({
+            "color": "#ccc"
+        })
+        $("#left").css({
+            "color": "#000"
+        })
 
-		//换图片
-		$(".box-lh-one li").mouseover(function() {
-			$(this).css({
-				"padding": "0",
-				"border": "2px solid #e53e41"
+    })
 
-			}).siblings().css({
-				"padding": "1px",
-				"border": "none"
-			})
+    //换图片
+    $(".box-lh-one li").mouseover(function () {
+        $(this).css({
+            "padding": "0",
+            "border": "2px solid #e53e41"
 
-		})
+        }).siblings().css({
+            "padding": "1px",
+            "border": "none"
+        })
 
-		//地区出现
-		$(".box-stock-li").mouseover(function() {
-			$(".box-stock-two").css({
-				"display": "block"
-			})
-			$(this).css({
-				"border-bottom": "none",
-				"padding": "0",
-				"padding-bottom": "1px"
-			})
-		}).mouseout(function() {
-			$(".box-stock-two").css({
-				"display": "none"
-			})
-			$(this).css({
-				"border": "none",
-				"padding": "1px"
-			})
-		})
+    })
 
-		//切换地区
-		$(".box-stock-div").click(function() {
-			var num = $(this).index()
-			$(".box-stock-con").eq(num).css({
-				"display": "block"
-			}).siblings().css({
-				"display": "none"
-			})
-			$(".box-stock-div").eq(num).css({
-				"border": "solid 1px #e4393c",
-				"border-bottom": "solid 2px #fff"
-			}).siblings().css({
-				"border": "1px solid #ddd",
-				"border-bottom": "none"
-			})
-			$(".box-stock-fot").css({
-				"border-top": "solid 1px #e4393c"
-			})
-		})
+    //地区出现
+    $(".box-stock-li").mouseover(function () {
+        $(".box-stock-two").css({
+            "display": "block"
+        })
+        $(this).css({
+            "border-bottom": "none",
+            "padding": "0",
+            "padding-bottom": "1px"
+        })
+    }).mouseout(function () {
+        $(".box-stock-two").css({
+            "display": "none"
+        })
+        $(this).css({
+            "border": "none",
+            "padding": "1px"
+        })
+    })
 
-		//上升 下升
-		$(function() {
-			var toggle = true;
-			$(".box-stock-two-img").click(function() {
-				if(toggle) {
-					$(".box-stock-dd").css({
-						"display": "none"
-					})
-					$(this).css({
-						"transform": "rotate(180deg)"
-					})
-					toggle = false;
-				} else {
-					$(".box-stock-dd").css({
-						"display": "block"
-					})
-					$(this).css({
-						"transform": "rotate(0)"
-					})
-					toggle = true;
-				}
+    //切换地区
+    $(".box-stock-div").click(function () {
+        var num = $(this).index()
+        $(".box-stock-con").eq(num).css({
+            "display": "block"
+        }).siblings().css({
+            "display": "none"
+        })
+        $(".box-stock-div").eq(num).css({
+            "border": "solid 1px #e4393c",
+            "border-bottom": "solid 2px #fff"
+        }).siblings().css({
+            "border": "1px solid #ddd",
+            "border-bottom": "none"
+        })
+        $(".box-stock-fot").css({
+            "border-top": "solid 1px #e4393c"
+        })
+    })
 
-			})
-		})
+    //上升 下升
+    $(function () {
+        var toggle = true;
+        $(".box-stock-two-img").click(function () {
+            if (toggle) {
+                $(".box-stock-dd").css({
+                    "display": "none"
+                })
+                $(this).css({
+                    "transform": "rotate(180deg)"
+                })
+                toggle = false;
+            } else {
+                $(".box-stock-dd").css({
+                    "display": "block"
+                })
+                $(this).css({
+                    "transform": "rotate(0)"
+                })
+                toggle = true;
+            }
 
-		function Zoom(imgbox, hoverbox, l, t, x, y, h_w, h_h, showbox,showbox1) {
-			var moveX = x - l - (h_w / 2);
-			//鼠标区域距离
-			var moveY = y - t - (h_h / 2);
-			//鼠标区域距离
-			if(moveX < 0) {
-				moveX = 0
-			}
-			if(moveY < 0) {
-				moveY = 0
-			}
-			if(moveX >= imgbox.width() - h_w) {
-				moveX = imgbox.width() - h_w
-			}
-			if(moveY >= imgbox.height() - h_h) {
-				moveY = imgbox.height() - h_h
-			}
-			//判断鼠标使其不跑出图片框
-			var zoomX = showbox.width() / imgbox.width()
-			//求图片比例
-			var zoomY = showbox.height() / imgbox.height()
+        })
+    })
 
-			var scaleX = moveX/(imgbox.width()-hoverbox.width());
-			var scaleY = moveY/(imgbox.height()-hoverbox.height());
-			/*//获取滑块和box1的的距离比例
-			//设置右侧大图的左边定位距离。也就是滑块和box1的距离比乘以大图片的宽减去box2的值
-			oImg.style.left = "-"+scaleX*(oImg.offsetWidth-box2.offsetWidth)+"px";
-			设置右侧大图的高度定位距离。
-			oImg.style.top =  "-"+scaleY*(oImg.offsetHeight-box2.offsetHeight)+"px";*/
-			showbox.css({
-				left: -scaleX *( showbox.width() - showbox1.width()),
-				top: -scaleY *( showbox.height()- showbox1.height())
-			})
-			hoverbox.css({
-				left: moveX,
-				top: moveY
-			})
-			//确定位置
+    function Zoom(imgbox, hoverbox, l, t, x, y, h_w, h_h, showbox, showbox1) {
+        var moveX = x - l - (h_w / 2);
+        //鼠标区域距离
+        var moveY = y - t - (h_h / 2);
+        //鼠标区域距离
+        if (moveX < 0) {
+            moveX = 0
+        }
+        if (moveY < 0) {
+            moveY = 0
+        }
+        if (moveX >= imgbox.width() - h_w) {
+            moveX = imgbox.width() - h_w
+        }
+        if (moveY >= imgbox.height() - h_h) {
+            moveY = imgbox.height() - h_h
+        }
+        //判断鼠标使其不跑出图片框
+        var zoomX = showbox.width() / imgbox.width()
+        //求图片比例
+        var zoomY = showbox.height() / imgbox.height()
 
-		}
+        var scaleX = moveX / (imgbox.width() - hoverbox.width());
+        var scaleY = moveY / (imgbox.height() - hoverbox.height());
+        /*//获取滑块和box1的的距离比例
+        //设置右侧大图的左边定位距离。也就是滑块和box1的距离比乘以大图片的宽减去box2的值
+        oImg.style.left = "-"+scaleX*(oImg.offsetWidth-box2.offsetWidth)+"px";
+        设置右侧大图的高度定位距离。
+        oImg.style.top =  "-"+scaleY*(oImg.offsetHeight-box2.offsetHeight)+"px";*/
+        showbox.css({
+            left: -scaleX * (showbox.width() - showbox1.width()),
+            top: -scaleY * (showbox.height() - showbox1.height())
+        })
+        hoverbox.css({
+            left: moveX,
+            top: moveY
+        })
+        //确定位置
 
-		function Zoomhover(imgbox, hoverbox, showbox,showbox1) {
-			var l = imgbox.offset().left;
-			var t = imgbox.offset().top;
-			var w = hoverbox.width();
-			var h = hoverbox.height();
-			var time;
-			$(".probox img,.hoverbox").mouseover(function(e) {
-				var x = e.pageX;
-				var y = e.pageY;
-				$(".hoverbox,.showbox").show();
-				hoverbox.css("opacity", "0.3")
-				time = setTimeout(function() {
-					Zoom(imgbox, hoverbox, l, t, x, y, w, h, showbox,showbox1)
-				}, 1)
-			}).mousemove(function(e) {
-				var x = e.pageX;
-				var y = e.pageY;
-				time = setTimeout(function() {
-					Zoom(imgbox, hoverbox, l, t, x, y, w, h, showbox,showbox1)
-				}, 1)
-			}).mouseout(function() {
-				showbox.parent().hide()
-				hoverbox.hide();
-			})
-		}
-		$(function() {
-			Zoomhover($(".probox img"), $(".hoverbox"), $(".showbox img"),$(".showbox"));
-			$(".box-lh-one ul li").hover(function() {
-				$('.img1').attr("src", $(this).find('img').attr('src'));
-			})
-		})
-		//我的京东显示隐藏
-$(".zjxs").mouseover(function () {
-	$(".header_wdjd").css("display","block");
-}).mouseout(function(){
-	$(".header_wdjd").css("display","none");
-	
-})
+    }
+
+    function Zoomhover(imgbox, hoverbox, showbox, showbox1) {
+        var l = imgbox.offset().left;
+        var t = imgbox.offset().top;
+        var w = hoverbox.width();
+        var h = hoverbox.height();
+        var time;
+        $(".probox img,.hoverbox").mouseover(function (e) {
+            var x = e.pageX;
+            var y = e.pageY;
+            $(".hoverbox,.showbox").show();
+            hoverbox.css("opacity", "0.3")
+            time = setTimeout(function () {
+                Zoom(imgbox, hoverbox, l, t, x, y, w, h, showbox, showbox1)
+            }, 1)
+        }).mousemove(function (e) {
+            var x = e.pageX;
+            var y = e.pageY;
+            time = setTimeout(function () {
+                Zoom(imgbox, hoverbox, l, t, x, y, w, h, showbox, showbox1)
+            }, 1)
+        }).mouseout(function () {
+            showbox.parent().hide()
+            hoverbox.hide();
+        })
+    }
+
+    $(function () {
+        Zoomhover($(".probox img"), $(".hoverbox"), $(".showbox img"), $(".showbox"));
+        $(".box-lh-one ul li").hover(function () {
+            $('.img1').attr("src", $(this).find('img').attr('src'));
+        })
+    })
+    //我的京东显示隐藏
+    $(".zjxs").mouseover(function () {
+        $(".header_wdjd").css("display", "block");
+    }).mouseout(function () {
+        $(".header_wdjd").css("display", "none");
+
+    })
 
 //手机京东显示隐藏
-$(".sjxs").hover(function () {
-	$(".header_sjjd").toggle();
-})
+    $(".sjxs").hover(function () {
+        $(".header_sjjd").toggle();
+    })
 
 //关注京东显示隐藏
-$(".gzxs").hover(function () {
-	$(".header_gzjd").toggle();
-})
+    $(".gzxs").hover(function () {
+        $(".header_gzjd").toggle();
+    })
 
 //关注京东显示隐藏
-$(".khxs").hover(function () {
-	$(".header_khfw").toggle();
-})
+    $(".khxs").hover(function () {
+        $(".header_khfw").toggle();
+    })
 
 //网站导航显示隐藏
-$(".wzxs").hover(function () {
-	$(".header_wzdh").toggle();
-})
-
-$(".header_ul_left>.glyphicon-map-marker").mouseover(function(){
-	$(this).children("#beijing").show();
-}).mouseout(function(){
-	$(this).children("#beijing").hide();
-})
-$(".header_ul_right>.jingdong").mouseover(function(){
-	$(this).children(".jingdong_ol").show();
-}).mouseout(function(){
-	$(this).children(".jingdong_ol").hide();
-})
-$(".header_ul_right>.fuwu").mouseover(function(){
-	$(this).children(".fuwu_ol").show();
-}).mouseout(function(){
-	$(this).children(".fuwu_ol").hide();
-})
-$(".header_ul_right>.daohang").mouseover(function(){
-	$(this).children(".daohang_ol").show();
-}).mouseout(function(){
-	$(this).children(".daohang_ol").hide();
-})
-
-$('.nav_top_three').mouseover(function(){
-	$('.gouwuchexiaguo').css('display','block')
-}).mouseout(function(){
-	$('.gouwuchexiaguo').css('display','none')
-})
-
- $('.aaa').on('click',function(){
-            $('html,body').animate({//$('html,body')兼容问题body属于chrome
-                scrollTop:0
-            })
-        });
+    $(".wzxs").hover(function () {
+        $(".header_wzdh").toggle();
     })
+
+    $(".header_ul_left>.glyphicon-map-marker").mouseover(function () {
+        $(this).children("#beijing").show();
+    }).mouseout(function () {
+        $(this).children("#beijing").hide();
+    })
+    $(".header_ul_right>.jingdong").mouseover(function () {
+        $(this).children(".jingdong_ol").show();
+    }).mouseout(function () {
+        $(this).children(".jingdong_ol").hide();
+    })
+    $(".header_ul_right>.fuwu").mouseover(function () {
+        $(this).children(".fuwu_ol").show();
+    }).mouseout(function () {
+        $(this).children(".fuwu_ol").hide();
+    })
+    $(".header_ul_right>.daohang").mouseover(function () {
+        $(this).children(".daohang_ol").show();
+    }).mouseout(function () {
+        $(this).children(".daohang_ol").hide();
+    })
+
+    $('.nav_top_three').mouseover(function () {
+        $('.gouwuchexiaguo').css('display', 'block')
+    }).mouseout(function () {
+        $('.gouwuchexiaguo').css('display', 'none')
+    })
+
+    $('.aaa').on('click', function () {
+        $('html,body').animate({//$('html,body')兼容问题body属于chrome
+            scrollTop: 0
+        })
+    });
+})
 
 
