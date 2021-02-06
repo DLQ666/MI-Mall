@@ -1,0 +1,7 @@
+#server:
+#  port: 13000
+#spring:
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: gitdlq.top:8848  #配置nacos地址
