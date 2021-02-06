@@ -23,3 +23,5 @@ buildNumber.properties
 
 
 
+/mi-auth/src/main/resources/static/login/
+/mi-auth/src/main/resources/static/regist/

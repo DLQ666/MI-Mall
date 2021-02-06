@@ -226,16 +226,16 @@ header .header_head .header_head_box ul li {
 
 header .header_head .header_head_box ul li a {
     text-decoration: none;
-    color: #000000;
+    color: #999;
     font-size: 12px;
 }
 
 header .header_head .header_head_box ul li .li_2 {
-    color: red;
+    color: #f30213;
 }
 
 header .header_head .header_head_box ul a:hover {
-    color: #C81623;
+    color: #f30213;
 }
 
 header .header_head .header_head_box ul .header_wdjd {

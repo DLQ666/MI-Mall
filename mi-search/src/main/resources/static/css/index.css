@@ -103,11 +103,11 @@ html {
 }
 
 .header_head .header_head_box ul li .li_2 {
-    color: red;
+    color: #f30213;
 }
 
 .header_head .header_head_box ul a:hover {
-    color: #C81623;
+    color: #f30213;
 }
 
 .header_head .header_head_box ul .header_wdjd {
