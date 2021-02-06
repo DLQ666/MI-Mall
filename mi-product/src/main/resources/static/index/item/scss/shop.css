@@ -102,6 +102,10 @@ a {
     border-top: none;
 }
 
+.Shop .ShopXiangqing .allLeft .dangeshopxingqing img{
+    width: 180px;
+}
+
 .Shop .ShopXiangqing .allLeft .dangeshopxingqing .shopdange {
     width: 100%;
 }
@@ -116,6 +120,7 @@ a {
 .Shop .ShopXiangqing .allLeft .dangeshopxingqing .shopdange li img {
     margin-top: 20px;
     border: none;
+    width: 180px;
 }
 
 .Shop .ShopXiangqing .allLeft .dangeshopxingqing .shopdange li p {
@@ -129,7 +134,7 @@ a {
 }
 
 .Shop .ShopXiangqing .allLeft .dangeshopxingqing .shopdange li p strong {
-    color: red;
+    color: #e4393c;
     font-size: 14px;
 }
 
@@ -228,7 +233,7 @@ a {
 
 .PINgjia .nav .left p span {
     font-size: 38px;
-    color: red;
+    color: #e4393c;
 }
 
 .PINgjia .nav .right {
@@ -264,11 +269,11 @@ a {
 }
 
 .PINgjia .nav .right ul li:active {
-    border: 1px solid red;
+    border: 1px solid #e4393c;
 }
 
 .PINgjia .nav .right ul li:active a:active {
-    color: red;
+    color: #e4393c;
 }
 
 .PINgjia .allpingjia {
@@ -309,6 +314,31 @@ a {
     width: 100%;
     margin-top: 20px;
 }
+.shanpinsssss ul{
+    padding: 20px 0 15px;
+    overflow: hidden;
+    _zoom: 1;
+}
+
+.shanpinsssss ul li{
+    padding-left: 42px;
+    float: left;
+    margin-bottom: 5px;
+    width: 145px;
+    font: 12px/150% tahoma,arial,Microsoft YaHei,Hiragino Sans GB,"\u5b8b\u4f53",sans-serif;
+}
+.shanpinsssss .brandShow li {
+    width: 50%;
+}
+.shanpinsssss .brandShow {
+    padding-bottom: 0;
+}
+.shanpinsssss .shapinShow li {
+    width: 200px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
 
 .shanpinsssss p a {
     font-size: 12px;
@@ -334,9 +364,9 @@ a {
     text-overflow: ellipsis;
 }
 
-.shanpinsssss table td a:hover {
+/*.shanpinsssss table td a:hover {
     color: red;
-}
+}*/
 
 .shanpinsssss .xiaoguo {
     margin-left: 106px;
@@ -388,7 +418,7 @@ a {
 }
 
 .headera .table dl dt a:hover {
-    color: red;
+    color: #f30213;
 }
 
 .headera .table dl dd {
@@ -401,7 +431,7 @@ a {
 }
 
 .headera .table dl dd a:hover {
-    color: red;
+    color: #f30213;
 }
 
 .headera .table .dls {
@@ -433,7 +463,7 @@ a {
 }
 
 .headera .guanyuwomen ul li a:hover {
-    color: red;
+    color: #f30213;
 }
 
 .headera .p1 {
@@ -791,12 +821,12 @@ a {
 }
 
 .crumb-wrap .contact .contact-ul li .contact-sp .contact-sp1 {
-    color: #FF0000;
+    color: #e4393c;
     padding-left: 2px;
 }
 
 .crumb-wrap .contact .contact-ul li .contact-sp .contact-sp2 {
-    background: #FF0000;
+    background: #e4393c;
     color: #fff;
 }
 
@@ -1539,7 +1569,7 @@ a {
 .oBox .changJia .lianBao .oImg h3 {
     width: 64px;
     height: 43px;
-    color: red;
+    color: #e4393c;
     display: inline;
 }
 
@@ -1565,7 +1595,7 @@ a {
 .oBox .changJia .quanLi h4 {
     width: 970px;
     height: 20px;
-    color: red;
+    color: #e4393c;
 }
 
 .oBox .changJia .quanLi .jingDong {
@@ -1666,14 +1696,19 @@ a {
 .gouwuchexiaguo {
     display: none;
     width: 325px;
-    height: 68px;
-    border: 1px solid gainsboro;
+    height: 67px;
     position: absolute;
     top: 112px;
-    right: 117px;
-    box-shadow: 0 3px 8px lavender;
+    right: 265px;
     color: #666666;
-    font-size: 16px;
+    box-shadow: 0 0 5px rgba(0,0,0,.2);
+    border: 1px solid #ddd;
+}
+.gouwuchexiaguo img{
+    margin-top: 7px;
+}
+.gouwuchexiaguo span{
+    vertical-align: middle;
 }
 
 /*# sourceMappingURL=shop.css.map */

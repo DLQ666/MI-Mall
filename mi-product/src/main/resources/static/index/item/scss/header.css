@@ -395,6 +395,16 @@ a {
     clear: both;
 }
 
+#max nav .nav_min .nav_top .spacer{
+    position: absolute;
+    right: 0;
+    top: -7px;
+    width: 139px;
+    height: 12px;
+    background: #fff;
+    z-index: 7;
+}
+
 #max nav .nav_min .nav_top div {
     float: left;
 }
@@ -434,14 +444,14 @@ a {
 }
 
 #max nav .nav_min .nav_top .nav_top_three {
-    width: 12%;
+    width: 139px;
     height: 40%;
-    border: 1px solid darkgray;
+    border: 1px solid #DFDFDF;
     line-height: 40px;
     text-align: center;
-    background: #F3F3F3;
+    background: #F9F9F9;
     margin-top: 2.5%;
-    margin-left: 5%;
+    margin-left: 5.5%;
     position: relative;
     z-index: 5;
 }
@@ -453,7 +463,7 @@ a {
 }
 
 #max nav .nav_min .nav_top .nav_top_three a {
-    color: #F30213;
+    color: #666;
     text-decoration: none;
 }
 
@@ -467,13 +477,13 @@ a {
     z-index: 3;
     background: white;
     display: none;
-    box-shadow: 0 3px 8px lavender;
+    box-shadow: 0 0 5px rgba(0,0,0,.2);
 }
 
 #max nav .nav_min .nav_top .nav_top_three:hover {
     border: 0;
     background: white;
-    box-shadow: 0 0 8px lavender;
+    box-shadow: 0 0 5px rgba(0,0,0,.2);
     z-index: 1;
     color: darkgray;
 }
