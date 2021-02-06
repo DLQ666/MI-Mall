@@ -45,12 +45,12 @@ class MiProductApplicationTests {
 
     @Test
     public void test() {
-        System.out.println(skuSaleAttrValueDao.getSaleAttrsVersionBySpuId(11L));
+        System.out.println(skuSaleAttrValueDao.getSaleAttrsBySpuId(11L));
     }
 
     @Test
     public void test2() {
-        System.out.println(skuSaleAttrValueDao.getSaleAttrsColorsBySpuId(9L));
+        System.out.println(skuSaleAttrValueDao.getSaleAttrsBySpuId(9L));
     }
 
     @Test
