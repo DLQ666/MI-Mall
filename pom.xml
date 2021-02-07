@@ -19,6 +19,7 @@
         <module>mi-gateway</module>
         <module>mi-third-party</module>
         <module>mi-search</module>
+        <module>mi-auth</module>
         <module>renren-fast</module>
         <module>renren-generator</module>
     </modules>
