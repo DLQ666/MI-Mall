@@ -50,36 +50,36 @@ setTimeout(function() {
 }, 1)
 //秒杀图片上移 文字变红
 $(".swiper_section_second_list_left li p").mouseover(function() {
-  $(this).css("color", "#F90013");
+  $(this).css("color", "#c81623");
 
-  $(this).prev().stop().animate({
+  /*$(this).prev().stop().animate({
     marginTop: "0px",
     marginBottom: "8px",
 
-  }, 500)
+  }, 500)*/
 }).mouseout(function() {
-  $(this).css("color", "#999")
-  $(this).prev().stop().animate({
-    marginTop: "8px",
+  $(this).css("color", "#333")
+  /*$(this).prev().stop().animate({
+    marginTop: "25px",
     marginBottom: "0px",
 
-  }, 500)
+  }, 500)*/
 })
 $(".swiper_section_second_list_left li img").mouseover(function() {
-  $(this).next().css("color", "#F90013");
+  $(this).next().css("color", "#c81623");
 
-  $(this).stop().animate({
+  /*$(this).stop().animate({
     marginTop: "0px",
     marginBottom: "8px",
 
-  }, 500)
+  }, 500)*/
 }).mouseout(function() {
-  $(this).next().css("color", "#999")
-  $(this).stop().animate({
-    marginTop: "8px",
+  $(this).next().css("color", "#333")
+ /* $(this).stop().animate({
+    marginTop: "25px",
     marginBottom: "0px",
 
-  }, 500)
+  }, 500)*/
 })
 //秒杀左侧轮播按钮
 $(".swiper_section_second_list_left").mouseover(function() {

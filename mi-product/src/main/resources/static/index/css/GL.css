@@ -139,6 +139,7 @@ html {
 header {
     width: 100%;
     background: #fff;
+    margin-bottom: 20px;
 }
 
 header .header_head {
@@ -357,7 +358,7 @@ header .header_sous .header_form {
     overflow: hidden;
     background: #f10215;
     position: absolute;
-    left: 280px;
+    left: 260px;
     top: 25px;
     width: 550px;
     height: 32px;
@@ -393,7 +394,7 @@ header .header_sous .header_form img {
 
 header .header_sous .header_ico {
     position: absolute;
-    right: 99px;
+    right: 220px;
     top: 25px;
 }
 
@@ -403,7 +404,7 @@ header .header_sous .header_ico .header_gw:hover {
 }
 
 header .header_sous .header_ico .header_gw {
-    width: 160px;
+    width: 130px;
     height: 35px;
     background-color: #fff;
     text-align: center;
@@ -416,7 +417,7 @@ header .header_sous .header_ico .header_gw {
 }
 
 header .header_sous .header_ico .header_gw span:nth-child(2) {
-    font-size: 13px;
+    font-size: 12px;
 }
 
 header .header_sous .header_ico .header_gw span:nth-child(2) a {
@@ -438,7 +439,7 @@ header .header_sous .header_ico .header_gw span:nth-child(3) {
     font-size: 12px;*/
     position: absolute;
     top: 1px;
-    left: 41px;
+    left: 21%;
     right: auto;
     display: inline-block;
     padding: 1px 3px;
@@ -473,7 +474,7 @@ header .header_sous .header_ico .header_ko p {
 header .header_sous .header_form_nav {
     overflow: hidden;
     position: absolute;
-    left: 280px;
+    left: 260px;
     top: 65px;
     width: 550px;
     height: 20px;
@@ -487,7 +488,7 @@ header .header_sous .header_form_nav ul li {
 }
 
 header .header_sous .header_form_nav ul li a {
-    color: #666;
+    color: #999;
     font-size: 12px;
     text-decoration: none;
 }
@@ -517,7 +518,8 @@ header .header_sous nav ul {
 
 header .header_sous nav ul li {
     float: left;
-    margin-left: 30px;
+    margin-left: 11px;
+    margin-right: 11px;
 }
 
 header .header_sous nav ul li a {
@@ -525,9 +527,8 @@ header .header_sous nav ul li a {
     display: block;
     height: 40px;
     line-height: 40px;
-    font-size: 16px;
-    font-weight: 700;
-    color: #555;
+    font-size: 15px;
+    color: #333;
     text-decoration: none;
 }
 
@@ -549,9 +550,13 @@ header .header_sous nav .spacer {
 header .header_sous .right {
     position: absolute;
     right: 0;
-    bottom: 0;
+    bottom: 10px;
     width: 190px;
-    height: 40px;
+    height: 120px;
+}
+header .header_sous .right img{
+    width: 190px;
+    height: 120px;
 }
 
 header .header_main {
@@ -1507,7 +1512,115 @@ header .header_main .header_banner1_div p {
     margin: 0 auto;
     overflow: hidden;
     background: #fff;
-    padding: 10px 0;
+}
+
+.seckill-countdown {
+    position: relative;
+    float: left;
+    width: 190px;
+    height: 260px;
+    color: #fff;
+    background-color: #e83632;
+    background-image: url(../img/miaosha.png);
+    background-size: contain;
+    background-position: 50%;
+    background-repeat: no-repeat;
+}
+.seckill-countdown:hover{
+    color: #fff;
+}
+
+.seckill-countdown .countdown-title {
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    margin-top: 31px;
+    height: 45px;
+}
+
+.seckill-countdown .countdown-desc {
+    margin-top: 90px;
+    font-size: 14px;
+    text-align: center;
+    height: 26px;
+}
+
+.seckill-countdown .countdown-main {
+    margin-left: auto;
+    margin-right: auto;
+    width: 130px;
+    height: 30px;
+    margin-top: 10px;
+    display: block;
+}
+.seckill-countdown .countdown-main .section_second_header_right_hours{
+    position: relative;
+    float: left;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background-color: #2f3430;
+    margin-right: 20px;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+}
+.seckill-countdown .countdown-main .section_second_header_right_hours:after{
+    content: ":";
+    display: block;
+    position: absolute;
+    right: -20px;
+    font-weight: bolder;
+    font-size: 18px;
+    width: 20px;
+    height: 100%;
+    top: 0;
+}
+.seckill-countdown .countdown-main .section_second_header_right_minutes{
+    position: relative;
+    float: left;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background-color: #2f3430;
+    margin-right: 20px;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+}
+.seckill-countdown .countdown-main .section_second_header_right_minutes:after{
+    content: ":";
+    display: block;
+    position: absolute;
+    right: -20px;
+    font-weight: bolder;
+    font-size: 18px;
+    width: 20px;
+    height: 100%;
+    top: 0;
+}
+
+.seckill-countdown .countdown-main .section_second_header_right_second{
+    position: relative;
+    margin-right: 0;
+    float: left;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background-color: #2f3430;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+.seckill-countdown .countdown-desc strong {
+    font-size: 18px;
+    padding-right: 2px;
+    vertical-align: middle;
+    display: inline-block;
+    margin-top: -1px;
 }
 
 .section_second .section_second_list .swiper-container {
@@ -1523,23 +1636,32 @@ header .header_main .header_banner1_div p {
 }
 
 .section_second .section_second_list .swiper-container .second_list {
-    top: 40%;
     width: 20px;
-    height: 50px;
+    height: 35px;
     background-size: 10px 44px;
     display: none;
 }
 
 .section_second .section_second_list .swiper-container .second_list p {
-    width: 100%;
-    height: 100%;
+    width: 25px;
+    height: 35px;
     background: rgba(0, 0, 0, 0.1) !important;
 }
+.swiper-button-prev p{
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+
+.swiper-button-next p{
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
+}
+
 
 .section_second .section_second_list .swiper_section_second_list_left {
-    width: 1000px;
+    width: 800px;
     float: left;
-    height: 225px;
+    height: 260px;
 }
 
 .section_second .section_second_list .swiper_section_second_list_left > li:last-child {
@@ -1548,7 +1670,7 @@ header .header_main .header_banner1_div p {
 
 .section_second .section_second_list .swiper_section_second_list_left li {
     width: 200px;
-    height: 225px;
+    height: 260px;
     float: left;
     padding: 5px 10px;
     border-right: 1px solid #e7e7e7;
@@ -1561,7 +1683,9 @@ header .header_main .header_banner1_div p {
 
 .section_second .section_second_list .swiper_section_second_list_left li img {
     margin-left: 25px;
-    margin-top: 8px;
+    margin-top: 25px;
+    height: 140px;
+    width: 140px;
 }
 
 .section_second .section_second_list .swiper_section_second_list_left li img:hover {
@@ -1570,9 +1694,14 @@ header .header_main .header_banner1_div p {
 }
 
 .section_second .section_second_list .swiper_section_second_list_left li p {
-    height: 30px;
-    overflow-y: hidden;
-    margin-bottom: 10px;
+    height: 18px;
+    margin-top: 13px;
+    margin-left: 10px;
+    margin-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 400;
 }
 
 .section_second .section_second_list .swiper_section_second_list_left li p,
@@ -1581,17 +1710,16 @@ header .header_main .header_banner1_div p {
     color: #999;
 }
 
-.section_second .section_second_list .swiper_section_second_list_left li span {
+/*.section_second .section_second_list .swiper_section_second_list_left li span {
     font-size: 18px;
     color: #e1251b;
     font-weight: 400;
-}
+}*/
 
 .section_second .section_second_list .section_second_list_right {
     float: right;
-    width: 180px;
-    height: 225px;
-    margin-right: 10px;
+    width: 200px;
+    height: 260px;
     position: relative;
 }
 
@@ -1603,6 +1731,9 @@ header .header_main .header_banner1_div p {
 
 .section_second .section_second_list .section_second_list_right li img {
     display: block;
+    height: 240px;
+    width: 180px;
+    padding: 10px;
 }
 
 .section_second .section_second_list .section_second_list_right > li:nth-of-type(2) {
@@ -1613,14 +1744,16 @@ header .header_main .header_banner1_div p {
     width: 50px;
     height: 10px;
     position: absolute;
-    left: 67px;
-    bottom: 5px;
+    bottom: 16px;
     z-index: 9;
+    left: 41%;
+    font-size: 0;
+    text-align: center;
 }
 
 .section_second .section_second_list .section_second_list_right .section_second_list_right_button p {
-    width: 10px;
-    height: 10px;
+    width: 4px;
+    height: 4px;
     border-radius: 50%;
     background: #333;
     float: left;
@@ -2306,6 +2439,75 @@ header .header_main .header_banner1_div p {
     padding: 25px 30px 40px;
     background: #ffffff;
     position: relative;
+}
+
+.swiper-slide .seckill-item__price {
+    border: 1px solid #e1251b;
+    position: relative;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    line-height: 24px;
+    overflow: hidden;
+    background-color: #e1251b;
+}
+
+.swiper-slide .seckill-item__price {
+    width: 160px;
+    height: 24px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 7px;
+}
+.swiper-slide .seckill-item__price .price-miaosha {
+    width: 92px;
+    height: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 22px;
+    float: left;
+}
+.swiper-slide .seckill-item__price .price-miaosha span{
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 22px;
+}
+.swiper-slide .seckill-item__price .price-miaosha:before {
+    content: " ";
+    width: 0;
+    height: 0;
+    border-color: transparent white transparent transparent;
+    border-style: solid;
+    border-width: 22px 8px 0 0;
+    position: absolute;
+    top: 0;
+    left: 84px;
+}
+.swiper-slide .seckill-item__price .price-miaosha i {
+    font-size: 12px;
+    font-weight: 400;
+    padding-right: 2px;
+    font-style: normal;
+}
+.swiper-slide .seckill-item__price .price-origin {
+    height: 100%;
+    width: 66px;
+    float: right;
+    background: #fff;
+    text-align: center;
+    color: #999;
+    font-size: 12px;
+    line-height: 22px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    text-decoration: line-through;
+    vertical-align: top;
+}
+.swiper-slide .seckill-item__price .price-origin i{
+    font-style: normal;
 }
 
 .section_second .section_ling .swiper_section_ling_right_list .swiper-slide-active {
