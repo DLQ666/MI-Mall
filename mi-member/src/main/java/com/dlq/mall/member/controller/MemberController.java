@@ -3,13 +3,14 @@ package com.dlq.mall.member.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.dlq.common.exception.BizCodeEnum;
+import com.dlq.mall.member.exception.PhoneExistException;
+import com.dlq.mall.member.exception.UsernameExistException;
 import com.dlq.mall.member.feign.CouponFeignService;
+import com.dlq.mall.member.vo.MemLoginVo;
+import com.dlq.mall.member.vo.MemRegistVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.dlq.mall.member.entity.MemberEntity;
 import com.dlq.mall.member.service.MemberService;
@@ -33,6 +34,31 @@ public class MemberController {
 
     @Autowired
     CouponFeignService couponFeignService;
+
+    @PostMapping("/login")
+    public R login(@RequestBody MemLoginVo loginVo) {
+        MemberEntity entity = memberService.login(loginVo);
+        if (entity != null) {
+            return R.ok();
+        } else {
+            return R.error(BizCodeEnum.LOGINACCT_PASSWORD_INVALID_EXCEPTION.getCode(),BizCodeEnum.LOGINACCT_PASSWORD_INVALID_EXCEPTION.getMsg());
+        }
+    }
+
+    @PostMapping("/regist")
+    public R regist(@RequestBody MemRegistVo registVo){
+
+        try {
+            memberService.regist(registVo);
+        } catch (PhoneExistException e) {
+            e.printStackTrace();
+            return R.error(BizCodeEnum.PHONE_EXIT_EXCEPTION.getCode(),BizCodeEnum.PHONE_EXIT_EXCEPTION.getMsg());
+        }catch (UsernameExistException e){
+            e.printStackTrace();
+            return R.error(BizCodeEnum.USER_EXIT_EXCEPTION.getCode(), BizCodeEnum.USER_EXIT_EXCEPTION.getMsg());
+        }
+        return R.ok();
+    }
 
     @RequestMapping("/coupons")
     public R test(){
