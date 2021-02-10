@@ -14,3 +14,6 @@ spring:
           - data-id: oss.yaml
             group: DEFAULT_GROUP
             refresh: true
+          - data-id: sms.yaml
+            group: DEFAULT_GROUP
+            refresh: true
