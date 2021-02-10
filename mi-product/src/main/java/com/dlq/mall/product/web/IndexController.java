@@ -1,7 +1,12 @@
 package com.dlq.mall.product.web;
 
+import com.alibaba.fastjson.TypeReference;
+import com.dlq.common.to.es.SpuEsModule;
+import com.dlq.common.utils.R;
 import com.dlq.mall.product.entity.CategoryEntity;
+import com.dlq.mall.product.feign.SearchFeignService;
 import com.dlq.mall.product.service.CategoryService;
+import com.dlq.mall.product.vo.SearchParam;
 import com.dlq.mall.product.vo.webvo.Catelog2Vo;
 import io.lettuce.core.dynamic.domain.Timeout;
 import org.omg.CORBA.TIMEOUT;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -34,6 +40,8 @@ public class IndexController {
     StringRedisTemplate stringRedisTemplate;
     @Autowired
     RedissonClient redisson;
+    @Autowired
+    SearchFeignService feignService;
 
     @GetMapping({"/","/index.html"})
     public String indexPage(Model model){
@@ -41,6 +49,12 @@ public class IndexController {
         //查出所有一级分类
         List<CategoryEntity> categoryEntities = categoryService.getLevel1Categorys();
         model.addAttribute("categorys", categoryEntities);
+        //查询所有商品
+        SearchParam param = new SearchParam();
+        R r = feignService.indexPage(param);
+        List<SpuEsModule> result = r.getData("result", new TypeReference<List<SpuEsModule>>() {
+        });
+        model.addAttribute("result",result);
         return "index";
     }
 
