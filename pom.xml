@@ -20,6 +20,7 @@
         <module>mi-third-party</module>
         <module>mi-search</module>
         <module>mi-auth</module>
+        <module>mi-cart</module>
         <module>renren-fast</module>
         <module>renren-generator</module>
     </modules>
