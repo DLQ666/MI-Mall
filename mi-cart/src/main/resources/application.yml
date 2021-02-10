@@ -1,0 +1,9 @@
+server:
+  port: 14000
+spring:
+  application:
+    name: mi-cart
+  cloud:
+    nacos:
+      discovery:
+        server-addr: dlqk8s.top:8848  #配置nacos地址
