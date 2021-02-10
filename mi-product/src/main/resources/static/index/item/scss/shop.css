@@ -1698,8 +1698,8 @@ a {
     width: 305px;
     height: 67px;
     position: absolute;
-    top: 112px;
-    right: 281px;
+    top: 41px;
+    right: -1px;
     color: #666666;
     box-shadow: 0 0 5px rgba(0,0,0,.2);
     border: 1px solid #ddd;

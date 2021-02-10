@@ -403,7 +403,7 @@ a {
 #max nav .nav_min .nav_top .spacer{
     position: absolute;
     right: 0;
-    top: -7px;
+    top: -5px;
     width: 139px;
     height: 12px;
     background: #fff;
@@ -466,10 +466,16 @@ a {
     color: #F30213;
     z-index: 1;
 }
+#max nav .nav_min .nav_top .nav_top_three .gouwuchexiaguo span {
+    color: #999;
+}
 
 #max nav .nav_min .nav_top .nav_top_three a {
     color: #666;
     text-decoration: none;
+}
+#max nav .nav_min .nav_top .nav_top_three a:hover {
+    color: #f30213;
 }
 
 #max nav .nav_min .nav_top .nav_top_three .nav_top_three_1 {
