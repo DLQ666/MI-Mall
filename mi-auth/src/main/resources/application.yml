@@ -5,3 +5,9 @@
 #    nacos:
 #      discovery:
 #        server-addr: gitdlq.top:8848  #配置nacos地址
+#  redis:
+#    host: dlqk8s.top
+#    port: 6379
+#    password: dlq.*123
+#  thymeleaf:
+#    cache: false

@@ -14,3 +14,11 @@
 #      oss:
 #        endpoint: oss-cn-beijing.aliyuncs.com
 #        bucket: dlq-mi-mall
+##阿里云短信
+#aliyun:
+#  sms:
+#    regionId: cn-hangzhou
+#    keyId: LTAI4
+#    keySecret: ri4WsWdY3RL
+#    templateCode: SMS_18
+#    signName: JAV

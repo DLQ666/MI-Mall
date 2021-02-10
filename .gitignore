@@ -25,3 +25,10 @@ buildNumber.properties
 
 /mi-auth/src/main/resources/static/login/
 /mi-auth/src/main/resources/static/regist/
+/cart/
+/mi-cart/src/main/resources/static/cart/
+/mi-cart/src/main/resources/static/cart/bootstrap/
+/mi-cart/src/main/resources/static/cart/css/
+/mi-cart/src/main/resources/static/cart/image/
+/mi-cart/src/main/resources/static/cart/img/
+/mi-cart/src/main/resources/static/cart/js/
