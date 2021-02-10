@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>京东(JD.COM)-正品低价、品质保障、配送及时、轻松购物！</title>
+    <title>某东(JD.COM)-正品低价、品质保障、配送及时、轻松购物！</title>
     <link rel="shortcut icon" href="/static/index/img/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="/static/index/css/swiper-3.4.2.min.css">
     <link rel="stylesheet" href="/static/index/css/GL.css">
+    <link rel="stylesheet" href="/static/index/css/index.css">
     <script src="/static/index/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
 
     <script src="/static/index/js/swiper-3.4.2.jquery.min.js" type="text/javascript" charset="utf-8"></script>
@@ -179,21 +180,21 @@
                         <a href="#">拍卖</a>
                     </li>
                     <li>
-                        <a href="#">京东家电</a>
+                        <a href="#">某东家电</a>
                     </li>
                     <li>
-                        <a href="#">京东超市</a>
+                        <a href="#">某东超市</a>
                     </li>
                     <li>
-                        <a href="#">京东生鲜</a>
+                        <a href="#">某东生鲜</a>
                     </li>
                 </ul>
                 <ul>
                     <li>
-                        <a href="#">京东国际</a>
+                        <a href="#">某东国际</a>
                     </li>
                     <li>
-                        <a href="#">京东金融</a>
+                        <a href="#">某东金融</a>
                     </li>
                 </ul>
             </nav>
@@ -272,7 +273,7 @@
                             <a href="#"><img class="" src="/static/index/img/touxiang.png"></a>
                         </div>
                         <div class="user_info_show">
-                            <p class="">Hi~欢迎来到京东！</p>
+                            <p class="">Hi~欢迎来到某东！</p>
                             <p>
                                 <a href="#" class="">登录</a>
                                  |
@@ -546,7 +547,7 @@
     </div>-->
     <div class="section_second_list">
         <a class="seckill-countdown">
-            <div class="countdown-title">京东秒杀</div>
+            <div class="countdown-title">某东秒杀</div>
             <div>
                 <div class="countdown-desc"><strong>16:00</strong>点场 倒计时</div>
                 <span class="timmer countdown-main">
@@ -560,80 +561,24 @@
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <ul>
-                        <li>
-                            <img src="/static/index/img/三星miaosha.jpg" alt="">
-                            <p>三星 Galaxy Note20 5G（SM-N9810）S Pen&三星笔记 专业视频拍摄  游戏手机 5G手机 8GB+256GB 迷雾金</p>
+                        <li th:each="pro:${result}">
+                            <img  th:src="${pro.defImg}" alt="">
+                            <p>[[${pro.defTitle}]]</p>
                             <div class="seckill-item__price">
-                                <span class="price-miaosha"><i>¥</i><span>5699.00</span></span>
-                                <span class="price-origin"><i>¥</i><span>5799.00</span></span>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="/static/index/img/三星miaosha.jpg" alt="">
-                            <p>三星 Galaxy Note20 5G（SM-N9810）S Pen&三星笔记 专业视频拍摄  游戏手机 5G手机 8GB+256GB 迷雾金</p>
-                            <div class="seckill-item__price">
-                                <span class="price-miaosha"><i>¥</i><span>5699.00</span></span>
-                                <span class="price-origin"><i>¥</i><span>5799.00</span></span>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="/static/index/img/三星miaosha.jpg" alt="">
-                            <p>三星 Galaxy Note20 5G（SM-N9810）S Pen&三星笔记 专业视频拍摄  游戏手机 5G手机 8GB+256GB 迷雾金</p>
-                            <div class="seckill-item__price">
-                                <span class="price-miaosha"><i>¥</i><span>5699.00</span></span>
-                                <span class="price-origin"><i>¥</i><span>5799.00</span></span>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="/static/index/img/三星miaosha.jpg" alt="">
-                            <p>三星 Galaxy Note20 5G（SM-N9810）S Pen&三星笔记 专业视频拍摄  游戏手机 5G手机 8GB+256GB 迷雾金</p>
-                            <div class="seckill-item__price">
-                                <span class="price-miaosha"><i>¥</i><span>5699.00</span></span>
-                                <span class="price-origin"><i>¥</i><span>5799.00</span></span>
+                                <span th:each="attr:${pro.attrs}" th:if="${pro.defSkuId == attr.skuId}" class="price-miaosha"><i>¥</i><span>[[${attr.skuPrice}]]</span></span>
+                                <span th:each="attr:${pro.attrs}" th:if="${pro.defSkuId == attr.skuId}" class="price-origin"><i>¥</i><span>[[${attr.skuPrice}]]</span></span>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="swiper-slide">
                     <ul>
-                        <li>
-                            <img src="/static/index/img/三星miaosha.jpg" alt="">
-                            <p>三星 Galaxy Note20 5G（SM-N9810）S Pen&三星笔记 专业视频拍摄  游戏手机 5G手机 8GB+256GB 迷雾金</p>
+                        <li th:each="pro:${result}">
+                            <img  th:src="${pro.defImg}" alt="">
+                            <p>[[${pro.defTitle}]]</p>
                             <div class="seckill-item__price">
-                                <span class="price-miaosha"><i>¥</i><span>5699.00</span></span>
-                                <span class="price-origin"><i>¥</i><span>5799.00</span></span>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="/static/index/img/三星miaosha.jpg" alt="">
-                            <p>三星 Galaxy Note20 5G（SM-N9810）S Pen&三星笔记 专业视频拍摄  游戏手机 5G手机 8GB+256GB 迷雾金</p>
-                            <div class="seckill-item__price">
-                                <span class="price-miaosha"><i>¥</i><span>5699.00</span></span>
-                                <span class="price-origin"><i>¥</i><span>5799.00</span></span>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="/static/index/img/三星miaosha.jpg" alt="">
-                            <p>三星 Galaxy Note20 5G（SM-N9810）S Pen&三星笔记 专业视频拍摄  游戏手机 5G手机 8GB+256GB 迷雾金</p>
-                            <div class="seckill-item__price">
-                                <span class="price-miaosha"><i>¥</i><span>5699.00</span></span>
-                                <span class="price-origin"><i>¥</i><span>5799.00</span></span>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="/static/index/img/三星miaosha.jpg" alt="">
-                            <p>三星 Galaxy Note20 5G（SM-N9810）S Pen&三星笔记 专业视频拍摄  游戏手机 5G手机 8GB+256GB 迷雾金</p>
-                            <div class="seckill-item__price">
-                                <span class="price-miaosha"><i>¥</i><span>5699.00</span></span>
-                                <span class="price-origin"><i>¥</i><span>5799.00</span></span>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="/static/index/img/三星miaosha.jpg" alt="">
-                            <p>三星 Galaxy Note20 5G（SM-N9810）S Pen&三星笔记 专业视频拍摄  游戏手机 5G手机 8GB+256GB 迷雾金</p>
-                            <div class="seckill-item__price">
-                                <span class="price-miaosha"><i>¥</i><span>5699.00</span></span>
-                                <span class="price-origin"><i>¥</i><span>5799.00</span></span>
+                                <span th:each="attr:${pro.attrs}" th:if="${pro.defSkuId == attr.skuId}" class="price-miaosha"><i>¥</i><span>[[${attr.skuPrice}]]</span></span>
+                                <span th:each="attr:${pro.attrs}" th:if="${pro.defSkuId == attr.skuId}" class="price-origin"><i>¥</i><span>[[${attr.skuPrice}]]</span></span>
                             </div>
                         </li>
                     </ul>
@@ -668,6 +613,31 @@
         <h3 class="floorhd_tit">
             为你推荐
         </h3>
+    </div>
+</div>
+<div id="productItem">
+    <div class="rig_tab">
+        <div th:each="product:${result}">
+            <p class="da">
+                <a class="asd" th:href="|http://item.dlqk8s.top:81/${product.defSkuId}.html|" th:title="${product.defTitle}">
+                    <img th:src="${product.defImg}" class="dim">
+                </a>
+            </p>
+            <ul class="tab_im">
+                <li th:each="attr:${product.getAttrs()}">
+                    <a title="颜色">
+                        <img th:src="${attr.getSkuImg()}" th:imgHerf="|http://item.dlqk8s.top:81/${attr.skuId}.html|" th:imgTitle="${attr.skuTitle}"></a>
+                </li>
+            </ul>
+            <p class="tab_R">
+                <span th:each="attr:${product.getAttrs()}" th:utext="'<em>¥</em>'+${attr.getSkuPrice()}">¥5199.00</span>
+            </p>
+            <p class="tab_JE">
+                <a th:each="attr:${product.getAttrs()}" th:href="|http://item.dlqk8s.top:81/${attr.getSkuId()}.html|" th:utext="${attr.getSkuTitle()}" th:title="${attr.getSkuTitle()}">
+                    离线商品名
+                </a>
+            </p>
+        </div>
     </div>
 </div>
 <!--底部-->
@@ -757,17 +727,17 @@
                 </li>
                 <li><a href="#" style="color: rgb(114, 114, 114);">延保服务</a>
                 </li>
-                <li><a href="#" style="color: rgb(114, 114, 114);">京东商城E卡</a>
+                <li><a href="#" style="color: rgb(114, 114, 114);">某东商城E卡</a>
                 </li>
-                <li><a href="#" style="color: rgb(114, 114, 114);">京东商城通信</a>
+                <li><a href="#" style="color: rgb(114, 114, 114);">某东商城通信</a>
                 </li>
-                <li><a href="#" style="color: rgb(114, 114, 114);">京东商城</a>
+                <li><a href="#" style="color: rgb(114, 114, 114);">某东商城</a>
                 </li>
             </ol>
             <ol>
-                <li>京东商城自营覆盖区域</li>
+                <li>某东商城自营覆盖区域</li>
                 <li>
-                    京东商城已向全国2661个区县提供自<br> 营配送服务，支持货到付款、
+                    某东商城已向全国2661个区县提供自<br> 营配送服务，支持货到付款、
                     <br> POS机刷卡和售后上门服务。
                 </li>
                 <li><a href="#" style="color: rgb(114, 114, 114);">查看详情&gt;</a>
@@ -790,53 +760,53 @@
                 <span></span>
                 <a href="#" style="color: rgb(114, 114, 114);">营销中心</a>
                 <span></span>
-                <a href="#" style="color: rgb(114, 114, 114);">手机京东商城</a>
+                <a href="#" style="color: rgb(114, 114, 114);">手机某东商城</a>
                 <span></span>
                 <a href="#" style="color: rgb(114, 114, 114);">友情链接</a>
                 <span></span>
                 <a href="#" style="color: rgb(114, 114, 114);">销售联盟</a>
                 <span></span>
-                <a href="#" style="color: rgb(114, 114, 114);">京东商城社区</a>
+                <a href="#" style="color: rgb(114, 114, 114);">某东商城社区</a>
                 <span></span>
                 <a href="#" style="color: rgb(114, 114, 114);">风险监测</a>
                 <span></span>
                 <a href="#">隐私政策</a>
                 <span></span>
-                <a href="#">京东商城公益</a>
+                <a href="#">某东商城公益</a>
                 <span></span>
                 <a href="#" style="color: rgb(114, 114, 114);">English Site</a>
                 <span></span>
                 <a href="#">media &amp; IR</a>
             </p>
             <p class="footer_p">
-                <a href="#">京公网安备 11000002000088号</a>
+                <a href="#">京公网安备 0000000000000号</a>
                 <span></span>
-                <a href="#">京ICP证070359号</a>
+                <a href="#">京ICP证00000000号</a>
                 <span></span>
-                <a href="#">互联网药品信息服务资格证编号(京)-经营性-2014-0008</a>
+                <a href="#">互联网药品信息服务资格证编号(京)-经营性-0000-0000</a>
                 <span></span>
-                <a href="#">新出发京零 字第大120007号</a>
+                <a href="#">新出发京零 字第大0000000号</a>
             </p>
             <p class="footer_p">
                 <a href="#">互联网出版许可证编号新出网证(京)字150号</a>
                 <span></span>
                 <a href="#">出版物经营许可证</a>
                 <span></span>
-                <a href="#">网络文化经营许可证京网文[2014]2148-348号</a>
+                <a href="#">网络文化经营许可证京网文[0000]0000-000号</a>
                 <span></span>
-                <a href="#">违法和不良信息举报电话：4006561155</a>
+                <a href="#">违法和不良信息举报电话：0000000000</a>
             </p>
             <p class="footer_p">
-                <a href="#">Copyright © 2004 - 2017  京东商城JD.com 版权所有</a>
+                <a href="#">Copyright © 0000 - 0000  某东商城JD.com 版权所有</a>
                 <span></span>
-                <a href="#">消费者维权热线：4006067733</a>
+                <a href="#">消费者维权热线：0000000000</a>
                 <a href="#">经营证照</a>
             </p>
             <p class="footer_p">
-                <a href="#">京东商城旗下网站:</a>
-                <a href="#">京东商城支付</a>
+                <a href="#">某东商城旗下网站:</a>
+                <a href="#">某东商城支付</a>
                 <span></span>
-                <a href="#">京东商城云</a>
+                <a href="#">某东商城云</a>
             </p>
             <ul>
                 <li></li>
@@ -851,6 +821,25 @@
 </footer>
 </body>
 <script type="text/javascript">
+    $(".rig_tab>div").hover(function(){
+        var i = $(this).index();
+        $(this).find('.ico').css({display:'block'}).stop(true).animate({top:"205px"},200)
+    },function(){
+        var i = $(this).index();
+        $(this).find('.ico').css({display:'none'}).stop(true).animate({top:"220px"})
+    });
+    $('.tab_im img').hover(function(){
+        var a=$(this).prop('src');
+        var b=$(this).attr('imgHerf');
+        var t=$(this).attr('imgTitle');
+        var index=$(this).parents('li').index();
+        $(this).parents('li').css('border','2px solid #e4393c').siblings('li').css('border','1px solid #ccc');
+        $(this).parents('ul').prev().find('img').prop('src',a);
+        $(this).parents('ul').prev().find("a").prop('href',b);
+        $(this).parents('ul').prev().find("a").prop('title',t);
+        $(this).parents('ul').siblings('.tab_JE').find('a').eq(index).css('display','block').siblings('a').css('display','none');
+        $(this).parents('ul').siblings('.tab_R').find('span').eq(index).css('display','block').siblings('span').css('display','none')
+    });
     function search() {
         var keyword = $("#searchText").val()
         if (keyword !== ""){

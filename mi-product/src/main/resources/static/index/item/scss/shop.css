@@ -588,7 +588,6 @@ a {
 
 .guiGebox .guiGe dl dt {
     width: 165px;
-    height: 26.4px;
     line-height: 26.4px;
     padding-right: 5px;
     float: left;
@@ -598,7 +597,6 @@ a {
 .guiGebox .guiGe dl dd {
     width: 670px;
     line-height: 26.4px;
-    height: 26.4px;
     margin-left: 210px;
 }
 
