@@ -5,6 +5,8 @@
 #    nacos:
 #      discovery:
 #        server-addr: gitdlq.top:8848  #配置nacos地址
+#  session:
+#    store-type: redis
 #  redis:
 #    host: dlqk8s.top
 #    port: 6379
