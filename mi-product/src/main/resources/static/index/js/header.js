@@ -65,11 +65,11 @@ $(".header_sj a").hover(function() {
 	})
 })
 //购物车下拉
-/*$('.header_gw').hover(function() {
+$('.header_gw').hover(function() {
 	$(this).next('.header_ko').stop(true).fadeIn(100)
 }, function() {
 	$(this).next('.header_ko').stop(true).fadeOut(100)
-})*/
+})
 //我的京东下拉
 $(".header_wdjd").hover(function() {
 	$(this).children(".header_wdjd_txt").stop(true).show(100)
