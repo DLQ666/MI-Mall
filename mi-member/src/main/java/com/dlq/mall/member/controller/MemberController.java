@@ -1,5 +1,7 @@
 package com.dlq.mall.member.controller;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -9,6 +11,7 @@ import com.dlq.mall.member.exception.UsernameExistException;
 import com.dlq.mall.member.feign.CouponFeignService;
 import com.dlq.mall.member.vo.MemLoginVo;
 import com.dlq.mall.member.vo.MemRegistVo;
+import com.dlq.mall.member.vo.SocialUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +37,16 @@ public class MemberController {
 
     @Autowired
     CouponFeignService couponFeignService;
+
+    @PostMapping("/oauth2/login")
+    public R oauthLogin(@RequestBody SocialUser socialUser) throws IOException, ParseException {
+        MemberEntity entity = memberService.login(socialUser);
+        if (entity != null) {
+            return R.ok().setData(entity);
+        } else {
+            return R.error(BizCodeEnum.LOGINACCT_PASSWORD_INVALID_EXCEPTION.getCode(),BizCodeEnum.LOGINACCT_PASSWORD_INVALID_EXCEPTION.getMsg());
+        }
+    }
 
     @PostMapping("/login")
     public R login(@RequestBody MemLoginVo loginVo) {

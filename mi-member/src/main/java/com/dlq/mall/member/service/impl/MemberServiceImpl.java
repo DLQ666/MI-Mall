@@ -1,15 +1,23 @@
 package com.dlq.mall.member.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.dlq.common.utils.HttpClientUtils;
 import com.dlq.mall.member.dao.MemberLevelDao;
 import com.dlq.mall.member.entity.MemberLevelEntity;
 import com.dlq.mall.member.exception.PhoneExistException;
 import com.dlq.mall.member.exception.UsernameExistException;
 import com.dlq.mall.member.vo.MemLoginVo;
 import com.dlq.mall.member.vo.MemRegistVo;
+import com.dlq.mall.member.vo.SocialUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.HashMap;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -101,6 +109,61 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
             }else {
                 return null;
             }
+        }
+    }
+
+    @Override
+    public MemberEntity login(SocialUser socialUser) throws IOException, ParseException {
+        MemberDao memberDao = this.baseMapper;
+        //登录和注册合并逻辑
+        String uid = socialUser.getUid();
+        //1、判断当前社交用户是否已经登陆过系统
+        MemberEntity memberEntity = memberDao.selectOne(new QueryWrapper<MemberEntity>().eq("social_uid", uid));
+        if (memberEntity != null){
+            //数据库查出来了------》说明以前登陆过，已经注册
+            MemberEntity update = new MemberEntity();
+            update.setId(memberEntity.getId());
+            update.setAccessToken(socialUser.getAccess_token());
+            update.setExpiresIn(socialUser.getExpires_in());
+            memberDao.updateById(update);
+
+            memberEntity.setAccessToken(socialUser.getAccess_token());
+            memberEntity.setExpiresIn(socialUser.getExpires_in());
+            return memberEntity;
+
+        }else {
+            //没查出来当前社交用户---》说明没登录过---》要新注册
+            MemberEntity regist = new MemberEntity();
+
+            try {
+                //查询当前社交用户的社交账号信息（昵称，性别等）
+                HashMap<String, String> param = new HashMap<>();
+                param.put("access_token", socialUser.getAccess_token());
+                param.put("uid", socialUser.getUid());
+                String baseUrl = "https://api.weibo.com/2/users/show.json";
+                HttpClientUtils client = new HttpClientUtils(baseUrl, param);
+                client.get();
+                if (client.getStatusCode() == 200) {
+                    //查询成功
+                    String json = client.getContent();
+                    JSONObject jsonObject = JSON.parseObject(json);
+                    //昵称
+                    String name = jsonObject.getString("name");
+                    //性别
+                    String gender = jsonObject.getString("gender");
+
+                    regist.setNickname(name);
+                    regist.setGender("m".equals(gender) ? 1 : 0);
+                    //...
+                }
+            } catch (Exception e) {}
+            //差不查询成功--这些都要保存到数据库
+            regist.setSocialUid(socialUser.getUid());
+            regist.setAccessToken(socialUser.getAccess_token());
+            regist.setExpiresIn(socialUser.getExpires_in());
+
+            memberDao.insert(regist);
+            return regist;
         }
     }
 }

@@ -5,7 +5,10 @@ import com.dlq.common.utils.PageUtils;
 import com.dlq.mall.member.entity.MemberEntity;
 import com.dlq.mall.member.vo.MemLoginVo;
 import com.dlq.mall.member.vo.MemRegistVo;
+import com.dlq.mall.member.vo.SocialUser;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Map;
 
 /**
@@ -26,5 +29,7 @@ public interface MemberService extends IService<MemberEntity> {
     void checkUsernameUnique(String username);
 
     MemberEntity login(MemLoginVo loginVo);
+
+    MemberEntity login(SocialUser socialUser) throws IOException, ParseException;
 }
 
