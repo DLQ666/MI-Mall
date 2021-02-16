@@ -75,7 +75,7 @@
 					<div class="nav_top_two"><input type="text"/>
 						<button>搜索</button>
 					</div>
-					<div class="nav_top_three"><a href="http://cart.dlqk8s.top:81/">我的购物车</a><span
+					<div class="nav_top_three"><a href="http://cart.dlqk8s.top:81/cart.html">我的购物车</a><span
 							class="glyphicon glyphicon-shopping-cart"></span>
 						<div class="gouwuchexiaguo">
 							<div class="spacer"></div>
@@ -439,7 +439,7 @@
 
 					<div class="box-btns clear">
 						<div class="box-btns-one">
-							<input type="text" name="" id="" value="1"/>
+							<input type="text" name="" id="numInput" value="1"/>
 							<div class="box-btns-one1">
 
 								<div>
@@ -456,7 +456,7 @@
 							</div>
 						</div>
 						<div class="box-btns-two">
-							<a href="../商品分类\index.html">
+							<a id="addToCart" th:attr="skuId = ${item.info.skuId}">
 								加入购物车
 							</a>
 						</div>
@@ -1086,6 +1086,12 @@
 	<script src="/static/item/js/jquery1.9.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/static/item/js/js.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
+		$("#addToCart").click(function () {
+			var num = $("#numInput").val();
+			var skuId = $("#addToCart").attr("skuId");
+			location.href = "http://cart.dlqk8s.top:81/addToCart?skuId="+skuId+"&num="+num;
+			return false;
+		})
 	</script>
 
 </html>

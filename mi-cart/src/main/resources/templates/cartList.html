@@ -59,7 +59,7 @@
 		</div>
 		<div id="cart-body">
 			<div class="w">
-				<div class="cart-empty">
+				<!--<div class="cart-empty" th:if="${userId}==null">
 					<div class="message">
 						<ul>
 							<li class="txt">购物车内暂时没有商品，登录后将显示您之前加入的商品</li>
@@ -67,11 +67,19 @@
 									href="http://dlqk8s.top:81/" class="ftx-05">去购物&gt;</a></li>
 						</ul>
 					</div>
+				</div>-->
+				<div class="cart-empty" th:if="${userId}==null">
+					<div class="message">
+						<ul>
+							<li class="txt">购物车空空的哦~，去看看心仪的商品吧~</li>
+							<li><a href="http://dlqk8s.top:81/" class="ftx-05">去购物&gt;</a></li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="One_BdyShop" >
-			<div class="OneBdy_box">
+			<div class="OneBdy_box" th:if="${userId}!=null">
 				<div class="One_tabTop">
 					<div class="One_Topleft">
 						<span>全部商品 </span>
