@@ -4,13 +4,15 @@ import com.dlq.cart.vo.UserInfoTo;
 import com.dlq.common.constant.AuthServerConstant;
 import com.dlq.common.constant.CartConstant;
 import com.dlq.common.vo.MemberRespVo;
-import org.springframework.stereotype.Component;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 /**
  *@program: MI-Mall
@@ -18,7 +20,6 @@ import javax.servlet.http.HttpSession;
  *@author: Hasee
  *@create: 2021-02-11 20:50
  */
-@Component
 public class CartInterceptor implements HandlerInterceptor {
 
     public static ThreadLocal<UserInfoTo> threadLocal = new ThreadLocal<>();
@@ -34,6 +35,7 @@ public class CartInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) throws Exception {
+
         UserInfoTo userInfoTo = new UserInfoTo();
 
         HttpSession session = request.getSession();
@@ -50,12 +52,42 @@ public class CartInterceptor implements HandlerInterceptor {
                 String name = cookie.getName();
                 if (name.equals(CartConstant.TEMP_USER_COOKIE_NAME)) {
                     userInfoTo.setUserKey(cookie.getValue());
+                    userInfoTo.setTempUser(true);
                 }
             }
         }
 
-        threadLocal.set(userInfoTo);
+        //没有临时用户，一定分配一个临时用户
+        if (StringUtils.isEmpty(userInfoTo.getUserKey())){
+            String uuid = UUID.randomUUID().toString();
+            userInfoTo.setUserKey(uuid);
+        }
         //目标方法执行之前
+        threadLocal.set(userInfoTo);
         return true;
+    }
+
+    /**
+     * 业务执行之后；分配临时用户，让浏览器保存
+     * @param request
+     * @param response
+     * @param handler
+     * @param modelAndView
+     * @throws Exception
+     */
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response,
+                           Object handler, ModelAndView modelAndView) throws Exception {
+
+        UserInfoTo userInfoTo = threadLocal.get();
+
+        //如果没有临时用户一定保存一个临时用户
+        if (!userInfoTo.isTempUser()){
+            //判断请求是否带 临时用户信息，没有就设置临时用户cookie
+            Cookie cookie = new Cookie(CartConstant.TEMP_USER_COOKIE_NAME, userInfoTo.getUserKey());
+            cookie.setDomain("dlqk8s.top");
+            cookie.setMaxAge(CartConstant.TEMP_USER_COOKIE_TIMEOUT);
+            response.addCookie(cookie);
+        }
     }
 }

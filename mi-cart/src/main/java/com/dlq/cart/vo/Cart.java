@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  *@program: MI-Mall
- *@description: 整个购物车
+ *@description: 整个购物车  需要计算的属性，必须重写它的get方法，保证每次获取属性都会重新计算
  *@author: Hasee
  *@create: 2021-02-10 16:04
  */

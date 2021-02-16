@@ -11,6 +11,8 @@ import lombok.Data;
 @Data
 public class UserInfoTo {
 
-    private Long userId;
-    private String userKey;
+    private Long userId; //如果有用户ID说明用户登录了 ，如果没有那一定有临时用户 userKey
+    private String userKey; //一定封装了
+
+    private boolean tempUser = false;
 }

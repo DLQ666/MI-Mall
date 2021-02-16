@@ -12,7 +12,7 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
  *@program: MI-Mall
  *@description:
  *@author: Hasee
- *@create: 2021-02-11 13:10
+ *@create: 2021-02-14 14:19
  */
 @EnableRedisHttpSession
 @Configuration

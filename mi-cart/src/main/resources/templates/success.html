@@ -63,7 +63,8 @@
     <div class="success-wrap">
         <div class="w" id="result">
             <div class="m succeed-box">
-                <div class="mc success-cont">
+
+                <div th:if="${item!=null}" class="mc success-cont">
                     <div class="success-lcol">
                         <div class="success-top"><b class="succ-icon"></b>
                             <h3 class="ftx-02">商品已成功加入购物车</h3></div>
@@ -75,9 +76,12 @@
                             <div class="p-info">
                                 <div class="p-name">
                                     <a th:href="'http://item.dlqk8s.top:81/'+${item.skuId}+'.html'"
-                                       th:text="${item.title}">离线名字</a>
+                                       th:text="${item.title}" th:title="${item.title}">离线名字</a>
                                 </div>
-                                <div class="p-extra"><span class="txt" th:text="'数量：'+${item.count}">  数量：离线</span></div>
+                                <div class="p-extra">
+                                    <span th:each="attr:${item.skuAttr}" class="txt" th:text="${attr}" th:title="${attr}"></span>
+                                    <span class="txt" th:text="'/ 数量：'+${item.count}" th:title="'数量：'+${item.count}">/  数量：离线</span>
+                                </div>
                             </div>
                             <div class="clr"></div>
                         </div>
@@ -93,6 +97,19 @@
                         </div>
                     </div>
                 </div>
+
+                <div th:if="${item==null}" class="mc success-cont">
+                    <div class="success-lcol">
+                        <div class="success-top" style="margin: 60px 0;"><b class="fail-icon"></b>
+                            <h3 class="ftx-02" style="color: #E4393C">购物车中无商品</h3></div>
+                    </div>
+                    <div class="success-btns success-btns-new" style="float: left;">
+                        <div class="bg_shop" style="margin: 55px 20px;">
+                            <a class="btn-addtocart" style="padding-left: 20px;" href="http://dlqk8s.top:81/"><b></b>去购物</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
