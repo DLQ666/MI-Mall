@@ -76,6 +76,10 @@
         WHERE ssav.attr_id = 47 AND info.`spu_id`= #{spuId}
         GROUP BY ssav.`attr_value`,info.`sku_default_img`,ssav.`attr_name`
     </select>-->
-
+    <select id="getSkuSaleAttrValuesAsStringList" resultType="java.lang.String">
+        SELECT CONCAT(attr_name,"：",attr_value)
+        FROM `pms_sku_sale_attr_value`
+        WHERE sku_id = #{skuId}
+    </select>
 
 </mapper>
