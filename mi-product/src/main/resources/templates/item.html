@@ -58,8 +58,11 @@
 					</li>
 				</ul>
 				<ul class="header_ul_right">
-					<li style="border: 0;"><a href="http://auth.dlqk8s.top:81" class="aa">你好，请登录</a></li>
-					<li><a href="../注册页面\index.html" style="color: #f30213;">免费注册</a></li>
+					<li style="border: 0;">
+						<a th:if="${session.loginUser == null}" href="http://auth.dlqk8s.top:81/login.html" class="aa">你好，请登录</a>
+						<a th:if="${session.loginUser != null}" class="aa">欢迎，[[${session.loginUser.nickname}]]</a>
+					</li>
+					<li th:if="${session.loginUser == null}" ><a href="http://auth.dlqk8s.top:81/regist.html" style="color: #f30213;">免费注册</a></li>
 					<span>|</span>
 					<li><a href="javascript:;" class="aa">我的订单</a></li>
 				</ul>

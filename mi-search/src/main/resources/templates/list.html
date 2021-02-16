@@ -65,10 +65,11 @@
         </b>
         <ul>
             <li>
-                <a href="http://auth.dlqk8s.top:81/login.html">你好，请登录</a>
+                <a th:if="${session.loginUser==null}" href="http://auth.dlqk8s.top:81/login.html">你好，请登录</a>
+                <a th:if="${session.loginUser!=null}" >欢迎，[[${session.loginUser.nickname}]]</a>
             </li>
             <li>
-                <a href="http://auth.dlqk8s.top:81/regist.html" class="li_2">免费注册</a>
+                <a th:if="${session.loginUser==null}" href="http://auth.dlqk8s.top:81/regist.html" class="li_2">免费注册</a>
             </li>
             <span>|</span>
             <li>

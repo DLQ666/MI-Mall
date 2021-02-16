@@ -105,7 +105,7 @@ a {
 }
 
 #max header .min .header_ul_right li {
-    width: 77px;
+    padding: 0 10px;
     height: 31px;
     line-height: 31px;
     float: left;
