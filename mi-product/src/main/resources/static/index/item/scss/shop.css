@@ -1313,6 +1313,9 @@ a {
     background: #df3033;
     cursor: hand
 }
+#addToCart{
+    cursor: pointer;
+}
 
 .box .box-two .box-btns .box-btns-two-off {
     float: left;
