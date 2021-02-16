@@ -4,16 +4,18 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.dlq.auth.feign.MemberFeignService;
 import com.dlq.auth.util.WeiboProperties;
-import com.dlq.auth.vo.MemberRespVo;
 import com.dlq.auth.vo.SocialUser;
+import com.dlq.common.constant.AuthServerConstant;
 import com.dlq.common.utils.HttpClientUtils;
 import com.dlq.common.utils.R;
+import com.dlq.common.vo.MemberRespVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ public class OAuth2Controller {
      * @throws ParseException
      */
     @GetMapping("/oauth2.0/weibo/success")
-    public String weibo(@RequestParam("code") String code) throws IOException, ParseException {
+    public String weibo(@RequestParam("code") String code, HttpSession session) throws IOException, ParseException {
 
         //1、根据code换取accessToken；
         //https://api.weibo.com/oauth2/access_token?
@@ -76,6 +78,13 @@ public class OAuth2Controller {
                 });
                 System.out.println("登录成功：用户信息=="+data);
                 log.info("登录成功：用户：{}", data.toString());
+                //1、第一次使用session，命令浏览器保存。JSESSIONID这个cookie
+                //2以后浏览器访问哪个本域名网站都会带上这个网站的cookie
+                //3、子域之间共享session，子域与父域名共享session，
+                //TODO 解决默认发的令牌为当前域名  要解决子域session共享问题
+                // todo 默认采用jdk 序列化机制 每个实体类对象都实现 Serializable  解决：采用JSON的序列化方式来序列化对象数据到redis 中
+                session.setAttribute(AuthServerConstant.LOGIN_USER,data);
+
                 //2、登录成功就跳回首页
                 return "redirect:http://dlqk8s.top:81";
             }else {

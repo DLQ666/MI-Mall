@@ -2,6 +2,7 @@ package com.dlq.common.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  *@create: 2021-02-13 15:27
  */
 @Data
-public class MemberRespVo {
+public class MemberRespVo implements Serializable {
 
     private Long id;
     /**

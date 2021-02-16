@@ -9,6 +9,7 @@ import com.dlq.common.constant.AuthServerConstant;
 import com.dlq.common.exception.BizCodeEnum;
 import com.dlq.common.utils.R;
 import com.dlq.common.utils.RandomUtils;
+import com.dlq.common.vo.MemberRespVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -151,12 +153,27 @@ public class LoginController {
         }
     }
 
+    @GetMapping("/login.html")
+    public String loginPage(HttpSession httpSession){
+        Object attribute = httpSession.getAttribute(AuthServerConstant.LOGIN_USER);
+        if (attribute == null){
+            //没登录
+            return "login";
+        }else {
+            return "redirect:http://dlqk8s.top:81/";
+        }
+    }
+
     @PostMapping("/login")
-    public String login(UserLoginVo vo,RedirectAttributes redirectAttributes){
+    public String login(UserLoginVo vo,RedirectAttributes redirectAttributes, HttpSession session){
 
         //远程调用登录服务
         R login = memFeignService.login(vo);
         if (login.getCode() == 0){
+            MemberRespVo data = login.getData("data", new TypeReference<MemberRespVo>() {
+            });
+            session.setAttribute(AuthServerConstant.LOGIN_USER, data);
+
             //成功
             return "redirect:http://dlqk8s.top:81/";
         }else {

@@ -58,11 +58,12 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         checkPhoneUnique(registVo.getPhone());
         checkUsernameUnique(registVo.getUserName());
 
-        //检查用户名和手机是否唯一
+        //设置用户名和手机
         memberEntity.setMobile(registVo.getPhone());
         memberEntity.setUsername(registVo.getUserName());
+        memberEntity.setNickname(registVo.getUserName());
 
-        //保存密码要采取加密存储
+        //保存密码要采取 BCrypt 加密存储
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encode = passwordEncoder.encode(registVo.getPassword());
         memberEntity.setPassword(encode);
