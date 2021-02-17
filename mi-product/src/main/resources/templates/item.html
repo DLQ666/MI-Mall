@@ -455,8 +455,8 @@
 
 							</div>
 						</div>
-						<div class="box-btns-two">
-							<a id="addToCart" th:attr="skuId = ${item.info.skuId}">
+						<div class="box-btns-two" id="addToCart">
+							<a th:attr="skuId = ${item.info.skuId}">
 								加入购物车
 							</a>
 						</div>
@@ -1088,7 +1088,11 @@
 	<script type="text/javascript">
 		$("#addToCart").click(function () {
 			var num = $("#numInput").val();
-			var skuId = $("#addToCart").attr("skuId");
+			if (num < 0 || num == 0){
+				alert("商品数量输入有误（单位：最少为1个！！！）");
+				return false;
+			}
+			var skuId = $(this).children("a").attr("skuId");
 			location.href = "http://cart.dlqk8s.top:81/addToCart?skuId="+skuId+"&num="+num;
 			return false;
 		})
