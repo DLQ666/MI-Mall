@@ -1,10 +1,12 @@
 package com.dlq.mall.search.controller;
 
 import com.dlq.common.to.es.SpuEsModule;
+import com.dlq.common.utils.GetClientIP;
 import com.dlq.common.utils.R;
 import com.dlq.mall.search.service.MallSearchService;
 import com.dlq.mall.search.vo.SearchParam;
 import com.dlq.mall.search.vo.SearchResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,7 @@ import java.util.Scanner;
  *@author: Hasee
  *@create: 2020-11-29 23:25
  */
+@Slf4j
 @Controller
 public class SearchController {
 
@@ -35,6 +38,8 @@ public class SearchController {
     @GetMapping("/list.html")
     public String listPage(SearchParam param, Model model, HttpServletRequest request){
         param.set_queryString(request.getQueryString());
+        String ipaddr = GetClientIP.getIpaddr(request);
+        log.info("请求者IP---->{}", ipaddr);
         //根据传递来的页面的查询参数，去es中检索商品
         SearchResult result = mallSearchService.search(param);
         model.addAttribute("result", result);
