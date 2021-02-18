@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title></title>
+    <title>商品已成功加入购物车</title>
+    <link rel="shortcut icon" href="/static/index/img/favicon.ico" type="image/x-icon" />
     <script type="text/javascript" src="/static/cart/js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="/static/cart/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="/static/cart/js/swiper.min.js"></script>
@@ -26,9 +27,10 @@
 
         <ul class="hd_wrap_right">
             <li>
-                <a href="http://auth.dlqk8s.top:81/login.html" class="link_login">你好，请登录</a>
+                <a th:if="${session.loginUser == null}" href="http://auth.dlqk8s.top:81/login.html" class="link_login">你好，请登录</a>
+                <a th:if="${session.loginUser != null}" class="link_login">欢迎，[[${session.loginUser.nickname}]]</a>
             </li>
-            <li class="forel">
+            <li th:if="${session.loginUser == null}" class="forel">
                 <a href="http://auth.dlqk8s.top:81/regist.html" class="link_regist">免费注册</a>
             </li>
             <li class="spacer"></li>
@@ -70,8 +72,9 @@
                             <h3 class="ftx-02">商品已成功加入购物车</h3></div>
                         <div class="p-item">
                             <div class="p-img">
-                                <a href="/javascript:;" target="_blank">
-                                    <img style="height: 60px;width:60px;" th:src="${item.image}" ></a>
+                                <a th:href="'http://item.dlqk8s.top:81/'+${item.skuId}+'.html'" th:title="${item.title}">
+                                    <img style="height: 60px;width:60px;" th:src="${item.image}" >
+                                </a>
                             </div>
                             <div class="p-info">
                                 <div class="p-name">

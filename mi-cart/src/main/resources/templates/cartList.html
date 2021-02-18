@@ -23,8 +23,11 @@
 
 					</ul>
 					<ul class="header-right">
-						<li><a href="http://auth.dlqk8s.top:81/login.html" >你好，请登录</a></li>
-						<li><a href="http://auth.dlqk8s.top:81/regist.html" style="color: #f30213;">免费注册</a></li>
+						<li>
+							<a th:if="${session.loginUser == null}" href="http://auth.dlqk8s.top:81/login.html" >你好，请登录</a>
+							<a th:if="${session.loginUser != null}" >欢迎，[[${session.loginUser.nickname}]]</a>
+						</li>
+						<li th:if="${session.loginUser == null}"><a href="http://auth.dlqk8s.top:81/regist.html" style="color: #f30213;">免费注册</a></li>
 						<li class="spacer"></li>
 						<li><a href="">我的订单</a></li>
 
@@ -34,9 +37,6 @@
 
 			</a>
 		</header>
-
-
-
 
 		<div class="one_search">
 
@@ -50,25 +50,16 @@
 						<input type="button" value="搜索" class="one_right_btn">
 					</div>
 				</div>
-				<div class="one_search_load" th:if="${userId}==null">
+				<div class="one_search_load" th:if="${session.loginUser == null && cart.items != null}">
 					<img src="/static/cart/img/shop_07.jpg" class="one_load_wraing">
-					<span>您还没有登录！登录后购物车的商品将保存到您账号中</span>
+					<span>您还没有登录！登录后购物车的商品将保存到您账号中，临时购物车商品暂存7天</span>
 					<a href="http://auth.dlqk8s.top:81/login.html"><input type="button" onclick="login()" value="立即登录" class="one_load_btn"></a>
 				</div>
 			</div>
 		</div>
-		<div id="cart-body">
+		<div id="cart-body" th:if="${cart.items == null}">
 			<div class="w">
-				<!--<div class="cart-empty" th:if="${userId}==null">
-					<div class="message">
-						<ul>
-							<li class="txt">购物车内暂时没有商品，登录后将显示您之前加入的商品</li>
-							<li><a href="http://auth.dlqk8s.top:81/login.html" class="btn-1 login-btn mr10" id="cartEmptyGologinBtn">登录</a><a
-									href="http://dlqk8s.top:81/" class="ftx-05">去购物&gt;</a></li>
-						</ul>
-					</div>
-				</div>-->
-				<div class="cart-empty" th:if="${userId}==null">
+				<div class="cart-empty">
 					<div class="message">
 						<ul>
 							<li class="txt">购物车空空的哦~，去看看心仪的商品吧~</li>
@@ -79,17 +70,15 @@
 			</div>
 		</div>
 		<div class="One_BdyShop" >
-			<div class="OneBdy_box" th:if="${userId}!=null">
+			<div class="OneBdy_box" th:if="${cart.items}!=null">
 				<div class="One_tabTop">
 					<div class="One_Topleft">
 						<span>全部商品 </span>
-
 					</div>
-
 				</div>
 				<div class="One_ShopTop">
 					<ul>
-						<li><input type="checkbox" class="allCheck">全选</li>
+						<li><input type="checkbox" class="allCheck" ><span>全选</span></li>
 						<li>商品</li>
 						<li>单价</li>
 						<li>数量</li>
@@ -100,82 +89,50 @@
 
 				<div class="One_ShopCon">
 					<ul>
-						<li th:each="cartInfo:${cartList}">
+						<li th:each="item:${cart.items}">
 							<div> </div>
-
 							<div>
 								<ol>
-									<li><input type="checkbox" class="check" th:value="${cartInfo.skuId}" onchange="checkSku(this)" th:checked="(${cartInfo.isChecked}==1)?'true':'false'" /></li>
+									<li><input type="checkbox" class="check" th:attr="skuId=${item.skuId}"  th:checked="${item.check}" /></li>
 									<li>
-										<dt><img th:src="${cartInfo.imgUrl}" src="img\shop1.jpg" alt=""></dt>
-										<dd th:onclick="'toItem('+${cartInfo.skuId}+')'">
-											<p>
-												<span th:text="${cartInfo.skuName}">TCL 55A950C 55英寸32核</span>
+										<dt>
+											<a th:href="'http://item.dlqk8s.top:81/'+${item.skuId}+'.html'">
+											<img th:src="${item.image}" alt=""></a>
+										</dt>
+										<dd >
+											<p  >
+												<a th:href="'http://item.dlqk8s.top:81/'+${item.skuId}+'.html'" th:text="${item.title}">TCL 55A950C 55英寸32核</a>
 											</p>
 										</dd>
+										<div class="One_ShopCon_attr">
+											<p th:each="attr:${item.skuAttr}">
+												<span th:text="${#strings.listSplit(attr,'：')[1]}" th:title="${#strings.listSplit(attr,'：')[1]}"></span>
+											</p>
+										</div>
 									</li>
 									<li>
-										<p class="dj" th:text="'￥'+${cartInfo.skuPrice}">4599.00</p>
+										<p class="dj" th:text="'￥'+${#numbers.formatDecimal(item.price,3,2)}">4599.00</p>
 									</li>
 									<li>
-										<p>
-											<span>-</span>
-											<span th:text="${cartInfo.skuNum}">5</span>
-											<span>+</span>
+										<p th:attr="skuId=${item.skuId}">
+											<span class="countOpsBtn">-</span>
+											<span class="countOpsNum" th:text="${item.count}">5</span>
+											<span class="countOpsBtn">+</span>
 										</p>
 									</li>
 									<li style="font-weight:bold">
-										<p class="zj" th:text="'￥'+${cartInfo.totalPrice}">￥22995.00</p>
+										<p class="zj" th:text="'￥'+${#numbers.formatDecimal(item.getTotalPrice(),1,2)}">￥22995.00</p>
 									</li>
 									<li>
-										<p>删除</p>
+										<p class="deleteItemBtn" th:attr="skuId=${item.skuId}">删除</p>
 									</li>
 								</ol>
 							</div>
 						</li>
-						<!--<li>
-                    <div>
-                    </div>
-                    <div>
-                        <ol>
-                            <li><input type="checkbox"  class="check"></li>
-                            <li>
-                                <dt><img src="img\shop1.jpg" alt=""></dt>
-                                <dd>
-                                    <p>
-
-                                        <span>TCL 55A950C 55英寸32核</span>
-                                        <span>尺码: 55时 超薄曲面 人工智能</span>
-                                    </p>
-                                    <p>人工智能 HDR曲面超薄4K电视金属机</p>
-
-                                </dd>
-                            </li>
-                            <li>
-                                <p class="dj">￥4599.00</p>
-
-                            </li>
-                            <li>
-                                <p>
-                                    <span>-</span>
-                                    <span>5</span>
-                                    <span>+</span>
-                                </p>
-
-                            </li>
-                            <li style="font-weight:bold"><p class="zj">￥22995.00</p></li>
-                            <li>
-                                <p>删除</p>
-
-                            </li>
-                        </ol>
-                    </div>
-                </li>-->
-
 					</ul>
 				</div>
 				<div class="One_ShopFootBuy fix1">
-					<div>
+					<div class="One_ShopFootBuy_check">
 						<ul>
 							<li><input type="checkbox" class="allCheck"><span>全选</span></li>
 							<li>删除选中的商品</li>
@@ -193,8 +150,8 @@
 					</div>
 					<div>
 						<ol>
-							<li>总价:<span style="color:#e64346;font-weight:bold;font-size:16px;" class="fnt">￥0.00</span> </li>
-
+							<li><span>总价：</span><span style="color:#e64346;font-weight:bold;font-size:16px;" class="fnt" th:text="${#numbers.formatDecimal(cart.getTotalAmount(),1,2)}">￥0.00</span> </li>
+							<li><span>优惠：</span><span style="color:#e64346;font-weight:bold;font-size:16px;" class="youhui" th:text="${#numbers.formatDecimal(cart.reduce,1,2)}">￥0.00</span> </li>
 						</ol>
 					</div>
 					<div><button onclick="toTrade()" type="button">去结算</button></div>
@@ -216,7 +173,7 @@
 				</dl>
 			</div>
 			<div>
-				<button type="button">删除</button>
+				<button type="button" onclick="deleteItem()">删除</button>
 
 			</div>
 		</div>
@@ -374,6 +331,20 @@
 	</body>
 	<script src="/static/cart/js/index.js" charset="utf-8"></script>
 	<script type="text/javascript">
+		$(function () {
+			if ($(".check[class='check']:checked").length == $(".check[class='check']").length) {
+				$(".allCheck").prop("checked", true);
+			}
+			$(".check").each(function(index) {
+				if ($(".check").eq(index).is(":checked")) {
+					$(".check").eq(index).parent().parent().parent().css("background", "#fff4e8");
+					$(".check").eq(index).parent().parent().parent().parent().children("div:last-child").css("background", "#fff4e8")
+				} else {
+					$(".check").eq(index).parent().parent().parent().parent().children("div:last-child").css("background", "none")
+					$(".check").eq(index).parent().parent().parent().css("background", "none")
+				}
+			})
+		})
 		function toTrade() {
 			window.location.href = "http://cart.gmall.com:8087/toTrade";
 		}
@@ -383,8 +354,8 @@
 		}
 
 		function login() {
-			var s = encodeURIComponent("http://cart.gmall.com:8087/cartList");
-			window.location.href = "http://passport.atguigu.com/index?originUrl=" + s;
+			var s = encodeURIComponent("http://auth.dlqk8s.top:81/cartList");
+			window.location.href = "http://auth.dlqk8s.top:81/login.html";
 		}
 
 		function checkSku(chkbox) {
@@ -558,6 +529,7 @@
 			if ($(".One_ShopTop ul li:first-child .allCheck").is(":checked")) {
 				// $(".check").each(function(index){
 				$(".check").prop("checked", true);
+				$(".allCheck").prop("checked", true);
 				$(".check").parent().parent().parent().css("background", "#fff4e8");
 				$(".One_ShopBottom>div:first-child span:first-child .allCheck").prop("checked", true)
 				// })
@@ -565,6 +537,7 @@
 				// $(".check").each(function(){
 				$(".check").parent().parent().parent().css("background", "none");
 				$(".check").prop("checked", false);
+				$(".allCheck").prop("checked", false);
 				$(".One_ShopBottom>div:first-child span:first-child .allCheck").prop("checked", false)
 				// })
 			}
@@ -572,11 +545,13 @@
 		$(".One_ShopFootBuy>div:first-child ul li:first-child .allCheck").click(function() {
 			if ($(".One_ShopFootBuy>div:first-child ul li:first-child .allCheck").is(":checked")) {
 				$(".check").prop("checked", true);
+				$(".allCheck").prop("checked", true);
 				$(".check").parent().parent().parent().css("background", "#fff4e8");
 				$(".One_ShopBottom>div:first-child span:first-child .allCheck").prop("checked", true)
 			} else {
 				$(".check").parent().parent().parent().css("background", "none");
 				$(".check").prop("checked", false);
+				$(".allCheck").prop("checked", false);
 				$(".One_ShopBottom>div:first-child span:first-child .allCheck").prop("checked", false)
 			}
 		})
@@ -698,15 +673,15 @@
 		})
 		//+
 		$(".One_ShopCon ul li>div:nth-child(2) ol>li:nth-child(4) p:first-child span:last-child").click(function() {
+			//1、获取skuId
 			var add = $(this).prev("span").html();
 			add++;
 			$(this).prev("span").html(add);
 			//总价
-			var dj = $(this).parent().parent().prev().children(".dj").html().substring(1);
+			/*var dj = $(this).parent().parent().prev().children(".dj").html().substring(1);
 			var sl = $(this).prev("span").html();
 			$(this).parent().parent().parent().children("li:nth-child(5)").children(".zj").html("￥" + dj * sl + ".00")
-			sumSumPrice();
-
+			sumSumPrice();*/
 		})
 		//-
 		$(".One_ShopCon ul li>div:nth-child(2) ol>li:nth-child(4) p:first-child span:first-child").click(function() {
@@ -717,10 +692,10 @@
 			}
 			$(this).next("span").html(jian);
 			//总价
-			var dj = $(this).parent().parent().prev().children(".dj").html().substring(1);
+			/*var dj = $(this).parent().parent().prev().children(".dj").html().substring(1);
 			var sl = $(this).next("span").html();
 			$(this).parent().parent().parent().children("li:nth-child(5)").children(".zj").html("￥" + dj * sl + ".00")
-			sumSumPrice();
+			sumSumPrice();*/
 
 		})
 		//选中当前商品背景变色
@@ -833,10 +808,10 @@
 			$(".sumNum").html(kong);
 		}
 
-		$(".One_ShopCon ul li>div:nth-child(2)>ol>li:nth-child(2)>dd").mouseover(function() {
+		$(".One_ShopCon ul li>div:nth-child(2)>ol>li:nth-child(2)>dd>p>a").mouseover(function() {
 			$(this).css({
 				"cursor": "pointer",
-				"color": "#e64346"
+				"color": "#e2231a"
 			})
 		}).mouseout(function() {
 			$(this).css("color", "black")
@@ -858,15 +833,6 @@
 		$(".nmbd dd:last-child button:last-child").click(function() {
 			$(this).parent().parent().slideUp(100)
 		})
-
-
-
-
-
-
-
-
-
 
 		//active
 		$(".one_main_div1 .one_main_ul>li").mouseover(function() {
@@ -926,6 +892,41 @@
 			$(this).children("p").children("img").attr("src", "img/one_mian_gwc2.png")
 		}).mouseout(function() {
 			$(this).children("p").children("img").attr("src", "img/one_mian_gwc1.png")
+		})
+		
+		$(".check").click(function () {
+			var skuId = $(this).attr("skuId");
+			var check = $(this).prop("checked");
+			location.href = "http://cart.dlqk8s.top:81/checkItem?skuId="+skuId+"&"+"check="+(check?1:0);
+		})
+		$(".allCheck").click(function () {
+			var skuIds = new Array();
+			$(".check").each(function(index) {
+				var skuId = $(".check").eq(index).attr("skuId");
+				skuIds.push(skuId);
+			})
+			var check = $(this).prop("checked");
+			location.href = "http://cart.dlqk8s.top:81/checkAllItem?skuIds="+skuIds+"&"+"check="+(check?1:0);
+		})
+		$(".countOpsBtn").click(function () {
+			//1、获取skuId
+			var skuId = $(this).parent().attr("skuId");
+			var num = $(this).parent().find(".countOpsNum").text();
+			if (num < 1){
+				num = 1;
+				$(this).next("span").html(num);
+				return false;
+			}else {
+				location.href = "http://cart.dlqk8s.top:81/countItem?skuId="+skuId+"&num="+num;
+			}
+		})
+		var deleteId = 0;
+		//删除购物车项
+		function deleteItem() {
+			location.href = "http://cart.dlqk8s.top:81/deleteItem?skuId="+deleteId;
+		}
+		$(".deleteItemBtn").click(function () {
+			deleteId = $(this).attr("skuId");
 		})
 	</script>
 </html>

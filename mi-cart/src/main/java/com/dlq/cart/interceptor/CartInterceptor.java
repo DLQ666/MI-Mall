@@ -3,7 +3,9 @@ package com.dlq.cart.interceptor;
 import com.dlq.cart.vo.UserInfoTo;
 import com.dlq.common.constant.AuthServerConstant;
 import com.dlq.common.constant.CartConstant;
+import com.dlq.common.utils.GetClientIP;
 import com.dlq.common.vo.MemberRespVo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +14,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.net.InetAddress;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
@@ -20,6 +25,7 @@ import java.util.UUID;
  *@author: Hasee
  *@create: 2021-02-11 20:50
  */
+@Slf4j
 public class CartInterceptor implements HandlerInterceptor {
 
     public static ThreadLocal<UserInfoTo> threadLocal = new ThreadLocal<>();
@@ -37,7 +43,7 @@ public class CartInterceptor implements HandlerInterceptor {
                              Object handler) throws Exception {
 
         UserInfoTo userInfoTo = new UserInfoTo();
-
+        String clientIpAddress = GetClientIP.getIpaddr(request);
         HttpSession session = request.getSession();
         MemberRespVo member = (MemberRespVo) session.getAttribute(AuthServerConstant.LOGIN_USER);
         if (member != null) {
@@ -58,9 +64,13 @@ public class CartInterceptor implements HandlerInterceptor {
         }
 
         //没有临时用户，一定分配一个临时用户
-        if (StringUtils.isEmpty(userInfoTo.getUserKey())){
-            String uuid = UUID.randomUUID().toString();
-            userInfoTo.setUserKey(uuid);
+        if (StringUtils.isEmpty(userInfoTo.getUserKey())) {
+            String uuid = UUID.randomUUID().toString().substring(0, 16);
+            DateTimeFormatter formatter3 = DateTimeFormatter.ofPattern("yyyy-MM-dd-hh-mm");
+            //格式化
+            String str4 = formatter3.format(LocalDateTime.now());
+
+            userInfoTo.setUserKey(uuid + "-" + clientIpAddress + "-" + str4);
         }
         //目标方法执行之前
         threadLocal.set(userInfoTo);
@@ -82,7 +92,7 @@ public class CartInterceptor implements HandlerInterceptor {
         UserInfoTo userInfoTo = threadLocal.get();
 
         //如果没有临时用户一定保存一个临时用户
-        if (!userInfoTo.isTempUser()){
+        if (!userInfoTo.isTempUser()) {
             //判断请求是否带 临时用户信息，没有就设置临时用户cookie
             Cookie cookie = new Cookie(CartConstant.TEMP_USER_COOKIE_NAME, userInfoTo.getUserKey());
             cookie.setDomain("dlqk8s.top");
@@ -90,4 +100,5 @@ public class CartInterceptor implements HandlerInterceptor {
             response.addCookie(cookie);
         }
     }
+
 }
