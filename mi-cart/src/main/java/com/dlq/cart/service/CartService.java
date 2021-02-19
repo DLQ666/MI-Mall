@@ -67,4 +67,10 @@ public interface CartService {
      * @param skuId
      */
     void deleteItem(Long skuId);
+
+    /**
+     * 全选删除购物项
+     * @return
+     */
+    void deleteAllItem(List<Long> skuIds);
 }

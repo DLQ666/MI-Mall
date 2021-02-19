@@ -239,4 +239,14 @@ public class CartServiceImpl implements CartService {
             cartOps.delete(skuId.toString());
         }
     }
+
+    @Override
+    public void deleteAllItem(List<Long> skuIds) {
+        if (skuIds != null && skuIds.size()>0){
+            for (Long skuId : skuIds) {
+                BoundHashOperations<String, Object, Object> cartOps = getCartOps();
+                cartOps.delete(skuId.toString());
+            }
+        }
+    }
 }

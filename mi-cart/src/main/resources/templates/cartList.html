@@ -135,7 +135,7 @@
 					<div class="One_ShopFootBuy_check">
 						<ul>
 							<li><input type="checkbox" class="allCheck"><span>全选</span></li>
-							<li>删除选中的商品</li>
+							<li class="deleteAllItems" >删除选中的商品</li>
 							<li>移到我的关注</li>
 							<li>清除下柜商品</li>
 						</ul>
@@ -174,6 +174,24 @@
 			</div>
 			<div>
 				<button type="button" onclick="deleteItem()">删除</button>
+
+			</div>
+		</div>
+		<div class="One_isDel" id="One_isDelAll">
+			<p>
+				<span>删除</span><span><img src="/static/cart/img/错误.png" alt=""></span>
+			</p>
+			<div>
+				<dl>
+					<dt><img src="/static/cart/img/感叹三角形 (2).png" alt=""></dt>
+					<dd>
+						<li>删除商品？</li>
+						<li>您可以选择移到关注，或删除商品。</li>
+					</dd>
+				</dl>
+			</div>
+			<div>
+				<button type="button" onclick="deleteAllItem()">删除</button>
 
 			</div>
 		</div>
@@ -588,7 +606,7 @@
 				$(".One_moveGzIfNull").show();
 			} else {
 				$(".One_mb").show(); //蒙版显示
-				$(".One_isDel").show(); //删除弹框显示
+				$("#One_isDelAll").show(); //删除弹框显示
 				$(".One_moveGzIfNull").hide();
 			}
 			//移除结账固定定位
@@ -738,7 +756,7 @@
 		})
 		$(".One_ShopCon ul li>div:nth-child(2) ol>li:nth-child(6) p:first-child").click(function() {
 			$(".One_mb").show();
-			$(".One_isDel").show();
+			$(".One_isDel:first").show();
 			var that = $(this);
 			//确定删除
 			/*        $(".One_isDel>div:last-child button:first-child").click(function(){
@@ -928,5 +946,18 @@
 		$(".deleteItemBtn").click(function () {
 			deleteId = $(this).attr("skuId");
 		})
+
+		var skuIds = [];
+		$(".deleteAllItems").click(function () {
+			$(".check").each(function (index) {
+				var skuId = $(".check").eq(index).attr("skuId");
+				if ($(".check").eq(index).is(":checked")) {
+					skuIds.push(skuId);
+				}
+			})
+		})
+		function deleteAllItem() {
+			location.href = "http://cart.dlqk8s.top:81/deleteAllItem?skuIds=" + skuIds;
+		}
 	</script>
 </html>

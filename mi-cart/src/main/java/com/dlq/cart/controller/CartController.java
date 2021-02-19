@@ -27,11 +27,20 @@ public class CartController {
     private CartService cartService;
 
     /**
+     * 全选删除购物项
+     */
+    @GetMapping("/deleteAllItem")
+    public String deleteAllItem(@RequestParam("skuIds")List<Long> skuIds){
+        cartService.deleteAllItem(skuIds);
+        return "redirect:http://cart.dlqk8s.top:81/cart.html";
+    }
+
+    /**
      * 删除购物项
      * @param skuId
      * @return
      */
-    @GetMapping("deleteItem")
+    @GetMapping("/deleteItem")
     public String deleteItem(@RequestParam("skuId")Long skuId){
         cartService.deleteItem(skuId);
         return "redirect:http://cart.dlqk8s.top:81/cart.html";
