@@ -87,6 +87,13 @@
 							<div class="error" th:attr="style=${(errors == null)?'display: none':'display: block'}" th:text="${errors?.get('msg')}">
 								<div></div>
 							</div>
+							<div class="error" th:attr="style=${session.msg!=null?'display: block;':'display: none;'}">
+								<div></div>
+								[[${session.msg}]]
+							</div>
+							<div class="error" text="哈哈哈哈哈">
+								<div></div>
+							</div>
 							<form action="/login" method="post">
 								<ul>
 									<li class="top_1">

@@ -104,7 +104,7 @@
                 </li>
                 <span>|</span>
                 <li>
-                    <a href="#">我的订单</a>
+                    <a href="http://order.dlqk8s.top:81/list.html">我的订单</a>
                 </li>
             </ul>
         </div>
@@ -272,11 +272,12 @@
                             <a href="#"><img class="" src="/static/index/img/touxiang.png"></a>
                         </div>
                         <div class="user_info_show">
-                            <p class="">Hi~欢迎来到某东！</p>
-                            <p>
-                                <a href="#" class="">登录</a>
-                                 |
-                                <a href="#" class="">注册</a>
+                            <p th:if="${session.loginUser==null}" class="">Hi~欢迎来到某东！</p>
+                            <p th:if="${session.loginUser!=null}" class="">Hi~[[${session.loginUser.nickname}]]</p>
+                            <p th:if="${session.loginUser==null}">
+                                <a href="http://auth.dlqk8s.top:81/login.html" class="">登录</a>
+                                ㅣ
+                                <a href="http://auth.dlqk8s.top:81/regist.html" class="">注册</a>
                             </p>
                         </div>
                     </div>
@@ -777,7 +778,7 @@
                 <span></span>
                 <a href="#">media &amp; IR</a>
             </p>
-            <p class="footer_p">
+            <!--<p class="footer_p">
                 <a href="#">京公网安备 0000000000000号</a>
                 <span></span>
                 <a href="#">京ICP证00000000号</a>
@@ -814,7 +815,7 @@
                 <li></li>
                 <li></li>
                 <li></li>
-            </ul>
+            </ul>-->
         </div>
     </div>
 </footer>

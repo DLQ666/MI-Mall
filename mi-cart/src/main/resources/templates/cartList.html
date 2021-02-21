@@ -17,8 +17,8 @@
 
 					<ul class="header-left">
 						<li>
-
-							<a href="http://dlqk8s.top:81/">首页</a>
+							<img src="/static/detail/img/header_1.png">
+							<a href="http://dlqk8s.top:81/">京东首页</a>
 						</li>
 
 					</ul>
@@ -29,7 +29,7 @@
 						</li>
 						<li th:if="${session.loginUser == null}"><a href="http://auth.dlqk8s.top:81/regist.html" style="color: #f30213;">免费注册</a></li>
 						<li class="spacer"></li>
-						<li><a href="">我的订单</a></li>
+						<li><a href="http://order.dlqk8s.top:81/list.html">我的订单</a></li>
 
 					</ul>
 					<div style="clear: both;"></div>
@@ -364,7 +364,7 @@
 			})
 		})
 		function toTrade() {
-			window.location.href = "http://cart.gmall.com:8087/toTrade";
+			window.location.href = "http://order.dlqk8s.top:81/toTrade";
 		}
 
 		function toItem(skuId) {
