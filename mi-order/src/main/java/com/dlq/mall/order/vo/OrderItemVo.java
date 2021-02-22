@@ -1,7 +1,10 @@
 package com.dlq.mall.order.vo;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  *@program: MI-Mall
@@ -9,6 +12,7 @@ import java.util.List;
  *@author: Hasee
  *@create: 2021-02-21 20:48
  */
+@Data
 public class OrderItemVo {
 
     private Long skuId;
@@ -18,4 +22,6 @@ public class OrderItemVo {
     private BigDecimal price;
     private Integer count;
     private BigDecimal totalPrice;
+
+    private BigDecimal weight;
 }

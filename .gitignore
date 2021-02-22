@@ -53,3 +53,14 @@ buildNumber.properties
 /mi-order/src/main/resources/static/static/cashier/css/
 /mi-order/src/main/resources/static/static/cashier/img/
 /mi-order/src/main/resources/static/static/cashier/js/
+/mi-order/src/main/resources/rebel.xml
+/mi-member/src/main/resources/rebel.xml
+/mi-ware/src/main/resources/rebel.xml
+/mi-product/src/main/resources/rebel.xml
+/mi-search/src/main/resources/rebel.xml
+/mi-third-party/src/main/resources/rebel.xml
+/mi-gateway/src/main/resources/rebel.xml
+/mi-coupon/src/main/resources/rebel.xml
+/mi-common/src/main/resources/rebel.xml
+/mi-cart/src/main/resources/rebel.xml
+/mi-auth/src/main/resources/rebel.xml

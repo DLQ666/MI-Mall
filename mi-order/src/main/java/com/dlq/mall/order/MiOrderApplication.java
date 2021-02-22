@@ -20,7 +20,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  *    @RabbitListener：标在 类或方法上（监听哪些队列）
  *    @RabbitHandler：标在 方法上（重载区分不同的信息）
  */
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.dlq.mall.order.feign")
 @EnableRedisHttpSession
 @EnableRabbit
 @SpringBootApplication
