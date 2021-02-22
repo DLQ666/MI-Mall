@@ -357,9 +357,9 @@
 				<span>新增收货地址</span>
 			</div>
 
-			<!--地址-->
-			<div class="top-3">
-				<p>家里</p><span>齐天大圣  北京市  昌平区城区晨曦小区-16号楼 吉利大学  150****2245</span>
+			<!--地址 orderConfirmData-->
+			<div class="top-3" th:each="addr:${orderConfirmData.address}">
+				<p>[[${addr.name}]]</p><span>[[${addr.name}]]  [[${addr.province}]]  [[${addr.city}]][[${addr.region}]] [[${addr.detailAddress}]]  [[${#strings.substring(addr.phone,0,3)}]]****[[${#strings.substring(addr.phone,7,11)}]]</span>
 			</div>
 			<p class="p2">更多地址︾</p>
 			<div class="hh1"/></div>
@@ -372,10 +372,10 @@
 		</div>
 
 		<!--地址-->
-		<div class="top-5">
+		<!--<div class="top-5">
 			<p>北京昌平区</p><span>北京市  昌平区城区晨曦小区-16号楼 吉利大学  齐天大圣 150****2245</span><img src="/static/detail/img/09.png" /><span>距收货人0米</span>
 			<p class="p3">距离最近</p><span class="xiu">修改自提点</span>
-		</div>
+		</div>-->
 		<div class="hh1" /></div>
 
 		<!--支付方式-->
@@ -404,79 +404,28 @@
 					<span style="color: black;"> 配送服务全面升级</span>
 				</div>-->
 				<div class="hh1"></div>
-				<!--<p class="tui">
-					<span class="til">退换无忧：</span>
-					<span class="con">
-							<input type="checkbox" />
-							自签收后7天内退货，15天内换<span style="font-size: 12px;margin-left: 5px"> ￥ 0.50</span><br />
-						<span class="nul">货，</span>可享1次上门取件服务 ﹀
-						</span>
-
-				<div class="updata-2">
-					<img src="/static/detail/img/im_11.png" />
-					<span>京准达运费大促（限自营中小件）</span>
-				</div>
-
-				</p>-->
 				<p class="kg" style="color:#666666;margin-top: 13px;font-size: 12px">总重量：<span style="color:#999999;font-size: 12px">0.095kg</span></p>
 			</div>
 			<div class="to_right">
 				<h5>商家：京东自营</h5>
 				<!--<div><button>换购</button><span>已购满20.00元，再加49.90元，可返回购物车领取赠品</span></div>-->
 				<!--图片-->
-				<div class="yun1">
-					<img src="/static/detail/img/im_03.png" class="yun"/>
+				<div class="yun1" th:each="item:${orderConfirmData.items}">
+					<img th:src="${item.image}" class="yun"/>
 					<div class="mi">
 						<div class="mi-title-price">
-							<div class="mi-title"><p>小米（MI）小米手环2 智能运动 心率检测 来 电提醒 久坐提醒 LED显示器 时间显示 防水记</p></div>
+							<div class="mi-title"><p th:text="${item.title}" th:title="${item.title}"></p></div>
 							<div class="mi-price">
-								<span style="color: red;width: 93px">￥149.00</span>
-								<span style="width: 63px"> x1 </span>
-								<span style="width: 51px">有货</span>
+								<span style="color: red;width: 93px" th:text="'￥'+ ${#numbers.formatDecimal(item.price,1,2)}" th:title="'￥'+ ${#numbers.formatDecimal(item.price,1,2)}">￥149.00</span>
+								<span style="width: 63px" th:text="${'x'+item.count}" th:title="'x'+${item.count}"> x1 </span>
+								<span style="width: 51px" th:text="${item.hasStock? '有货':'无货'}" th:title="${item.hasStock == true? '有货':'无货'}">有货</span>
 								<span style="width: 93px;">0.095kg</span>
 							</div>
 						</div>
 						<div class="mi-attr">
-							<div class="mi-chima"><span >颜色：</span><span >黑色</span></div>
-							<div class="mi-chima"><span >尺码：</span><span >64GB</span></div>
-						</div>
-						<p class="tui-1"><img src="/static/detail/img/i_07.png" />支持7天无理由退货（拆封后不支持）</p>
-					</div>
-				</div>
-				<div class="yun1">
-					<img src="/static/detail/img/im_03.png" class="yun"/>
-					<div class="mi">
-						<div class="mi-title-price">
-							<div class="mi-title"><p>小米（MI）小米手环2 智能运动 心率检测 来 电提醒 久坐提醒 LED显示器 时间显示 防水记</p></div>
-							<div class="mi-price">
-								<span style="color: red;width: 93px">￥149.00</span>
-								<span style="width: 63px"> x1 </span>
-								<span style="width: 51px">有货</span>
-								<span style="width: 93px;">0.095kg</span>
+							<div class="mi-chima" th:each="attr,attrStat:${item.skuAttr}" th:if="${attrStat.count}<=2">
+								<span th:text="${attr}" th:title="${attr}"></span>
 							</div>
-						</div>
-						<div class="mi-attr">
-							<div class="mi-chima"><span >颜色：</span><span >黑色</span></div>
-							<div class="mi-chima"><span >尺码：</span><span >64GB</span></div>
-						</div>
-						<p class="tui-1"><img src="/static/detail/img/i_07.png" />支持7天无理由退货（拆封后不支持）</p>
-					</div>
-				</div>
-				<div class="yun1">
-					<img src="/static/detail/img/im_03.png" class="yun"/>
-					<div class="mi">
-						<div class="mi-title-price">
-							<div class="mi-title"><p>小米（MI）小米手环2 智能运动 心率检测 来 电提醒 久坐提醒 LED显示器 时间显示 防水记</p></div>
-							<div class="mi-price">
-								<span style="color: red;width: 93px">￥149.00</span>
-								<span style="width: 63px"> x1 </span>
-								<span style="width: 51px">有货</span>
-								<span style="width: 93px;">0.095kg</span>
-							</div>
-						</div>
-						<div class="mi-attr">
-							<div class="mi-chima"><span >颜色：</span><span >黑色</span></div>
-							<div class="mi-chima"><span >尺码：</span><span >64GB</span></div>
 						</div>
 						<p class="tui-1"><img src="/static/detail/img/i_07.png" />支持7天无理由退货（拆封后不支持）</p>
 					</div>
@@ -515,9 +464,9 @@
 		<div class="xia">
 			<div class="qian">
 				<p class="qian_y">
-					<span>1</span>
+					<span th:text="${orderConfirmData.getCount()}">1</span>
 					<span>件商品，总商品金额：</span>
-					<span class="rmb">￥28.90</span>
+					<span class="rmb" th:text="'￥'+${#numbers.formatDecimal(orderConfirmData.total,1,2)}">￥28.90</span>
 				</p>
 				<p class="qian_y">
 					<span>返现：</span>
@@ -539,8 +488,9 @@
 			</div>
 
 			<div class="yfze">
-				<p class="yfze_a"><span class="z">应付总额：</span><span class="hq">￥28.90</span></p>
-				<p class="yfze_b">寄送至： 北京 朝阳区 三环到四环之间 朝阳北路复兴国际大厦23层麦田房产 IT-中心研发二部 收货人：赵存权 188****5052</p>
+				<p class="yfze_a"><span class="z">应付总额：</span><span class="hq" th:text="'￥'+${#numbers.formatDecimal(orderConfirmData.payPrice,1,2)}">￥28.90</span></p>
+
+				<p class="yfze_b">寄送至：  收货人：</p>
 			</div>
 			<button class="tijiao" onclick="commitOrder()">提交订单</button>
 		</div>
