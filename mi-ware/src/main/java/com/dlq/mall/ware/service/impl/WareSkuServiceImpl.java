@@ -1,9 +1,8 @@
 package com.dlq.mall.ware.service.impl;
 
+import com.dlq.common.exception.NoStockException;
 import com.dlq.common.utils.R;
-import com.dlq.mall.ware.exception.NoStockException;
 import com.dlq.mall.ware.feign.ProductFeignService;
-import com.dlq.mall.ware.vo.LockStockResult;
 import com.dlq.mall.ware.vo.OrderItemVo;
 import com.dlq.mall.ware.vo.SkuHasStockVo;
 import com.dlq.mall.ware.vo.WareSkuLockVo;
@@ -87,17 +86,17 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
     @Override
     public List<SkuHasStockVo> getSkuHasStock(List<Long> skuIds) {
 
-        List<SkuHasStockVo> collect = skuIds.stream().map(skuId -> {
+        return skuIds.stream().map(skuId -> {
             SkuHasStockVo vo = new SkuHasStockVo();
 
             //查询当前sku总库存量
             //SELECT SUM(stock-stock_locked) FROM `ims_ware_sku` WHERE sku_id=1
             Long count = baseMapper.getSkuStock(skuId);
             vo.setSkuId(skuId);
-            vo.setHasStock(count == null ? false : count > 0);
+            //vo.setHasStock(count == null ? false : count > 0);
+            vo.setHasStock(count != null && count > 0);
             return vo;
         }).collect(Collectors.toList());
-        return collect;
     }
 
     /**
@@ -126,7 +125,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
 
         //2、锁定库存
         for (SkuWareHasStock skuWareHasStock : collect) {
-            Boolean skuStocked = false;
+            boolean skuStocked = false;
             Long skuId = skuWareHasStock.getSkuId();
             List<Long> wareIds = skuWareHasStock.getWareId();
             if (wareIds == null || wareIds.size() == 0) {
@@ -141,11 +140,10 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
                     skuStocked = true;
                     //然后终止循环锁定下一个仓库 的库存
                     break;
-                }else {
-                    //当前仓库锁失败。重试下一个仓库
-                }
+                } //当前仓库锁失败。重试下一个仓库
+
             }
-            if (skuStocked == false){
+            if (!skuStocked){
                 //说明当前商品的所有仓库库存都不足，没有锁住库存
                 //那么抛库存不足异常
                 throw new NoStockException(skuId);
