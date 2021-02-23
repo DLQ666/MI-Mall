@@ -4,7 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.dlq.common.exception.BizCodeEnum;
+import com.dlq.mall.ware.exception.NoStockException;
+import com.dlq.mall.ware.vo.LockStockResult;
 import com.dlq.mall.ware.vo.SkuHasStockVo;
+import com.dlq.mall.ware.vo.WareSkuLockVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +31,16 @@ import com.dlq.common.utils.R;
 public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
+
+    @PostMapping("/lock/order")
+    public R orderLockStock(@RequestBody WareSkuLockVo vo){
+        try{
+            Boolean stock = wareSkuService.orderLockStock(vo);
+            return R.ok();
+        }catch(NoStockException e){
+            return R.error(BizCodeEnum.NO_STOCK_EXCEPTION.getCode(),BizCodeEnum.NO_STOCK_EXCEPTION.getMsg());
+        }
+    }
 
     //查询sku是否有库存
     @PostMapping("/hasstock")
