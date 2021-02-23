@@ -261,8 +261,11 @@ public class CartServiceImpl implements CartService {
             String cartKey = CART_PREFIX + userInfoTo.getUserId();
             //查出购物车中所有购物项
             List<CartItem> cartItems = getCartItems(cartKey);
+            if (cartItems == null){
+                //没东西刷新网页
+                return null;
+            }
             //进行过滤
-            assert cartItems != null;
             //获取所有被选中的购物项
             List<CartItem> collect = cartItems.stream()
                     .filter(CartItem::getCheck)
