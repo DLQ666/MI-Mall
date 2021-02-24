@@ -406,8 +406,12 @@
 								</div>
 
 							</li>
-							<li>
-								<span th:text="${item.hasStock?'有货':'无货'}">无货</span>， 此商品暂时售完
+							<li th:if="${item.hasStock}">
+								<span>可配货</span><span style="color: #666;font-weight:400;">， 支持</span>
+								<span style="color:#646fb0; font-weight:400;">可配送港澳台</span>
+							</li>
+							<li th:if="${!item.hasStock}">
+								<span >无货</span><span style="color: #999;font-weight:400;">， 此商品暂时售完</span>
 							</li>
 						</ul>
 					</div>

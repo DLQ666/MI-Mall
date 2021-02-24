@@ -1,15 +1,18 @@
 package com.dlq.mall.product.service.impl;
 
+import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dlq.common.utils.PageUtils;
 import com.dlq.common.utils.Query;
+import com.dlq.common.utils.R;
 import com.dlq.mall.product.config.MyThreadConfig;
 import com.dlq.mall.product.dao.SkuInfoDao;
 import com.dlq.mall.product.entity.SkuImagesEntity;
 import com.dlq.mall.product.entity.SkuInfoEntity;
 import com.dlq.mall.product.entity.SpuInfoDescEntity;
+import com.dlq.mall.product.feign.WareFeignService;
 import com.dlq.mall.product.service.*;
 import com.dlq.mall.product.vo.sku.*;
 import org.apache.commons.lang.StringUtils;
@@ -38,6 +41,8 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
     SkuSaleAttrValueService skuSaleAttrValueService;
     @Autowired
     ThreadPoolExecutor executor;
+    @Autowired
+    WareFeignService wareFeignService;
 
 
     @Override
@@ -147,6 +152,14 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
             List<SkuImagesEntity> images = imagesService.getImagesBySkuId(skuId);
             skuItemVo.setImages(images);
         }, executor);
+
+        R r = wareFeignService.getSkuHasStock(skuId);
+        if (r.getCode()==0){
+            //查询成功
+            SkuStockVo data = r.getData(new TypeReference<SkuStockVo>() {
+            });
+            skuItemVo.setHasStock(data.getHasStock());
+        }
 
         //等待所有任务完成===时长为上面任意任务最长任务执行时间
         CompletableFuture.allOf(saleAttrFuture,descFuture,attrGroupFuture,imgFuture).get();
