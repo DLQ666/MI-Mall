@@ -31,7 +31,7 @@ public class OrderWebController {
         OrderConfirmVo orderConfirmVo = orderService.confirmOrder();
         model.addAttribute("orderConfirmData", orderConfirmVo);
         if (orderConfirmVo.getItems() == null || orderConfirmVo.getItems().size()==0){
-            return "redirect:http://dlqk8s.top:81/";
+            return "redirect:http://cart.dlqk8s.top:81/cart.html";
         }
         //展示订单确认的数据
         return "detail";
