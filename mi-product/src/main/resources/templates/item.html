@@ -459,9 +459,14 @@
 
 							</div>
 						</div>
-						<div class="box-btns-two" id="addToCart">
+						<div th:if="${item.hasStock}" class="box-btns-two" id="addToCart">
 							<a th:attr="skuId = ${item.info.skuId}">
 								加入购物车
+							</a>
+						</div>
+						<div style="cursor: not-allowed; background: #ccc;" th:if="${!item.hasStock}" class="box-btns-two" id="yuyue">
+							<a th:attr="skuId = ${item.info.skuId}">
+								到货通知
 							</a>
 						</div>
 						<!--<div class="box-btns-three">
