@@ -41,6 +41,14 @@ public class WareSkuController {
         }
     }
 
+    //商品详情页，查询当前商品是否有库存
+    @PostMapping("/{skuId}/hasstock")
+    public R getSkuHasStock(@PathVariable("skuId") Long skuId){
+        //sku_id  stock
+        SkuHasStockVo vo = wareSkuService.getSkuIsStock(skuId);
+        return R.ok().setData(vo);
+    }
+
     //查询sku是否有库存
     @PostMapping("/hasstock")
     public R getSkuHasStock(@RequestBody List<Long> skuIds){
