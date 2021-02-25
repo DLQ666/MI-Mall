@@ -163,7 +163,11 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
                 OrderVo data = r.getData(new TypeReference<OrderVo>() {});
                 if (data == null || OrderStatusEnum.CANCLED.getCode().equals(data.getStatus())){
                     //订单已经被取消 。才能解锁库存
-                    unLockStock(detail.getSkuId(),detail.getWareId(),detail.getSkuNum(),detailId);
+
+                    if (byId.getLockStatus() == 1){
+                        //当前库存工作单详情，状态1 已锁定但是未解锁才可以解锁
+                        unLockStock(detail.getSkuId(),detail.getWareId(),detail.getSkuNum(),detailId);
+                    }
                 }
             }else {
                 //消息拒绝以后重新放到队列里面，让别人继续消费解锁。
@@ -175,7 +179,14 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
     }
 
     private void unLockStock(Long skuId,Long wareId,Integer num,Long taskDetailId){
+        //库存解锁
         wareSkuDao.unLockStock(skuId,wareId,num,taskDetailId);
+        //更新库存工作单状态
+        WareOrderTaskDetailEntity entity = new WareOrderTaskDetailEntity();
+        entity.setId(taskDetailId);
+        //修改为已解锁
+        entity.setLockStatus(2);
+        orderTaskDetailService.updateById(entity);
     }
 
     /**
