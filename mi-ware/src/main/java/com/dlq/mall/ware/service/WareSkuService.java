@@ -1,6 +1,7 @@
 package com.dlq.mall.ware.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.dlq.common.to.mq.StockLockedTo;
 import com.dlq.common.utils.PageUtils;
 import com.dlq.mall.ware.entity.WareSkuEntity;
 import com.dlq.mall.ware.vo.LockStockResult;
@@ -38,5 +39,7 @@ public interface WareSkuService extends IService<WareSkuEntity> {
      * @return
      */
     SkuHasStockVo getSkuIsStock(Long skuId);
+
+    void unLockStock(StockLockedTo to);
 }
 

@@ -19,17 +19,19 @@ import java.util.Map;
 @Configuration
 public class WareMQConfig {
 
+
     @Bean
     public Queue stockDelayQueue(){
         /**
          * x-dead-letter-exchange: stock-event-exchange
          * x-dead-letter-routing-key: stock.release
          * x-message-ttl: 60000*50
+         * //延时队列
          */
         Map<String,Object> arguments = new HashMap<>();
         arguments.put("x-dead-letter-exchange","stock-event-exchange");
         arguments.put("x-dead-letter-routing-key","stock.release");
-        arguments.put("x-message-ttl", 60000*50);
+        arguments.put("x-message-ttl", 120000);
         return new Queue("stock.delay.queue", true,false,false, arguments);
     }
 
@@ -51,7 +53,7 @@ public class WareMQConfig {
         return new Binding("stock.delay.queue",
                 Binding.DestinationType.QUEUE,
                 "stock-event-exchange",
-                "stock.finish",null);
+                "stock.locked",null);
     }
     @Bean
     public Binding stockRelease(){
