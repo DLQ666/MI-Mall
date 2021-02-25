@@ -39,39 +39,34 @@ public class OrderWebController {
 
     @PostMapping("/submitOrder")
     public String submitOrder(OrderSubmitVo vo, Model model, RedirectAttributes redirectAttributes){
-        SubmitOrderResponseVo responseVo = null;
         try {
-            responseVo = orderService.submitOrder(vo);
-        } catch (NoStockException e) {
-
+            SubmitOrderResponseVo responseVo = orderService.submitOrder(vo);
+            System.out.println("订单提交的数据"+vo);
+            if (responseVo.getCode() == 0){
+                //下单成功，跳转到支付页
+                model.addAttribute("submitOrderResp", responseVo);
+                return "cashier";
+            }else {
+                String msg = "下单失败！";
+                switch (responseVo.getCode()) {
+                    case 1: msg += "订单信息过期，请刷新再次提交！"; break;
+                    case 2: msg += "订单商品价格发生变化，请确认后再次提交！"; break;
+                    case 3: msg += "库存锁定失败，商品库存不足！"; break;
+                }
+                redirectAttributes.addFlashAttribute("msg", msg);
+                //下单失败，跳转到订单确认页面
+                return "redirect:http://order.dlqk8s.top:81/toTrade";
+            }
+        } catch (Exception e) {
+            if (e instanceof NoStockException){
+                String message = ((NoStockException)e).getMessage();
+                redirectAttributes.addFlashAttribute("msg", message);
+            }
             redirectAttributes.addFlashAttribute("msg", e.getMessage());
             //下单失败，跳转到订单确认页面
             return "redirect:http://order.dlqk8s.top:81/toTrade";
         }
-        //成功到支付选择页
-        //失败回到订单确认
-        System.out.println(vo);
-        if (responseVo.getCode() == 0){
-            //下单成功，跳转到支付页
-            model.addAttribute("submitOrderResp", responseVo);
-            return "cashier";
-        }else {
-            String msg = "下单失败！";
-            switch (responseVo.getCode()) {
-                case 1:
-                    msg += "订单信息过期，请刷新再次提交！";
-                    break;
-                case 2:
-                    msg += "订单商品价格发生变化，请确认后再次提交！";
-                    break;
-                case 3:
-                    msg += "库存锁定失败，商品库存不足！";
-                    break;
-            }
 
-            redirectAttributes.addFlashAttribute("msg", msg);
-            //下单失败，跳转到订单确认页面
-            return "redirect:http://order.dlqk8s.top:81/toTrade";
-        }
+
     }
 }

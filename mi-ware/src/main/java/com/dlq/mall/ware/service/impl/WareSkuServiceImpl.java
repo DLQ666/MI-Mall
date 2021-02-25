@@ -66,7 +66,9 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             wareSkuEntity.setSkuId(skuId);
             wareSkuEntity.setWareId(wareId);
             wareSkuEntity.setStock(skuNum);
-            //远程调用商品服务获取sku名字,失败事务无需回滚
+            //TODO 远程调用商品服务获取sku名字,失败事务无需回滚
+            //1、自己catch异常
+            // / ToDo 还可以用什么办法让异常出现以后不回滚?高级
             try {
                 R info = productFeignService.info(skuId);
                 Map<String, Object> data = (Map<String, Object>) info.get("skuInfo");

@@ -25,6 +25,7 @@ import com.dlq.mall.order.service.OrderItemService;
 import com.dlq.mall.order.service.OrderService;
 import com.dlq.mall.order.to.OrderCreateTo;
 import com.dlq.mall.order.vo.*;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -133,6 +134,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         return orderConfirmVo;
     }
 
+    //本地事务，在分布式系统，只能控制住自己的回滚，控制不了其他服务的回滚
+    //分布式事务：最大原因。网络原因+分布式机器、
+//    @GlobalTransactional //高并发
     @Transactional
     @Override
     public SubmitOrderResponseVo submitOrder(OrderSubmitVo vo) {
@@ -164,7 +168,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             if (Math.abs(payAmount.subtract(payPrice).doubleValue())<0.01){
                 //金额对比成功
 
-                //3、保存订单
+                //TODO 3、保存订单
                 saveOrder(order);
                 //4、库存锁定。只要有异常回滚订单数据。
                 // 订单号，所有订单项信息（skuid，skuname，num）
@@ -178,11 +182,19 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
                     return itemVo;
                 }).collect(Collectors.toList());
                 lockVo.setLocks(locks);
-                //TODO 远程锁库存
+                //TODO 4、远程锁库存
+                //库存锁定成功了，但是网络原因超时了，订单回滚，库存不回滚、
+
+                //为了保证高并发。库存服务自己回滚。可以发消息给库存服务；
+                //库存服务本身也可以使用自动解锁模式  消息
                 R r = wareFeignService.orderLockStock(lockVo);
                 if (r.getCode() == 0){
                     //锁成功了
                     responseVo.setOrder(order.getOrder());
+
+                    //TODO 未来可能添加 远程扣减积分   出异常  模拟 分布式事务问题
+                    int i= 10/0; //模拟未来扣积分远程调用出现异常 // 订单回滚，库存不回滚
+
                     return responseVo;
                 }else {
                     //锁失败了

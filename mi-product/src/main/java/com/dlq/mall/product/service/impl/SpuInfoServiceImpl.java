@@ -13,6 +13,7 @@ import com.dlq.mall.product.feign.SearchFeignService;
 import com.dlq.mall.product.feign.WareFeignService;
 import com.dlq.mall.product.service.*;
 import com.dlq.mall.product.vo.spuvo.*;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,13 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         return new PageUtils(page);
     }
 
+    /**
+     * @GlobalTransactional
+     * @param spuSaveVo
+     *
+     */
+    //Seata AT 分布式事务
+    //@GlobalTransactional
     @Transactional
     @Override
     public void saveSpuInfo(SpuSaveVo spuSaveVo) {
