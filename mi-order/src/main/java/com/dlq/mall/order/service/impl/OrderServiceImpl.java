@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dlq.common.exception.NoStockException;
+import com.dlq.common.to.mq.OrderTo;
 import com.dlq.common.utils.PageUtils;
 import com.dlq.common.utils.Query;
 import com.dlq.common.utils.R;
@@ -26,6 +27,9 @@ import com.dlq.mall.order.service.OrderService;
 import com.dlq.mall.order.to.OrderCreateTo;
 import com.dlq.mall.order.vo.*;
 import io.seata.spring.annotation.GlobalTransactional;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -63,6 +67,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     StringRedisTemplate redisTemplate;
     @Autowired
     ProductFeignService productFeignService;
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -146,6 +152,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         submitVoThreadLocal.set(vo);
         //1、验证令牌【令牌的对比和删除必须保证原子性】
         //返回0-令牌失败  1-删除成功
+        //lua 脚本
         String script="if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del',KEYS[1]) else return 0 end";
         String orderToken = vo.getOrderToken();
         //以下代码为原子删除令牌操作
@@ -193,8 +200,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
                     responseVo.setOrder(order.getOrder());
 
                     //TODO 未来可能添加 远程扣减积分   出异常  模拟 分布式事务问题
-                    int i= 10/0; //模拟未来扣积分远程调用出现异常 // 订单回滚，库存不回滚
-
+                    //int i= 10/0; //模拟未来扣积分远程调用出现异常 // 订单回滚，库存不回滚
+                    //TODO 订单创建成功，发送消息给MQ
+                    rabbitTemplate.convertAndSend("order-event-exchange", "order.create.order", order.getOrder());
                     return responseVo;
                 }else {
                     //锁失败了
@@ -222,6 +230,39 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     }
 
     @Override
+    public void closeOrder(OrderEntity entity) {
+        //关单之前 一定要查询这个订单的最新状态
+        OrderEntity orderEntity = this.getById(entity.getId());
+        if (OrderStatusEnum.CREATE_NEW.getCode().equals(orderEntity.getStatus())){
+            //关单
+            OrderEntity update = new OrderEntity();
+            update.setId(entity.getId());
+            update.setStatus(OrderStatusEnum.CANCLED.getCode());
+            this.updateById(update);
+            //再发给MQ一个消息 ，解锁库存===此步骤是为了防止订单创建成功以后--发出消息阻塞时间远超于
+            //库存解锁中发的消息-到解锁库存服务的时间。。。。。如果这样的话 ，订单阻塞了，库存解锁先于订单解锁
+            //造成库存解锁-判断状态不是-CANCLED(4,"已取消")-进而取消了解锁 由于库存解锁发的消息消费完了，导致库存没有扣减。
+            //然后最后这个订单也是超时没有进行支付，状态改为了-CANCLED(4,"已取消")-而 库存没有释放-还是扣减着的状态
+            //所以为了防止此类事件发生，让订单解锁还是待支付状态后 直接发给解锁库存服务，释放库存
+            //库存解锁
+            OrderTo orderTo = new OrderTo();
+            BeanUtils.copyProperties(orderEntity,orderTo);
+
+            try {
+                //TODO 保证消息一定会发送出去
+                rabbitTemplate.convertAndSend("order-event-exchange","order.release.other", orderTo);
+            } catch (AmqpException e) {
+                //TODO 将没发送出去的消息进行重试发送
+            }
+        }
+    }
+
+    /**
+     * 查询订单状态
+     * @param orderSn 订单号
+     * @return OrderEntity
+     */
+    @Override
     public OrderEntity getOrderStatusByOrderSn(String orderSn) {
         return this.getOne(new QueryWrapper<OrderEntity>().eq("order_sn", orderSn));
     }
@@ -240,13 +281,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
 
     /**
      * 生成订单
-     * @return
+     * @return OrderCreateTo
      */
     private OrderCreateTo createOrder() {
         OrderCreateTo orderCreateTo = new OrderCreateTo();
         //1、生成订单号
         String timeId = IdWorker.getTimeId();
-        //2、创建订单号
+        //2、构建订单
         OrderEntity orderEntity = buildOrder(timeId);
         orderCreateTo.setOrder(orderEntity);
 
@@ -255,7 +296,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         orderCreateTo.setOrderItems(itemEntities);
 
         //3、验价  计算价格、积分等相关信息
-        computePrice(orderEntity,itemEntities);
+        if (itemEntities != null && itemEntities.size() > 0){
+            computePrice(orderEntity,itemEntities);
+        }
 
         return orderCreateTo;
     }
@@ -347,6 +390,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         List<OrderItemVo> currentUserCartItems = cartFeignService.getCurrentUserCartItems();
         if (currentUserCartItems != null && currentUserCartItems.size()>0){
             List<OrderItemEntity> orderItemEntities = currentUserCartItems.stream().map(cartItem -> {
+                //构建某一个订单项
                 OrderItemEntity orderItemEntity = buildOrderItem(cartItem);
 
                 orderItemEntity.setOrderSn(timeId);

@@ -1,47 +1,42 @@
 package com.dlq.mall.ware.service.impl;
 
 import com.alibaba.fastjson.TypeReference;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dlq.common.enums.OrderStatusEnum;
 import com.dlq.common.exception.NoStockException;
-import com.dlq.common.to.mq.StockLockedTo;
+import com.dlq.common.to.mq.OrderTo;
 import com.dlq.common.to.mq.StockDetailTo;
+import com.dlq.common.to.mq.StockLockedTo;
+import com.dlq.common.utils.PageUtils;
+import com.dlq.common.utils.Query;
 import com.dlq.common.utils.R;
+import com.dlq.mall.ware.dao.WareSkuDao;
 import com.dlq.mall.ware.entity.WareOrderTaskDetailEntity;
 import com.dlq.mall.ware.entity.WareOrderTaskEntity;
+import com.dlq.mall.ware.entity.WareSkuEntity;
 import com.dlq.mall.ware.feign.OrderFeignService;
 import com.dlq.mall.ware.feign.ProductFeignService;
 import com.dlq.mall.ware.service.WareOrderTaskDetailService;
 import com.dlq.mall.ware.service.WareOrderTaskService;
+import com.dlq.mall.ware.service.WareSkuService;
 import com.dlq.mall.ware.vo.OrderItemVo;
 import com.dlq.mall.ware.vo.OrderVo;
 import com.dlq.mall.ware.vo.SkuHasStockVo;
 import com.dlq.mall.ware.vo.WareSkuLockVo;
-import com.rabbitmq.client.Channel;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dlq.common.utils.PageUtils;
-import com.dlq.common.utils.Query;
-
-import com.dlq.mall.ware.dao.WareSkuDao;
-import com.dlq.mall.ware.entity.WareSkuEntity;
-import com.dlq.mall.ware.service.WareSkuService;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service("wareSkuService")
 public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> implements WareSkuService {
@@ -162,7 +157,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
                 //订单数据返回成功
                 OrderVo data = r.getData(new TypeReference<OrderVo>() {});
                 if (data == null || OrderStatusEnum.CANCLED.getCode().equals(data.getStatus())){
-                    //订单已经被取消 。才能解锁库存
+                    //订单不存在  或者  订单已经被取消 。才能解锁库存
 
                     if (byId.getLockStatus() == 1){
                         //当前库存工作单详情，状态1 已锁定但是未解锁才可以解锁
@@ -175,6 +170,28 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             }
         }else {
             //无需解锁，都回滚了 解锁个锤子
+        }
+    }
+
+    //防止订单服务卡顿，导致订单状态消息一直改不了，库存消息优先到期。查订单状态肯定为新建状态，什么都不做就走了
+    //导致卡顿的订单，永远不能解锁库存
+    @Transactional
+    @Override
+    public void unLockStock(OrderTo orderTo) {
+        String orderSn = orderTo.getOrderSn();
+        //查一下最新库存的状态，防止重复解锁库存
+        WareOrderTaskEntity orderTaskEntity = orderTaskService.getOrderTaskByOrderSn(orderSn);
+        Long id = orderTaskEntity.getId();
+        //按照工作单找到所有 没有解锁的库存，进行解锁
+        List<WareOrderTaskDetailEntity> list = orderTaskDetailService.list(
+                new QueryWrapper<WareOrderTaskDetailEntity>()
+                        .eq("task_id", id)
+                        .eq("lock_status", 1));
+        if (list == null && list.size()==0){
+            return;
+        }
+        for (WareOrderTaskDetailEntity entity : list) {
+            unLockStock(entity.getSkuId(),entity.getWareId(),entity.getSkuNum(),entity.getId());
         }
     }
 

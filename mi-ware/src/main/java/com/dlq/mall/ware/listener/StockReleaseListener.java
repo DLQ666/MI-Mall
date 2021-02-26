@@ -2,6 +2,7 @@ package com.dlq.mall.ware.listener;
 
 import com.alibaba.fastjson.TypeReference;
 import com.dlq.common.enums.OrderStatusEnum;
+import com.dlq.common.to.mq.OrderTo;
 import com.dlq.common.to.mq.StockDetailTo;
 import com.dlq.common.to.mq.StockLockedTo;
 import com.dlq.common.utils.R;
@@ -41,5 +42,17 @@ public class StockReleaseListener {
         } catch (Exception e) {
             channel.basicReject(message.getMessageProperties().getDeliveryTag(), true);
         }
+    }
+
+    @RabbitHandler
+    public void handleOrderCloseRelease(OrderTo orderTo, Message message, Channel channel) throws IOException {
+        System.out.println("收到订单关闭---解锁库存消息.....");
+        try{
+            wareSkuService.unLockStock(orderTo);
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+        }catch(Exception e){
+            channel.basicReject(message.getMessageProperties().getDeliveryTag(), true);
+        }
+
     }
 }

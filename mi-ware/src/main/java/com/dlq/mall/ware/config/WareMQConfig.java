@@ -62,4 +62,12 @@ public class WareMQConfig {
                 "stock-event-exchange",
                 "stock.release.#",null);
     }
+    @Bean
+    public Binding stockOrderRelease(){
+        return new Binding("stock.release.stock.queue",
+                Binding.DestinationType.QUEUE,
+                "order-event-exchange",
+                "order.release.other.#",
+                null);
+    }
 }
