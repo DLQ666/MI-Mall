@@ -19,7 +19,7 @@
             <a th:if="${session.loginUser!=null}" >欢迎，[[${session.loginUser.nickname}]]</a>
           </li>
           <li class="base-line">|</li>
-          <li ><a href="http://order.dlqk8s.top:81/list.html">我的订单</a></li>
+          <li ><a href="http://member.dlqk8s.top:81/list.html">我的订单</a></li>
           <li class="base-line">|</li>
           <li>支付帮助</li>
         </ul>
@@ -108,7 +108,9 @@
             <img src="/static/cashier/img/weixinPay.png" style="weight:auto;height:30px;" alt="">
           </li>
 		  <li>
-            <img src="/static/cashier/img/zhifubaoPay.png" style="weight:auto;height:30px;" alt="">
+            <a th:href="'http://order.dlqk8s.top:81/payOrder?orderSn='+${submitOrderResp.order.orderSn}">
+              <img src="/static/cashier/img/zhifubaoPay.png" style="weight:auto;height:30px;" alt="">
+            </a>
           </li>
         </ul>
       </div>

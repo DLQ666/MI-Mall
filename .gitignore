@@ -54,3 +54,9 @@ buildNumber.properties
 /mi-order/src/main/resources/static/static/cashier/img/
 /mi-order/src/main/resources/static/static/cashier/js/
 
+/mi-member/src/main/resources/static/static/orderList/css/
+/mi-member/src/main/resources/static/static/orderList/image/
+/mi-member/src/main/resources/static/static/orderList/img/
+/mi-member/src/main/resources/static/static/orderList/js/
+/mi-member/src/main/resources/static/static/orderList/sass/
+/mi-member/src/main/resources/static/static/orderList/
