@@ -181,6 +181,9 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         String orderSn = orderTo.getOrderSn();
         //查一下最新库存的状态，防止重复解锁库存
         WareOrderTaskEntity orderTaskEntity = orderTaskService.getOrderTaskByOrderSn(orderSn);
+        if (orderTaskEntity == null){
+            return;
+        }
         Long id = orderTaskEntity.getId();
         //按照工作单找到所有 没有解锁的库存，进行解锁
         List<WareOrderTaskDetailEntity> list = orderTaskDetailService.list(
