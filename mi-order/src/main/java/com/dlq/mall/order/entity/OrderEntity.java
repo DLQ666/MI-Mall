@@ -1,12 +1,17 @@
 package com.dlq.mall.order.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
+
+import javax.annotation.Nullable;
 
 /**
  * 订单
@@ -189,5 +194,8 @@ public class OrderEntity implements Serializable {
 	 * 修改时间
 	 */
 	private Date modifyTime;
+
+	@TableField(exist = false) //数据库不存在该字段，不要去数据库找
+	private List<OrderItemEntity> orderItemEntities;
 
 }

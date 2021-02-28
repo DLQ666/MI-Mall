@@ -1,4 +1,4 @@
-package com.dlq.mall.order.interceptor;
+package com.dlq.mall.member.interceptor;
 
 import com.dlq.common.constant.AuthServerConstant;
 import com.dlq.common.vo.MemberRespVo;
@@ -35,10 +35,8 @@ public class LoginUserInterceptor implements HandlerInterceptor {
 
         // /order/order/status/{orderSn}
         String requestURI = request.getRequestURI();
-        AntPathMatcher antPathMatcher = new AntPathMatcher();
-        boolean match = antPathMatcher.match("/order/order/status/**", requestURI);
-        boolean match1 = antPathMatcher.match("/payed/notify", requestURI);
-        if (match || match1){
+        boolean match = new AntPathMatcher().match("/member/**", requestURI);
+        if (match){
             return true;
         }
 

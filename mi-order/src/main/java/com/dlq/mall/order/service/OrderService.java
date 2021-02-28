@@ -3,9 +3,7 @@ package com.dlq.mall.order.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dlq.common.utils.PageUtils;
 import com.dlq.mall.order.entity.OrderEntity;
-import com.dlq.mall.order.vo.OrderConfirmVo;
-import com.dlq.mall.order.vo.OrderSubmitVo;
-import com.dlq.mall.order.vo.SubmitOrderResponseVo;
+import com.dlq.mall.order.vo.*;
 
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -41,5 +39,17 @@ public interface OrderService extends IService<OrderEntity> {
     OrderEntity getOrderStatusByOrderSn(String orderSn);
 
     void closeOrder(OrderEntity orderEntity);
+
+    /**
+     * 获取当前订单的支付信息
+     * @param orderSn
+     * @return
+     */
+    PayVo getOrderPay(String orderSn);
+
+    PageUtils queryPageWithItem(Map<String, Object> params);
+
+    String handlePayResult(PayAsyncVo payAsyncVo);
+
 }
 

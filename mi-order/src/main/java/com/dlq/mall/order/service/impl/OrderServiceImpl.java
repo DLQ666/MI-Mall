@@ -16,6 +16,7 @@ import com.dlq.mall.order.dao.OrderDao;
 import com.dlq.mall.order.dao.OrderItemDao;
 import com.dlq.mall.order.entity.OrderEntity;
 import com.dlq.mall.order.entity.OrderItemEntity;
+import com.dlq.mall.order.entity.PaymentInfoEntity;
 import com.dlq.mall.order.enume.OrderStatusEnum;
 import com.dlq.mall.order.feign.CartFeignService;
 import com.dlq.mall.order.feign.MemberFeignService;
@@ -24,6 +25,7 @@ import com.dlq.mall.order.feign.WareFeignService;
 import com.dlq.mall.order.interceptor.LoginUserInterceptor;
 import com.dlq.mall.order.service.OrderItemService;
 import com.dlq.mall.order.service.OrderService;
+import com.dlq.mall.order.service.PaymentInfoService;
 import com.dlq.mall.order.to.OrderCreateTo;
 import com.dlq.mall.order.vo.*;
 import io.seata.spring.annotation.GlobalTransactional;
@@ -69,6 +71,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     ProductFeignService productFeignService;
     @Autowired
     RabbitTemplate rabbitTemplate;
+    @Autowired
+    PaymentInfoService paymentInfoService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -249,12 +253,72 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             BeanUtils.copyProperties(orderEntity,orderTo);
 
             try {
-                //TODO 保证消息一定会发送出去
+                //TODO 保证消息一定会发送出去，每一个消息都可以做一个日志记录。（给数据库保存每一个消息的详细信息）
+                //TODO 定期扫描数据库将失败的消息再发送一遍
                 rabbitTemplate.convertAndSend("order-event-exchange","order.release.other", orderTo);
-            } catch (AmqpException e) {
+            } catch (Exception e) {
                 //TODO 将没发送出去的消息进行重试发送
             }
         }
+    }
+
+    @Override
+    public PayVo getOrderPay(String orderSn) {
+        OrderEntity orderByOrderSn = this.getOrderStatusByOrderSn(orderSn);
+        PayVo payVo = new PayVo();
+        BigDecimal bigDecimal = orderByOrderSn.getPayAmount().setScale(2, BigDecimal.ROUND_UP);
+        payVo.setTotal_amount(bigDecimal.toString());
+        payVo.setOut_trade_no(orderByOrderSn.getOrderSn());
+        List<OrderItemEntity> order_sn = orderItemService.list(new QueryWrapper<OrderItemEntity>().eq("order_sn", orderByOrderSn.getOrderSn()));
+        OrderItemEntity orderItemEntity = order_sn.get(0);
+        payVo.setSubject(orderItemEntity.getSkuName());
+        payVo.setBody(orderItemEntity.getSkuAttrsVals());
+        return payVo;
+    }
+
+    /**
+     * 分页查询订单列表页
+     * @param params
+     * @return
+     */
+    @Override
+    public PageUtils queryPageWithItem(Map<String, Object> params) {
+        MemberRespVo memberRespVo = LoginUserInterceptor.threadLocalLoginUser.get();
+        IPage<OrderEntity> page = this.page(
+                new Query<OrderEntity>().getPage(params),
+                new QueryWrapper<OrderEntity>().eq("member_id", memberRespVo.getId()).orderByDesc("id")
+        );
+
+        List<OrderEntity> order_sn = page.getRecords().stream().map(order -> {
+            List<OrderItemEntity> itemEntities = orderItemService.list(new QueryWrapper<OrderItemEntity>().eq("order_sn", order.getOrderSn()));
+            order.setOrderItemEntities(itemEntities);
+            return order;
+        }).collect(Collectors.toList());
+        page.setRecords(order_sn);
+        return new PageUtils(page);
+    }
+
+    /**
+     * 处理支付宝的支付结果
+     * @param payAsyncVo
+     * @return
+     */
+    @Override
+    public String handlePayResult(PayAsyncVo payAsyncVo) {
+        //1、保存交易流水
+        PaymentInfoEntity infoEntity = new PaymentInfoEntity();
+        infoEntity.setAlipayTradeNo(payAsyncVo.getTrade_no());
+        infoEntity.setOrderSn(payAsyncVo.getOut_trade_no());
+        infoEntity.setPaymentStatus(payAsyncVo.getTrade_status());
+        infoEntity.setCallbackTime(payAsyncVo.getNotify_time());
+        paymentInfoService.save(infoEntity);
+        //2、修改订单的状态信息
+        if (payAsyncVo.getTrade_status().equals("TRADE_FINISHED") || payAsyncVo.getTrade_status().equals("TRADE_SUCCESS")){
+            //支付成功状态
+            String outTradeNo = payAsyncVo.getOut_trade_no();
+            this.baseMapper.updateOrderStatus(outTradeNo,OrderStatusEnum.PAYED.getCode());
+        }
+        return "success";
     }
 
     /**
