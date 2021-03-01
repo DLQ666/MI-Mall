@@ -1,0 +1,12 @@
+#server:
+#  port: 15000
+#spring:
+#  application:
+#    name: mi-seckill
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: dlqk8s.top:8848  #配置nacos地址
+#  redis:
+#    host: dlqk8s.top
+#    password: dlq.*123
