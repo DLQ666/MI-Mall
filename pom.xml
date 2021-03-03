@@ -21,6 +21,7 @@
         <module>mi-search</module>
         <module>mi-auth</module>
         <module>mi-cart</module>
+        <module>mi-seckill</module>
         <module>renren-fast</module>
         <module>renren-generator</module>
     </modules>

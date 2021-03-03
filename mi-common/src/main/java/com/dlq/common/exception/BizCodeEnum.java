@@ -22,6 +22,7 @@ public enum BizCodeEnum {
     VALID_EXCEPTION(10001,"参数格式校验失败"),
     SMS_CODE_EXCEPTION(10002,"验证码获取频率太高，请5分钟后再试"),
     PHONE_NULL_EXCEPTION(10003,"手机号为空，发送验证码失败"),
+    TO_MANY_REQUEST(10004,"服务器繁忙，请稍后重试！！！"),
     PRODUCT_UP_EXCEPTION(11000,"商品上架异常"),
     USER_EXIT_EXCEPTION(15001,"该用户名已存在"),
     PHONE_EXIT_EXCEPTION(15002,"该手机号已注册"),
