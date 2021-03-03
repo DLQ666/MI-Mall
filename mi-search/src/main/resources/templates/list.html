@@ -1188,7 +1188,7 @@
                                 </li>
                             </ul>
                             <p class="tab_R">
-                                <span th:each="attr:${product.getAttrs()}" th:utext="'<em>¥</em>'+${attr.getSkuPrice()}">¥5199.00</span>
+                                <span th:each="attr:${product.getAttrs()}" th:utext="'<em>¥</em>'+${#numbers.formatDecimal(attr.getSkuPrice(),1,2)}">¥5199.00</span>
                             </p>
                             <p class="tab_JE">
                                 <a th:each="attr:${product.getAttrs()}" th:href="|http://item.dlqk8s.top:81/${attr.getSkuId()}.html|" th:utext="${attr.getSkuTitle()}" th:title="${attr.getSkuTitle()}">

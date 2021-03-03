@@ -304,34 +304,65 @@
 					<div class="box-hide" th:text="${item.info.skuSubtitle}">副标题
 						<a href=""><u></u></a>
 					</div>
-					<div class="box-yuyue" style="background:url(//m.360buyimg.com/cc/jfs/t1/161142/1/3283/38776/6004f332E9264413b/2901eb7bfd686938.png) 0 0 no-repeat;">
-						<!--<div class="yuyue-one">
-							<img src="/static/item/img/7270ffc3baecdd448958f9f5e69cf60f.png" alt=""/> 预约抢购
-						</div>
-						<div class="yuyue-two">
-							<ul>
-								<li>
-									<img src="/static/item/img/f64963b63d6e5849977ddd6afddc1db5.png"/>
-									<span>190103</span> 人预约
-								</li>
-								<li>
-									<img src="/static/item/img/36860afb69afa241beeb33ae86678093.png"/> 预约剩余
-									<span id="timer">
-
-									</span>
-								</li>
-							</ul>
-						</div>-->
+					<div class="box-yuyue" th:if="${item.seckillInfoVo == null || #dates.createNow().getTime()>item.seckillInfoVo.endTime}" style="background:url(//dlqk8s.top:81/static/index/img/niuniannianhuo.png);">
 					</div>
-					<div class="box-summary clear">
+					<!--正常显示-->
+					<div th:if="${item.seckillInfoVo == null || #dates.createNow().getTime()>item.seckillInfoVo.endTime}" class="box-summary clear">
 						<ul>
-							<li>京 东 价</li>
+							<li>某 东 价</li>
 							<li>
 								<span>￥</span>
 								<span th:text="${#numbers.formatDecimal(item.info.price,2,2)}">价格</span>
 							</li>
-							<li>
+							<li th:if="${ item.seckillInfoVo != null && item.seckillInfoVo.startTime!=null && #dates.createNow().getTime()<item.seckillInfoVo.startTime}">
+								商品将会在[[${#dates.format(new java.util.Date(item.seckillInfoVo.startTime),"yyyy-MM-dd HH:mm:ss")}]]进行秒杀
+							</li>
+							<li >
 								降价通知
+							</li>
+							<li>
+								<a href="#">
+									累计评价 未获取
+								</a>
+							</li>
+						</ul>
+					</div>
+					<!--预告秒杀显示-->
+					<div class="box-yuyue" th:if="${item.seckillInfoVo != null && #dates.createNow().getTime()<item.seckillInfoVo.startTime}" style="background:url(//dlqk8s.top:81/static/index/img/niuniannianhuo.png);">
+					</div>
+					<div th:if="${item.seckillInfoVo != null && #dates.createNow().getTime()<item.seckillInfoVo.startTime}" class="box-summary clear">
+						<ul>
+							<li>某 东 价</li>
+							<li>
+								<span>￥</span>
+								<span th:text="${#numbers.formatDecimal(item.info.price,2,2)}">价格</span>
+							</li>
+							<li th:if="${ item.seckillInfoVo != null && item.seckillInfoVo.startTime!=null && #dates.createNow().getTime()<item.seckillInfoVo.startTime}">
+								商品将会在[<span style="color: #E4393C">[[${#dates.format(new java.util.Date(item.seckillInfoVo.startTime),"yyyy-MM-dd HH:mm:ss")}]]</span>]进行秒杀
+							</li>
+							<li>
+								<a href="#">
+									累计评价 未获取
+								</a>
+							</li>
+						</ul>
+					</div>
+					<!--秒杀显示-->
+					<div class="box-yuyue" th:if="${item.seckillInfoVo != null && #dates.createNow().getTime()>=item.seckillInfoVo.startTime && #dates.createNow().getTime()<=item.seckillInfoVo.endTime}" style="background:url(//dlqk8s.top:81/static/item/img/seckilling.jpg) 0 0 no-repeat;">
+						<div class="yuyue-one">
+							<i class="sprite-seckilling"></i>
+							<strong>某东秒杀</strong>
+						</div>
+					</div>
+					<div th:if="${item.seckillInfoVo != null && #dates.createNow().getTime()>=item.seckillInfoVo.startTime && #dates.createNow().getTime()<=item.seckillInfoVo.endTime}" class="box-summary clear">
+						<ul>
+							<li>秒 杀 价</li>
+							<li>
+								<span>￥</span>
+								<span th:text="${#numbers.formatDecimal(item.seckillInfoVo.seckillPrice,2,2)}">价格</span>
+							</li>
+							<li style="color: #666">
+								<del><span>[￥</span>[[${#numbers.formatDecimal(item.info.price,2,2)}]]<span>]</span></del>
 							</li>
 							<li>
 								<a href="#">
@@ -459,12 +490,22 @@
 
 							</div>
 						</div>
-						<div th:if="${item.hasStock}" class="box-btns-two" id="addToCart">
+						<div th:if="${item.hasStock && item.seckillInfoVo != null && (#dates.createNow().getTime()<item.seckillInfoVo.startTime || #dates.createNow().getTime()>item.seckillInfoVo.endTime)}" class="box-btns-two" id="addToCart">
 							<a th:attr="skuId = ${item.info.skuId}">
 								加入购物车
 							</a>
 						</div>
-						<div style="cursor: not-allowed; background: #ccc;" th:if="${!item.hasStock}" class="box-btns-two" id="yuyue">
+						<div th:if="${item.hasStock && item.seckillInfoVo == null}" class="box-btns-two" id="addToCart">
+							<a th:attr="skuId = ${item.info.skuId}">
+								加入购物车
+							</a>
+						</div>
+						<div style="cursor: pointer;" th:if="${item.hasStock && item.seckillInfoVo != null && #dates.createNow().getTime()>=item.seckillInfoVo.startTime && #dates.createNow().getTime()<=item.seckillInfoVo.endTime}" class="box-btns-two" id="secKillA">
+							<a th:attr="skuId = ${item.info.skuId},sessionId=${item.seckillInfoVo.promotionSessionId},code=${item.seckillInfoVo.randomCode}">
+								立即抢购
+							</a>
+						</div>
+						<div style="cursor: not-allowed; background: #ccc;" th:if="${!item.hasStock  && item.seckillInfoVo == null}" class="box-btns-two" id="yuyue">
 							<a th:attr="skuId = ${item.info.skuId}">
 								到货通知
 							</a>
@@ -664,7 +705,7 @@
 					<ul class="xuanxiangka">
 						<li class="jieshoa actives" id="li1">
 							<div class="shanpinsssss">
-								<ul class="brandShow">
+								<!--<ul class="brandShow">
 									<li title="未获取">品牌： <a href="//list.jd.com/list.html?cat=9987,653,655&amp;ev=exbrand_18374" clstag="shangpin|keycount|product|pinpai_1" target="_blank">未获取</a>
 									</li>
 								</ul>
@@ -679,7 +720,7 @@
 									<li title="游戏音效增强，液冷散热，游戏显示增强，游戏震感，游戏深度优化，游戏勿扰模式，游戏性能模式">游戏配置：未获取</li>
 									<li title="发烧级">游戏性能：未获取</li>
 									<li title="50-100W">充电功率：未获取</li>
-								</ul>
+								</ul>-->
 
 								<!-- 介绍大图 -->
 								<div>
@@ -1103,6 +1144,18 @@
 			}
 			var skuId = $(this).children("a").attr("skuId");
 			location.href = "http://cart.dlqk8s.top:81/addToCart?skuId="+skuId+"&num="+num;
+			return false;
+		})
+		$("#secKillA").click(function () {
+			var isLogin = [[${session.loginUser != null}]]; //true
+			if (isLogin){
+				var killId = $(this).children().attr("sessionid")+"_"+$(this).children().attr("skuid");
+				var key = $(this).children().attr("code");
+				var num = $("#numInput").val();
+				location.href="http://seckill.dlqk8s.top:81/kill?killId="+killId+"&key="+key+"&num="+num;
+			}else {
+				alert("参与秒杀请先登录")
+			}
 			return false;
 		})
 	</script>

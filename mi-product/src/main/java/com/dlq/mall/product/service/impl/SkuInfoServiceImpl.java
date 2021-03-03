@@ -12,8 +12,10 @@ import com.dlq.mall.product.dao.SkuInfoDao;
 import com.dlq.mall.product.entity.SkuImagesEntity;
 import com.dlq.mall.product.entity.SkuInfoEntity;
 import com.dlq.mall.product.entity.SpuInfoDescEntity;
+import com.dlq.mall.product.feign.SeckillFeignService;
 import com.dlq.mall.product.feign.WareFeignService;
 import com.dlq.mall.product.service.*;
+import com.dlq.mall.product.vo.seckillvo.SeckillInfoVo;
 import com.dlq.mall.product.vo.sku.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,8 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
     ThreadPoolExecutor executor;
     @Autowired
     WareFeignService wareFeignService;
+    @Autowired
+    SeckillFeignService seckillFeignService;
 
 
     @Override
@@ -153,16 +157,29 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
             skuItemVo.setImages(images);
         }, executor);
 
-        R r = wareFeignService.getSkuHasStock(skuId);
-        if (r.getCode()==0){
-            //查询成功
-            SkuStockVo data = r.getData(new TypeReference<SkuStockVo>() {
-            });
-            skuItemVo.setHasStock(data.getHasStock());
-        }
+        CompletableFuture<Void> wareFuture = CompletableFuture.runAsync(() -> {
+            //远程查询是否有库存
+            R r = wareFeignService.getSkuHasStock(skuId);
+            if (r.getCode() == 0) {
+                //查询成功
+                SkuStockVo data = r.getData(new TypeReference<SkuStockVo>() {
+                });
+                skuItemVo.setHasStock(data.getHasStock());
+            }
+        }, executor);
+
+        CompletableFuture<Void> seckillFuture = CompletableFuture.runAsync(() -> {
+            //3、查询当前sku是否参与秒杀优惠
+            R skuSeckillInfo = seckillFeignService.getSkuSeckillInfo(skuId);
+            if (skuSeckillInfo.getCode() == 0) {
+                SeckillInfoVo seckillInfoVo = skuSeckillInfo.getData(new TypeReference<SeckillInfoVo>() {
+                });
+                skuItemVo.setSeckillInfoVo(seckillInfoVo);
+            }
+        }, executor);
 
         //等待所有任务完成===时长为上面任意任务最长任务执行时间
-        CompletableFuture.allOf(saleAttrFuture,descFuture,attrGroupFuture,imgFuture).get();
+        CompletableFuture.allOf(saleAttrFuture,descFuture,attrGroupFuture,imgFuture,wareFuture,seckillFuture).get();
 
         return skuItemVo;
     }

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>商品已成功加入购物车</title>
+    <link rel="shortcut icon" href="/static/index/img/favicon.ico" type="image/x-icon" />
+    <script type="text/javascript" src="/static/cart/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="/static/cart/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/cart/js/swiper.min.js"></script>
+    <script src="/static/cart/js/swiper.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/cart/css/swiper.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/cart/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/cart/css/success.css"/>
+
+</head>
+
+<body>
+<!--头部-->
+<div class="alert-info">
+    <div class="hd_wrap_top">
+        <ul class="hd_wrap_left">
+            <li class="hd_home"><i class="glyphicon glyphicon-home"></i>
+                <a href="http://dlqk8s.top:81">某东首页</a>
+            </li>
+
+        </ul>
+
+        <ul class="hd_wrap_right">
+            <li>
+                <a th:if="${session.loginUser == null}" href="http://auth.dlqk8s.top:81/login.html" class="link_login">你好，请登录</a>
+                <a th:if="${session.loginUser != null}" class="link_login">欢迎，[[${session.loginUser.nickname}]]</a>
+            </li>
+            <li th:if="${session.loginUser == null}" class="forel">
+                <a href="http://auth.dlqk8s.top:81/regist.html" class="link_regist">免费注册</a>
+            </li>
+            <li class="spacer"></li>
+
+            <li>
+                <a href="http://member.dlqk8s.top:81/list.html">我的订单</a>
+            </li>
+
+
+        </ul>
+
+    </div>
+</div>
+
+<div class="nav-tabs-justified">
+    <div class="nav_wrap">
+
+        <div class="nav_top">
+            <div class="nav_top_one">
+                <a href="http://dlqk8s.top:81"><img src="/static/cart/img/jdlogo-201708-@1x.png" style="height: 42px;width: 134px;"/></a>
+            </div>
+            <div class="nav_top_two"><input type="text"/>
+                <button>搜索</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="main">
+
+    <div class="success-wrap">
+        <div class="w" id="result">
+            <div class="m succeed-box">
+
+                <div th:if="${orderSn != null}" class="mc success-cont">
+                    <div class="success-lcol">
+                        <div class="success-top"><b class="succ-icon"></b>
+                            <h3 class="ftx-02">恭喜，秒杀成功，订单号 [[${orderSn}]]，正在准备订单数据，10s后自动跳转支付！！！</h3>
+                        </div>
+                        <div class="success-btns success-btns-new" style="float: left;">
+                            <div class="bg_shop">
+                                <a class="btn-addtocart" style="padding-left: 20px;" th:href="${'http://order.dlqk8s.top:81/payOrder?orderSn='+orderSn}"><b></b>去支付</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${orderSn == null}" class="mc success-cont">
+                    <div class="success-lcol">
+                        <div class="success-top" style="margin: 60px 0;"><b class="fail-icon"></b>
+                            <h3 class="ftx-02" style="color: #E4393C">手气不好，秒杀失败，下次再来！！！</h3></div>
+                    </div>
+                    <div class="success-btns success-btns-new" style="float: left;">
+                        <div class="bg_shop" style="margin: 55px 20px;">
+                            <a class="btn-addtocart" style="padding-left: 20px;" href="http://dlqk8s.top:81/"><b></b>去购物</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script type="text/javascript" src="/static/cart/js/success.js"></script>
+
+</html>

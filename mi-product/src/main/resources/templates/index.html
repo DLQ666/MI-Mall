@@ -604,7 +604,7 @@
                 </li>
             </ul>
             <p class="tab_R">
-                <span th:each="attr:${product.getAttrs()}" th:utext="'<em>¥</em>'+${attr.getSkuPrice()}">¥5199.00</span>
+                <span th:each="attr:${product.getAttrs()}" th:utext="'<em>¥</em>'+${#numbers.formatDecimal(attr.getSkuPrice(),1,2)}">¥5199.00</span>
             </p>
             <p class="tab_JE">
                 <a th:each="attr:${product.getAttrs()}" th:href="|http://item.dlqk8s.top:81/${attr.getSkuId()}.html|" th:utext="${attr.getSkuTitle()}" th:title="${attr.getSkuTitle()}">
@@ -841,8 +841,8 @@
         if (resp.data.length>0){
             resp.data.forEach(function (item) {
                 $("<div class='swiper-slide'></div>")
-                    .append($("<a href='http://item.dlqk8s.top:81/"+item.skuId+".html'><ul class='seckillSkuContent'><li><img  src='"+item.skuInfoVo.skuDefaultImg+"' ><p>"+item.skuInfoVo.skuTitle+"</p><div class='seckill-item__price'><span class='price-miaosha'><i>¥</i><span>"+item.seckillPrice+"</span></span>" +
-                        "<span class='price-origin'><i>¥</i><span>"+item.skuInfoVo.price+"</span></span></div></li></ul></a>"))
+                    .append($("<a href='http://item.dlqk8s.top:81/"+item.skuId+".html'><ul class='seckillSkuContent'><li><img  src='"+item.skuInfoVo.skuDefaultImg+"' ><p>"+item.skuInfoVo.skuTitle+"</p><div class='seckill-item__price'><span class='price-miaosha'><i>¥</i><span>"+item.seckillPrice+".00</span></span>" +
+                        "<span class='price-origin'><i>¥</i><span>"+item.skuInfoVo.price+".00</span></span></div></li></ul></a>"))
                     .appendTo($(".swiper2").children(".swiper-wrapper"));
             })
         }

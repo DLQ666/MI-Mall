@@ -60,6 +60,8 @@ public class OrderCloseListener {
             System.out.println(code);
             if ("10000".equals(code)){
                 channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
+            }else if ("40004".equals(code)){
+                channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
             }else {
                 channel.basicReject(message.getMessageProperties().getDeliveryTag(),true);
             }

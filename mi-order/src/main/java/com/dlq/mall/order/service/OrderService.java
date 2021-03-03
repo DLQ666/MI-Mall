@@ -1,6 +1,7 @@
 package com.dlq.mall.order.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.dlq.common.to.mq.SeckillOrderTo;
 import com.dlq.common.utils.PageUtils;
 import com.dlq.mall.order.entity.OrderEntity;
 import com.dlq.mall.order.vo.*;
@@ -51,5 +52,6 @@ public interface OrderService extends IService<OrderEntity> {
 
     String handlePayResult(PayAsyncVo payAsyncVo);
 
+    void createSeckillOrder(SeckillOrderTo seckillOrderTo);
 }
 

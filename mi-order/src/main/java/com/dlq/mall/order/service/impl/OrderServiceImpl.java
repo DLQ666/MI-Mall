@@ -1,12 +1,15 @@
 package com.dlq.mall.order.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.alipay.api.domain.SkuInfo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dlq.common.exception.NoStockException;
 import com.dlq.common.to.mq.OrderTo;
+import com.dlq.common.to.mq.SeckillOrderTo;
 import com.dlq.common.utils.PageUtils;
 import com.dlq.common.utils.Query;
 import com.dlq.common.utils.R;
@@ -319,6 +322,54 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             this.baseMapper.updateOrderStatus(outTradeNo,OrderStatusEnum.PAYED.getCode());
         }
         return "success";
+    }
+
+    /**
+     * 接收秒杀服务发送的消息中保存的秒杀商品信息 保存到秒杀单
+     * @param seckillOrderTo
+     */
+    @Override
+    public void createSeckillOrder(SeckillOrderTo seckillOrderTo) {
+        //todo 保存订单信息
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setOrderSn(seckillOrderTo.getOrderSn());
+        orderEntity.setMemberId(seckillOrderTo.getMemberId());
+        orderEntity.setCreateTime(new Date());
+        orderEntity.setStatus(OrderStatusEnum.CREATE_NEW.getCode());
+        BigDecimal multiply = seckillOrderTo.getSeckillPrice().multiply(new BigDecimal(seckillOrderTo.getNum().toString()));
+        orderEntity.setPayAmount(multiply);
+        this.save(orderEntity);
+        //保存订单项信息
+        OrderItemEntity orderItemEntity = new OrderItemEntity();
+        orderItemEntity.setOrderSn(seckillOrderTo.getOrderSn());
+        orderItemEntity.setRealAmount(multiply);
+        //TODO 获取当前spu的详细信息进行设置 productFeignService.getSpuInfoBySkuId();
+        R spuInfoBySkuId = productFeignService.getSpuInfoBySkuId(seckillOrderTo.getSkuId());
+        if (spuInfoBySkuId.getCode() == 0){
+            SpuInfoVo spuInfoVo = spuInfoBySkuId.getData("spuInfoBySkuId", new TypeReference<SpuInfoVo>() {
+            });
+            orderItemEntity.setSpuId(spuInfoVo.getId());
+            orderItemEntity.setSpuName(spuInfoVo.getSpuName());
+            orderItemEntity.setSpuBrand(spuInfoVo.getBrandId().toString());
+        }
+        orderItemEntity.setSkuQuantity(seckillOrderTo.getNum());
+        orderItemEntity.setSkuId(seckillOrderTo.getSkuId());
+        //TODO 获取当前sku的详细信息进行设置 productFeignService.getSpuInfoBySkuId();
+        R skuInfoBySkuId = productFeignService.getSkuInfoBySkuId(seckillOrderTo.getSkuId());
+        if (skuInfoBySkuId.getCode() == 0){
+            SkuInfokVo skuInfo = skuInfoBySkuId.getData("skuInfo", new TypeReference<SkuInfokVo>() {
+            });
+            orderItemEntity.setSkuPic(skuInfo.getSkuDefaultImg());
+            orderItemEntity.setSkuName(skuInfo.getSkuName());
+            orderItemEntity.setSkuPrice(skuInfo.getPrice());
+        }
+        List<String> skuSaleAttrValues = productFeignService.getSkuSaleAttrValues(seckillOrderTo.getSkuId());
+        StringBuffer stringBuffer = new StringBuffer();
+        skuSaleAttrValues.stream().forEach(item -> {
+            stringBuffer.append(item).append(" ");
+        });
+        orderItemEntity.setSkuAttrsVals(stringBuffer.toString());
+        orderItemService.save(orderItemEntity);
     }
 
     /**
