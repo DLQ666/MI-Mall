@@ -6,6 +6,6 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: dlqk8s.top:8848 #配置中心地址
+        server-addr: nacos-service.jdmall:8848 #配置中心地址
         file-extension: yaml #指定yaml格式的配置
         namespace: 5665dfcf-f2f0-4fc2-8e0d-317d15e42363

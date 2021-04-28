@@ -16,3 +16,11 @@
 #    password: dlq.*123
 #  thymeleaf:
 #    cache: false
+#  zipkin:
+#    base-url: http://dlqk8s.top:9411/ #zipkin服务器的地址
+#    discovery-client-enabled: false #关闭服务发现,否则Spring Cloud会把 zipkin 的url 当做服务名称
+#    sender:
+#      type: web #设置使用http.的方式传输数据
+#  sleuth:
+#    sampler:
+#      probability: 1 #设置抽样采集率为100%，默认为0.1，即10%
