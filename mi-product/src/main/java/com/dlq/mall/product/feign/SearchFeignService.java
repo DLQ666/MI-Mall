@@ -2,6 +2,7 @@ package com.dlq.mall.product.feign;
 
 import com.dlq.common.to.es.SkuEsModule;
 import com.dlq.common.utils.R;
+import com.dlq.mall.product.feign.fallback.SearchFeignServiceFallback;
 import com.dlq.mall.product.vo.SearchParam;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ import java.util.List;
  *@author: Hasee
  *@create: 2020-11-19 21:38
  */
-@FeignClient("mi-search")
+@FeignClient(value = "mi-search",fallback = SearchFeignServiceFallback.class)
 public interface SearchFeignService {
 
     //远程上架商品接口
