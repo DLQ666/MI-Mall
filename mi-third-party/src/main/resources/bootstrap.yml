@@ -1,8 +1,8 @@
+server:
+  port: 8080
 spring:
   application:
     name: mi-third-party
-  profiles:
-    active: dev
   cloud:
     nacos:
       config:

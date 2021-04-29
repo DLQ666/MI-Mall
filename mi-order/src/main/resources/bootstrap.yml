@@ -1,8 +1,8 @@
+server:
+  port: 8080
 spring:
   application:
     name: mi-order
-  profiles:
-    active: dev
   cloud:
     nacos:
       config:

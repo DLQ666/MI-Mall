@@ -1,8 +1,8 @@
+server:
+  port: 8080
 spring:
   application:
     name: mi-gateway
-  profiles:
-    active: dev
   cloud:
     nacos:
       config:
