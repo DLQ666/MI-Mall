@@ -40,7 +40,7 @@ public class HelloSchedule {
      *              xxxService.hello();
      *          },executr);
      *      2)、支持定时任务线程池；设置 TaskSchedulingProperties
-     *              spring.task.scheduling.pool.size=5   springboot2.2.2 不好使
+     *              spring.task.scheduling.pool.size=5  --> springboot2.2.2 不好使
      *
      *      3)、让定时任务异步执行
      *           异步任务
