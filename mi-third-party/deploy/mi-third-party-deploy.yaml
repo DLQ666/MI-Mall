@@ -5,11 +5,6 @@ metadata:
   namespace: jdmall
   labels:
     app: mi-third-party
-  annotations:
-    deployment.kubernetes.io/revision: '1'
-    kubesphere.io/alias-name: sentinel
-    kubesphere.io/maxSurgePod: '2'
-    kubesphere.io/minAvailablePod: '1'
 spec:
   replicas: 1
   selector:
@@ -17,7 +12,6 @@ spec:
       app: mi-third-party
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: mi-third-party
     spec:
@@ -29,7 +23,7 @@ spec:
               protocol: TCP
           resources:
             limits:
-              cpu: 500m
+              cpu: 1000m
               memory: 150Mi
             requests:
               cpu: 10m
@@ -61,7 +55,7 @@ spec:
       protocol: TCP
       port: 8080
       targetPort: 8080
-      nodePort: 30000
+      nodePort: 31009
   selector:
     app: mi-third-party
   type: NodePort

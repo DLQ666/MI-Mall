@@ -5,11 +5,6 @@ metadata:
   namespace: jdmall
   labels:
     app: mi-auth
-  annotations:
-    deployment.kubernetes.io/revision: '1'
-    kubesphere.io/alias-name: sentinel
-    kubesphere.io/maxSurgePod: '2'
-    kubesphere.io/minAvailablePod: '1'
 spec:
   replicas: 1
   selector:
@@ -17,7 +12,6 @@ spec:
       app: mi-auth
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: mi-auth
     spec:
@@ -29,7 +23,7 @@ spec:
               protocol: TCP
           resources:
             limits:
-              cpu: 500m
+              cpu: 1000m
               memory: 150Mi
             requests:
               cpu: 10m
@@ -61,7 +55,7 @@ spec:
       protocol: TCP
       port: 8080
       targetPort: 8080
-      nodePort: 13000
+      nodePort: 31000
   selector:
     app: mi-auth
   type: NodePort
