@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: mi-ware
-          image: $REGISTRY/$HARBOR_NAMESPACE/$PROJECT_NAME:latest
+          image: $REGISTRY/$DOCKERHUB_NAMESPACE/$PROJECT_NAME:latest
           ports:
             - containerPort: 8080
               protocol: TCP
