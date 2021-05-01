@@ -6,10 +6,10 @@ pipeline {
 
   }
   environment {
-        DOCKER_CREDENTIAL_ID = 'dockerhub-id'
+        DOCKER_CREDENTIAL_ID = 'aliyun-hub-id'
         GITEE_CREDENTIAL_ID = 'gitee_id'
         KUBECONFIG_CREDENTIAL_ID = 'demo-kubeconfig'
-        REGISTRY = 'docker.io'
+        REGISTRY = 'registry.cn-hangzhou.aliyuncs.com'
         DOCKERHUB_NAMESPACE = 'dlq666'
         GITEE_ACCOUNT = 'dlq666'
         SONAR_CREDENTIAL_ID = 'soner-qube'
