@@ -8,8 +8,6 @@ import com.dlq.mall.product.feign.SearchFeignService;
 import com.dlq.mall.product.service.CategoryService;
 import com.dlq.mall.product.vo.SearchParam;
 import com.dlq.mall.product.vo.webvo.Catelog2Vo;
-import io.lettuce.core.dynamic.domain.Timeout;
-import org.omg.CORBA.TIMEOUT;
 import org.redisson.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
