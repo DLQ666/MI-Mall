@@ -1,11 +1,12 @@
-server:
-  port: 8080
+#server:
+#  port: 8080
 spring:
   application:
     name: mi-member
   cloud:
     nacos:
       config:
-        server-addr: nacos-service.jdmall:8848 #配置中心地址
+        #server-addr: nacos-service.jdmall:8848 #配置中心地址   --- k8s专用
+        server-addr: nacos:8848 #配置中心地址   --- docker 专用
         file-extension: yaml #指定yaml格式的配置
         namespace: e6a7201e-06b1-4a92-82fe-4a2df091fd93

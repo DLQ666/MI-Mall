@@ -30,7 +30,7 @@ public class SeckillSkuScheduled {
     private final String UPLOAD_LOCK = "seckill:upload:lock";
 
     //TODO 幂等性处理
-    @Scheduled(cron = "0 0 3 * * ?")
+    @Scheduled(cron = "0/3 * * * * ?")
     public void uploadSeckillSkuLatest3Days() {
         //1、重复上架无需处理
         log.info("上架秒杀的商品信息...");
